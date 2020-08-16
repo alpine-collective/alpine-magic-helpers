@@ -39,5 +39,7 @@
     "example": "example",
     "test": "test"
   },
-  "dependencies": {}
+  "dependencies": {
+    "axios": "^0.19.2"
+  }
 }

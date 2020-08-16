@@ -1,18 +1,14 @@
+import axios from 'axios'
 function registerFetchMagicMethod() {
     Alpine.addMagicProperty('fetch', function ($el) {
         return (...parameters) => {
-            // if (typeof parameters[0] !== 'string') return parameters[0]
-            // // if only a number or string is passed in, keep it simple
-            // if (typeof parameters[1] !== 'object') {
-            //     return parameters[0].slice(0, parameters[1])
-            // }
-            // if (parameters[1].hasOwnProperty('words')) {
-            //     return parameters[0].split(" ").splice(0, parameters[1].words).join(" ")
-            // }
-            // if (parameters[1].hasOwnProperty('characters')) {
-            //     return parameters[0].slice(0, parameters[1]['characters'])
-            // }
-            // return parameters[0]
+            if (typeof parameters[0] === 'string' && parameters[0].length) {
+                return axios(parameters[0]).then(response => response.hasOwnProperty('data') ?  response.data : response)
+            }
+            if (typeof parameters[0] === 'object') {
+                return axios(parameters[0])
+            }
+            return parameters[0]
         }
     })
 }
@@ -23,4 +19,4 @@ window.deferLoadingAlpine = function (callback) {
     alpine(callback)
 }
 
-module.exports = registerFetchMagicMethod
+export default registerFetchMagicMethod

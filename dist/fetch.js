@@ -81,47 +81,10 @@
 /******/
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 0);
+/******/ 	return __webpack_require__(__webpack_require__.s = 1);
 /******/ })
 /************************************************************************/
 /******/ ({
-
-/***/ "./index.js":
-/*!******************!*\
-  !*** ./index.js ***!
-  \******************/
-/*! exports provided: default */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _src_truncate_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./src/truncate.js */ "./src/truncate.js");
-/* harmony import */ var _src_truncate_js__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_src_truncate_js__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var _src_interval_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./src/interval.js */ "./src/interval.js");
-/* harmony import */ var _src_interval_js__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_src_interval_js__WEBPACK_IMPORTED_MODULE_1__);
-/* harmony import */ var _src_fetch_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./src/fetch.js */ "./src/fetch.js");
-
-
-
-
-var alpine = window.deferLoadingAlpine || function (alpine) {
-  return alpine();
-};
-
-window.deferLoadingAlpine = function (callback) {
-  _src_truncate_js__WEBPACK_IMPORTED_MODULE_0___default()();
-  _src_interval_js__WEBPACK_IMPORTED_MODULE_1___default()();
-  Object(_src_fetch_js__WEBPACK_IMPORTED_MODULE_2__["default"])();
-  alpine(callback);
-};
-
-/* harmony default export */ __webpack_exports__["default"] = ({
-  registerTruncateMagicMethod: _src_truncate_js__WEBPACK_IMPORTED_MODULE_0___default.a,
-  registerIntervalMagicMethod: _src_interval_js__WEBPACK_IMPORTED_MODULE_1___default.a,
-  registerFetchMagicMethod: _src_fetch_js__WEBPACK_IMPORTED_MODULE_2__["default"]
-});
-
-/***/ }),
 
 /***/ "./node_modules/axios/index.js":
 /*!*************************************!*\
@@ -2306,14 +2269,16 @@ module.exports = registerTruncateMagicMethod;
 
 /***/ }),
 
-/***/ 0:
-/*!************************!*\
-  !*** multi ./index.js ***!
-  \************************/
+/***/ 1:
+/*!****************************************************************!*\
+  !*** multi ./src/fetch.js ./src/interval.js ./src/truncate.js ***!
+  \****************************************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-module.exports = __webpack_require__(/*! /Users/kevin/code/alpinejs/alpine-magic-helpers/index.js */"./index.js");
+__webpack_require__(/*! /Users/kevin/code/alpinejs/alpine-magic-helpers/src/fetch.js */"./src/fetch.js");
+__webpack_require__(/*! /Users/kevin/code/alpinejs/alpine-magic-helpers/src/interval.js */"./src/interval.js");
+module.exports = __webpack_require__(/*! /Users/kevin/code/alpinejs/alpine-magic-helpers/src/truncate.js */"./src/truncate.js");
 
 
 /***/ })

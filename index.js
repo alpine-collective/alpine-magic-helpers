@@ -10,3 +10,5 @@ window.deferLoadingAlpine = function (callback) {
     registerFetchMagicMethod()
     alpine(callback)
 }
+
+export default { registerTruncateMagicMethod, registerIntervalMagicMethod, registerFetchMagicMethod }
