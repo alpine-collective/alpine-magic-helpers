@@ -1,7 +1,6 @@
 # Alpine Magic Helpers
 A set of magic helpers to use with AlpineJS
 
-![GitHub file size in bytes](https://img.shields.io/github/size/kevinbatdorf/alpine-magic-helpers/dist/index.js?label=minified&style=flat-square)
 ![GitHub tag (latest by date)](https://img.shields.io/github/v/tag/kevinbatdorf/alpine-magic-helpers?label=version&style=flat-square)
 
 ## About
