@@ -1,0 +1,43 @@
+{
+  "name": "@{package-slug}",
+  "version": "0.1.0",
+  "description": "{package-description}",
+  "main": "dist/index.js",
+  "publishConfig": {
+    "access": "public"
+  },
+  "scripts": {
+    "test": "jest",
+    "test-watch": "jest --watch",
+    "dev": "npm run development",
+    "development": "cross-env NODE_ENV=development node_modules/webpack/bin/webpack.js --progress --hide-modules --config=node_modules/laravel-mix/setup/webpack.config.js",
+    "watch": "npm run development -- --watch",
+    "build": "cross-env NODE_ENV=production node_modules/webpack/bin/webpack.js --no-progress --hide-modules --config=node_modules/laravel-mix/setup/webpack.config.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/{package-slug}.git"
+  },
+  "keywords": [
+    "alpinejs"
+  ],
+  "author": "{author-name}",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/{package-slug}/issues"
+  },
+  "homepage": "https://github.com/{package-slug}#readme",
+  "devDependencies": {
+    "alpinejs": "^2.4.1",
+    "cross-env": "^7.0.2",
+    "jest": "^26.0.1",
+    "laravel-mix": "^5.0.4",
+    "vue-template-compiler": "^2.6.11",
+    "webpack-livereload-plugin": "^1.2.0"
+  },
+  "directories": {
+    "example": "example",
+    "test": "test"
+  },
+  "dependencies": {}
+}
