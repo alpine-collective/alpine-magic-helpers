@@ -1,7 +1,7 @@
 {
-  "name": "@{package-slug}",
+  "name": "@kevinbatdorf/alpine-magic-helpers",
   "version": "0.1.0",
-  "description": "{package-description}",
+  "description": "A set of magic helpers to use with AlpineJS",
   "main": "dist/index.js",
   "publishConfig": {
     "access": "public"
@@ -16,17 +16,17 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/{package-slug}.git"
+    "url": "git+https://github.com/kevinbatdorf/alpine-magic-helpers.git"
   },
   "keywords": [
     "alpinejs"
   ],
-  "author": "{author-name}",
+  "author": "Kevin Batdorf",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/{package-slug}/issues"
+    "url": "https://github.com/kevinbatdorf/alpine-magic-helpers/issues"
   },
-  "homepage": "https://github.com/{package-slug}#readme",
+  "homepage": "https://github.com/kevinbatdorf/alpine-magic-helpers#readme",
   "devDependencies": {
     "alpinejs": "^2.4.1",
     "cross-env": "^7.0.2",
