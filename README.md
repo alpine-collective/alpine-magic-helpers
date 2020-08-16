@@ -12,7 +12,7 @@ This adds three magic properties to use with Alpine JS. ***More to come!***
 | [`$interval`](#interval) | Run a function every n seconds. Optionally start and stop the timer. |
 | [`$truncate`](#truncate) |  Limit a text string to a specific amount of characters or words. |
 
-🚀 If you have ideas for more properties, please open a discussion
+🚀 If you have ideas for more properties, please let me know on [Twitter](https://twitter.com/kevinbatdorf) or in the [AlpineJS Discord](https://discord.gg/snmCYk3)
 ##### TODO:
 1. Add more useful methods
 1. Create better examples with example pages
