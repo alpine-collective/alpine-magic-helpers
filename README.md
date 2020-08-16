@@ -9,7 +9,7 @@ This adds three magic properties to use with Alpine JS. ***More to come!***
 | Magic Properties | Description |
 | --- | --- |
 | [`$fetch`](#fetch) | Using Axios, fetch JSON from an external source.  |
-| [`$interfal`](#interval) | Run a function every n seconds. Optionally start and stop the timer. |
+| [`$interval`](#interval) | Run a function every n seconds. Optionally start and stop the timer. |
 | [`$truncate`](#truncate) |  Limit a text string to a specific amount of characters or words. |
 
 🚀 If you have ideas for more properties, please open a discussion
