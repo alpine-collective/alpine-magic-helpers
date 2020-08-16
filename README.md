@@ -61,6 +61,7 @@ import 'alpinejs'
     <!-- After init, data will be logged to the console -->
 </div>
 ```
+[Demo](https://codepen.io/KevinBatdorf/pen/poyyXKj)
 
 **Optionally pass in an options**
 
@@ -90,6 +91,7 @@ By default, `$fetch` will return the JSON data object. However, because we are u
     x-init="$interval(funtionToRun, timer)">
 </div>
 ```
+[Demo](https://codepen.io/KevinBatdorf/pen/xxVVoaX?editors=1010)
 
 **Optionally pass in options**
 
@@ -117,6 +119,7 @@ By default, `$interval ` will run your function every `nth` millisecond when bro
     @click="autoIntervalTest = !autoIntervalTest">
 </div>
 ```
+[Demo](https://codepen.io/KevinBatdorf/pen/poyyXQy?editors=1010)
 
 ---
 
@@ -130,6 +133,7 @@ By default, `$interval ` will run your function every `nth` millisecond when bro
     <!-- Text will show 'Lorem ipsum dolor sit amet, consectetur adipiscing' and will reveal all when clicked-->
 </div>
 ```
+[Demo](https://codepen.io/KevinBatdorf/pen/BaKKgGg?editors=1000)
 
 **Optionally pass in options**
 
@@ -145,6 +149,7 @@ By default, `$truncate` will return take characters as a parameter. Instead you 
     <!-- Will start with 5 words, then increase to 10 when clicked -->
 </div>
 ```
+[Demo](https://codepen.io/KevinBatdorf/pen/BaKKgGg?editors=1000) (same as above)
 > Behind the scenes, for words, this uses `sentence.split(" ").splice(0, words).join(" ")` which does not define a word in all languages. 
 
 ---
