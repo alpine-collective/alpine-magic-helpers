@@ -24,15 +24,15 @@ This adds three magic properties to use with Alpine JS. ***More to come!***
 Include the following `<script>` tag in the `<head>` of your document (before Alpine):
 
 ```html
-<script src="https://cdn.jsdelivr.net/gh/kevinbatdorf/alpine-magic-helpers@0.x.x/dist/index.js"></script>
+<script src="https://cdn.jsdelivr.net/gh/kevinbatdorf/alpine-magic-helpers@0.1.x/dist/index.js"></script>
 ```
 
 Or only use the specific methods you need:
 
 ```html
-<script src="https://cdn.jsdelivr.net/gh/kevinbatdorf/alpine-magic-helpers@0.x.x/dist/fetch.js"></script>
-<script src="https://cdn.jsdelivr.net/gh/kevinbatdorf/alpine-magic-helpers@0.x.x/dist/interval.js"></script>
-<script src="https://cdn.jsdelivr.net/gh/kevinbatdorf/alpine-magic-helpers@0.x.x/dist/truncate.js"></script>
+<script src="https://cdn.jsdelivr.net/gh/kevinbatdorf/alpine-magic-helpers@0.1.x/dist/fetch.js"></script>
+<script src="https://cdn.jsdelivr.net/gh/kevinbatdorf/alpine-magic-helpers@0.1.x/dist/interval.js"></script>
+<script src="https://cdn.jsdelivr.net/gh/kevinbatdorf/alpine-magic-helpers@0.1.x/dist/truncate.js"></script>
 ```
 
 ---
