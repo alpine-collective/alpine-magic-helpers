@@ -5,16 +5,16 @@ A set of magic helpers to use with AlpineJS
 
 ## About
 
-This adds three magic properties to use with Alpine JS. ***More to come!***
-| Magic Properties | Description |
+This adds three magic helpers to use with Alpine JS. ***More to come!***
+| Magic Helpers | Description |
 | --- | --- |
 | [`$fetch`](#fetch) | Using Axios, fetch JSON from an external source.  |
-| [`$interval`](#interval) | Run a function every n seconds. Optionally start and stop the timer. |
-| [`$truncate`](#truncate) |  Limit a text string to a specific amount of characters or words. |
+| [`$interval`](#interval) | Run a function every n milliseconds. Optionally start and stop the timer. |
+| [`$truncate`](#truncate) |  Limit a text string to a specific number of characters or words. |
 
-🚀 If you have ideas for more properties, please let me know on [Twitter](https://twitter.com/kevinbatdorf) or in the [AlpineJS Discord](https://discord.gg/snmCYk3)
+🚀 If you have ideas for more magic helpers, please let me know on [Twitter](https://twitter.com/kevinbatdorf) or on the [AlpineJS Discord](https://discord.gg/snmCYk3)
 ##### TODO:
-1. Add more useful methods
+1. Add more useful magic helpers
 1. Create better examples with example pages
 1. Write tests
 
