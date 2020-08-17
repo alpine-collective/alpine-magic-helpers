@@ -99,7 +99,7 @@ By default, `$interval ` will run your function every `nth` millisecond when bro
 | Property | Description |
 | --- | --- |
 | `timer` | Timer in milliseconds.  |
-| `delay` | Delay the first run. N.B. The first run is also relayed by the timer time. |
+| `delay` | Delay the first run. N.B. The first run is also delayed by the timer time. |
 | `forceInterval` |  Ignore the browser animation request mechinism. Default is false |
 
 > ⚠️ We also add a hidden property `autoIntervalTest` that will play/pause the timer depending on it's "truthyness"
