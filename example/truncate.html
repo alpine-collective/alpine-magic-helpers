@@ -17,6 +17,13 @@
         @click="characters = undefined"
         >
     </div>
+    <p class="mt-24 mb-4 font-bold">You may also pass a third argument to change the string that will be appended to the end</p>
+    <div
+        x-data="{ characters: 50, string: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.'}"
+        x-text="$truncate(string, characters, '(...)')"
+        @click="characters = undefined"
+        >
+    </div>
     <p class="mt-24 mb-4 font-bold">Truncate to specific words (click the truncated text to update from 5 to 10 words)</p>
     <div
         x-data="{ words: 5, string: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.'}"

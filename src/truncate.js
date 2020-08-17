@@ -9,6 +9,9 @@ function registerTruncateMagicMethod() {
 
             // if only a number or string is passed in, keep it simple
             if (typeof parameters[1] !== 'object') {
+                if (typeof parameters[2] !== 'undefined') {
+                    ellipsis = parameters[2]
+                }
                 return parameters[0].slice(0, parameters[1]) + ellipsis
             }
 

@@ -130,7 +130,15 @@ By default, `$interval ` will run your function every `nth` millisecond when bro
     x-data="{ characters: 50, string: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.'}"
     x-text="$truncate(string, characters)"
     @click="characters = undefined">
-    <!-- Text will show 'Lorem ipsum dolor sit amet, consectetur adipiscing' and will reveal all when clicked-->
+    <!-- Text will show 'Lorem ipsum dolor sit amet, consectetur adipiscing…' and will reveal all when clicked-->
+</div>
+```
+You may also pass a third argument to change the string that will be appended to the end:
+```html
+<div
+    x-data="{ characters: 50, string: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.'}"
+    x-text="$truncate(string, characters, ' (...)')">
+    <!-- Text will show 'Lorem ipsum dolor sit amet, consectetur adipiscing (...)' -->
 </div>
 ```
 [Demo](https://codepen.io/KevinBatdorf/pen/BaKKgGg?editors=1000)
