@@ -2,5 +2,6 @@
     "/dist/fetch.js": "/dist/fetch.js",
     "/dist/index.js": "/dist/index.js",
     "/dist/interval.js": "/dist/interval.js",
+    "/dist/observe.js": "/dist/observe.js",
     "/dist/truncate.js": "/dist/truncate.js"
 }
