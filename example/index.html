@@ -42,11 +42,11 @@
             @click="characters = undefined"
             >
         </div>
-        <p class="mt-24 mb-4">Truncate to specific words (click the truncated text to update from 5 to 10 words)</p>
+        <p class="mt-24 mb-4">Truncate to specific words (in this case, 5). Additionally, customize the ellipsis</p>
         <div
             x-data="{ words: 5, string: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.'}"
-            x-text="$truncate(string, {words: words})"
-            @click="words = 10"
+            x-text="$truncate(string, { words: words, ellipsis: ' ...read more' })"
+            @click="words = 0"
             >
         </div>
     </div>
