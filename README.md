@@ -42,13 +42,13 @@ Or only use the specific methods you need:
 If you wish to create your own bundle:
 
 ```bash
-npm install kevinbatdorf/alpine-magic-helpers --save
+npm install @kevinbatdorf/alpine-magic-helpers --save
 ```
 
 Then add the following to your script:
 
 ```javascript
-import 'alpine-magic-helpers'
+import '@kevinbatdorf/alpine-magic-helpers'
 import 'alpinejs'
 ```
 
@@ -71,7 +71,7 @@ By default, `$fetch` will return the JSON data object. However, because we are u
 
 ```html
 <div x-data="{ url: 'https://jsonplaceholder.typicode.com/todos/1' }"
-    x-init="$fetch({ url: url, method: 'post' }).then({ data } => console.log(data))">
+    x-init="$fetch({ url: url, method: 'post' }).then(({ data }) => console.log(data))">
 </div>
 ```
 > Note that this will return the entire response object, whereas by default `$fetch` will only return the data
@@ -100,7 +100,7 @@ By default, `$interval ` will run your function every `nth` millisecond when bro
 | --- | --- |
 | `timer` | Timer in milliseconds.  |
 | `delay` | Delay the first run. N.B. The first run is also delayed by the timer time. |
-| `forceInterval` |  Ignore the browser animation request mechinism. Default is false |
+| `forceInterval` |  Ignore the browser animation request mechanism. Default is false |
 
 > ⚠️ We also add a hidden property `autoIntervalTest` that will play/pause the timer depending on it's "truthyness"
 
