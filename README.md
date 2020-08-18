@@ -10,6 +10,7 @@ This adds three magic helpers to use with Alpine JS. ***More to come!***
 | --- | --- |
 | [`$fetch`](#fetch) | Using Axios, fetch JSON from an external source.  |
 | [`$interval`](#interval) | Run a function every n milliseconds. Optionally start and stop the timer. |
+| [`$observe`](#observe) | Access data natively from other components, including parents. |
 | [`$truncate`](#truncate) |  Limit a text string to a specific number of characters or words. |
 
 🚀 If you have ideas for more magic helpers, please let me know on [Twitter](https://twitter.com/kevinbatdorf) or on the [AlpineJS Discord](https://discord.gg/snmCYk3)
@@ -24,15 +25,16 @@ This adds three magic helpers to use with Alpine JS. ***More to come!***
 Include the following `<script>` tag in the `<head>` of your document (before Alpine):
 
 ```html
-<script src="https://cdn.jsdelivr.net/gh/kevinbatdorf/alpine-magic-helpers@0.2.x/dist/index.js"></script>
+<script src="https://cdn.jsdelivr.net/gh/kevinbatdorf/alpine-magic-helpers@0.3.x/dist/index.js"></script>
 ```
 
 Or only use the specific methods you need:
 
 ```html
-<script src="https://cdn.jsdelivr.net/gh/kevinbatdorf/alpine-magic-helpers@0.2.x/dist/fetch.js"></script>
-<script src="https://cdn.jsdelivr.net/gh/kevinbatdorf/alpine-magic-helpers@0.2.x/dist/interval.js"></script>
-<script src="https://cdn.jsdelivr.net/gh/kevinbatdorf/alpine-magic-helpers@0.2.x/dist/truncate.js"></script>
+<script src="https://cdn.jsdelivr.net/gh/kevinbatdorf/alpine-magic-helpers@0.3.x/dist/fetch.js"></script>
+<script src="https://cdn.jsdelivr.net/gh/kevinbatdorf/alpine-magic-helpers@0.3.x/dist/interval.js"></script>
+<script src="https://cdn.jsdelivr.net/gh/kevinbatdorf/alpine-magic-helpers@0.3.x/dist/observe.js"></script>
+<script src="https://cdn.jsdelivr.net/gh/kevinbatdorf/alpine-magic-helpers@0.3.x/dist/truncate.js"></script>
 ```
 
 ---
@@ -120,6 +122,33 @@ By default, `$interval ` will run your function every `nth` millisecond when bro
 </div>
 ```
 [Demo](https://codepen.io/KevinBatdorf/pen/poyyXQy?editors=1010)
+
+---
+
+### `$observe`
+**Example:**
+```html
+<div x-data="{ color: 'blue' }">
+    <p x-data x-init="$observe('parent')" x-text="parent.color"></p>
+    <!-- The text will say blue -->
+</div>
+```
+[Demo](https://codepen.io/KevinBatdorf/pen/BaKKgGg?editors=1000)
+
+You may watch multiple components, but you must give them each an id using `x-observable-id`:
+```html
+<div x-data="{ color: 'blue' }">
+    <p
+        x-data
+        x-init="$observe('parent', 'yellowSquare')"
+        x-text="parent.color"
+        :class="`bg-${yellowSquare.color}-400`">
+        <!-- This will have yellow background color and the text will say blue -->
+    </p>
+</div>
+<div x-observable-id="yellowSquare" x-data="{ color: 'yellow' }"></div>
+```
+
 
 ---
 
