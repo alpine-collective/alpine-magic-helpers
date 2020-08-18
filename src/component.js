@@ -39,7 +39,6 @@ function registerComponentMagicMethod() {
 
             if (typeof this[componentName] !== 'undefined') return this[componentName]
 
-            // Collect components from parameters
             const componentBeingObserved = document.querySelector(`[x-data][x-observable-id="${componentName}"]`)
             
             // Set initial state
@@ -53,7 +52,6 @@ function registerComponentMagicMethod() {
 
             this[componentName] = disableUpdatingPropertyDirectly(data, '$component')
 
-            // Set observers
             const observer = new MutationObserver(mutations => {
                 for (let i = 0; i < mutations.length; i++) {
                     const closestParentComponent = mutations[i].target.closest('[x-data]')
