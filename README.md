@@ -5,16 +5,16 @@ A set of magic helpers to use with AlpineJS
 
 ## About
 
-This adds three magic properties to use with Alpine JS. ***More to come!***
-| Magic Properties | Description |
+This adds three magic helpers to use with Alpine JS. ***More to come!***
+| Magic Helpers | Description |
 | --- | --- |
 | [`$fetch`](#fetch) | Using Axios, fetch JSON from an external source.  |
-| [`$interval`](#interval) | Run a function every n seconds. Optionally start and stop the timer. |
-| [`$truncate`](#truncate) |  Limit a text string to a specific amount of characters or words. |
+| [`$interval`](#interval) | Run a function every n milliseconds. Optionally start and stop the timer. |
+| [`$truncate`](#truncate) |  Limit a text string to a specific number of characters or words. |
 
-🚀 If you have ideas for more properties, please let me know on [Twitter](https://twitter.com/kevinbatdorf) or in the [AlpineJS Discord](https://discord.gg/snmCYk3)
+🚀 If you have ideas for more magic helpers, please let me know on [Twitter](https://twitter.com/kevinbatdorf) or on the [AlpineJS Discord](https://discord.gg/snmCYk3)
 ##### TODO:
-1. Add more useful methods
+1. Add more useful magic helpers
 1. Create better examples with example pages
 1. Write tests
 
@@ -24,15 +24,15 @@ This adds three magic properties to use with Alpine JS. ***More to come!***
 Include the following `<script>` tag in the `<head>` of your document (before Alpine):
 
 ```html
-<script src="https://cdn.jsdelivr.net/gh/kevinbatdorf/alpine-magic-helpers@0.1.x/dist/index.js"></script>
+<script src="https://cdn.jsdelivr.net/gh/kevinbatdorf/alpine-magic-helpers@0.2.x/dist/index.js"></script>
 ```
 
 Or only use the specific methods you need:
 
 ```html
-<script src="https://cdn.jsdelivr.net/gh/kevinbatdorf/alpine-magic-helpers@0.1.x/dist/fetch.js"></script>
-<script src="https://cdn.jsdelivr.net/gh/kevinbatdorf/alpine-magic-helpers@0.1.x/dist/interval.js"></script>
-<script src="https://cdn.jsdelivr.net/gh/kevinbatdorf/alpine-magic-helpers@0.1.x/dist/truncate.js"></script>
+<script src="https://cdn.jsdelivr.net/gh/kevinbatdorf/alpine-magic-helpers@0.2.x/dist/fetch.js"></script>
+<script src="https://cdn.jsdelivr.net/gh/kevinbatdorf/alpine-magic-helpers@0.2.x/dist/interval.js"></script>
+<script src="https://cdn.jsdelivr.net/gh/kevinbatdorf/alpine-magic-helpers@0.2.x/dist/truncate.js"></script>
 ```
 
 ---
@@ -99,7 +99,7 @@ By default, `$interval ` will run your function every `nth` millisecond when bro
 | Property | Description |
 | --- | --- |
 | `timer` | Timer in milliseconds.  |
-| `delay` | Delay the first run. N.B. The first run is also relayed by the timer time. |
+| `delay` | Delay the first run. N.B. The first run is also delayed by the timer time. |
 | `forceInterval` |  Ignore the browser animation request mechinism. Default is false |
 
 > ⚠️ We also add a hidden property `autoIntervalTest` that will play/pause the timer depending on it's "truthyness"
@@ -130,23 +130,31 @@ By default, `$interval ` will run your function every `nth` millisecond when bro
     x-data="{ characters: 50, string: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.'}"
     x-text="$truncate(string, characters)"
     @click="characters = undefined">
-    <!-- Text will show 'Lorem ipsum dolor sit amet, consectetur adipiscing' and will reveal all when clicked-->
+    <!-- Text will show 'Lorem ipsum dolor sit amet, consectetur adipiscing…' and will reveal all when clicked-->
+</div>
+```
+You may also pass a third argument to change the string that will be appended to the end:
+```html
+<div
+    x-data="{ characters: 50, string: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.'}"
+    x-text="$truncate(string, characters, ' (...)')">
+    <!-- Text will show 'Lorem ipsum dolor sit amet, consectetur adipiscing (...)' -->
 </div>
 ```
 [Demo](https://codepen.io/KevinBatdorf/pen/BaKKgGg?editors=1000)
 
 **Optionally pass in options**
 
-By default, `$truncate` will return take characters as a parameter. Instead you can pass in an object and trim by words.
+By default, `$truncate` will return take characters as a parameter. Instead you can pass in an object and trim by words. You may also update the ellipsis.
 
 **Example:**
 
 ```html
 <div
     x-data="{ count: 5, string: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.'}"
-    x-text="$truncate(string, {words: count})"
-    @click="count = 10">
-    <!-- Will start with 5 words, then increase to 10 when clicked -->
+    x-text="$truncate(string, { words: words, ellipsis: ' ...read more' })"
+    @click="count = 0">
+    <!-- Will start with 5 words, then increase to unlimited when clicked -->
 </div>
 ```
 [Demo](https://codepen.io/KevinBatdorf/pen/BaKKgGg?editors=1000) (same as above)
