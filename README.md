@@ -42,13 +42,13 @@ Or only use the specific methods you need:
 If you wish to create your own bundle:
 
 ```bash
-npm install @kevinbatdorf/alpine-magic-helpers --save
+npm install alpine-magic-helpers --save
 ```
 
 Then add the following to your script:
 
 ```javascript
-import '@kevinbatdorf/alpine-magic-helpers'
+import 'alpine-magic-helpers'
 import 'alpinejs'
 ```
 
