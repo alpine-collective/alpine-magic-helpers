@@ -8,9 +8,9 @@ A set of magic helpers to use with AlpineJS
 This adds three magic helpers to use with Alpine JS. ***More to come!***
 | Magic Helpers | Description |
 | --- | --- |
+| [`$component`](#component) | Access data natively from other components or the parent component. |
 | [`$fetch`](#fetch) | Using Axios, fetch JSON from an external source.  |
 | [`$interval`](#interval) | Run a function every n milliseconds. Optionally start and stop the timer. |
-| [`$observe`](#observe) | Access data natively from other components, including parents. |
 | [`$truncate`](#truncate) |  Limit a text string to a specific number of characters or words. |
 
 🚀 If you have ideas for more magic helpers, please let me know on [Twitter](https://twitter.com/kevinbatdorf) or on the [AlpineJS Discord](https://discord.gg/snmCYk3)
@@ -52,6 +52,33 @@ Then add the following to your script:
 ```javascript
 import 'alpine-magic-helpers'
 import 'alpinejs'
+```
+
+
+### `$component`
+**Example:**
+
+Arguably more useful, this also adds a `$parent` magic helper to access parent data
+```html
+<div x-data="{ color: 'blue' }">
+    <p x-data x-text="$parent.color"></p>
+    <!-- The text will say blue -->
+</div>
+```
+[Demo](https://codepen.io/KevinBatdorf/pen/XWdjWrr)
+
+You may watch other components, but you must give them each an id using `x-observable-id`:
+```html
+<div x-data="{ color: 'blue' }">
+    <p
+        x-data
+        x-text="$component('yellowSquare').color"
+        :class="`text-${$parent.color}-700`">
+        <!-- This text will have blue background color and the text will say yellow -->
+    </p>
+</div>
+
+<div x-observable-id="yellowSquare" x-data="{ color: 'yellow' }"></div>
 ```
 
 
@@ -122,33 +149,6 @@ By default, `$interval ` will run your function every `nth` millisecond when bro
 </div>
 ```
 [Demo](https://codepen.io/KevinBatdorf/pen/poyyXQy?editors=1010)
-
----
-
-### `$observe`
-**Example:**
-```html
-<div x-data="{ color: 'blue' }">
-    <p x-data x-init="$observe('parent')" x-text="parent.color"></p>
-    <!-- The text will say blue -->
-</div>
-```
-[Demo](https://codepen.io/KevinBatdorf/pen/BaKKgGg?editors=1000)
-
-You may watch multiple components, but you must give them each an id using `x-observable-id`:
-```html
-<div x-data="{ color: 'blue' }">
-    <p
-        x-data
-        x-init="$observe('parent', 'yellowSquare')"
-        x-text="parent.color"
-        :class="`bg-${yellowSquare.color}-400`">
-        <!-- This will have yellow background color and the text will say blue -->
-    </p>
-</div>
-<div x-observable-id="yellowSquare" x-data="{ color: 'yellow' }"></div>
-```
-
 
 ---
 

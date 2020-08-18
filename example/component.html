@@ -3,7 +3,7 @@
 <head>
 	<script type="module" src="https://cdn.jsdelivr.net/gh/alpinejs/alpine@v2.x.x/dist/alpine.min.js"></script>
 	<script nomodule src="https://cdn.jsdelivr.net/gh/alpinejs/alpine@v2.x.x/dist/alpine-ie11.min.js" defer></script>
-	<script src="../dist/observe.js"></script>
+	<script src="../dist/component.js"></script>
 	<link href="https://unpkg.com/tailwindcss@^1.0/dist/tailwind.min.css" rel="stylesheet">
 
 </head>
@@ -16,7 +16,7 @@
         class="w-64 h-64 mb-6 flex items-center justify-center"
         :class="`bg-${color}-400`"
         @click="color = color === 'blue' ? 'red' : 'blue'">
-        <p x-data x-init="$observe('parent')" x-text="parent.color"></p>
+        <p x-data x-text="$parent.color"></p>
     </div>
     
     <p class="mb-4 font-bold">This component is the same as above, but also watches the third component's color as well</p>
@@ -27,9 +27,8 @@
         @click="color = color === 'blue' ? 'red' : 'blue'">
         <p
             x-data
-            x-init="$observe('parent', 'yellowSquare')"
-            x-text="parent.color"
-            :class="`bg-${yellowSquare.color}-400`">
+            x-text="$parent.color"
+            :class="`bg-${$component('yellowSquare').color}-400`">
         </p>
     </div>
 
@@ -41,7 +40,7 @@
         :class="`bg-${color}-400`"
         @click="color = color === 'yellow' ? 'green' : 'yellow'">
     </div>
-    <p x-data x-init="$observe('yellowSquare')" x-text="yellowSquare.color"></p>
+    <p x-data x-text="$component('yellowSquare').color"></p>
 
 	<script src="http://localhost:35729/livereload.js"></script>
 </body>

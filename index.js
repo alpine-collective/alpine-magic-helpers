@@ -1,21 +1,21 @@
-import registerIntervalMagicMethod from './src/interval.js'
+import registerComponentMagicMethod from './src/component.js'
 import registerFetchMagicMethod from './src/fetch.js'
-import registerObserveMagicMethod from './src/observe.js'
+import registerIntervalMagicMethod from './src/interval.js'
 import registerTruncateMagicMethod from './src/truncate.js'
 
 
 const alpine = window.deferLoadingAlpine || ((alpine) => alpine())
 window.deferLoadingAlpine = function (callback) {
-    registerIntervalMagicMethod()
+    registerComponentMagicMethod()
     registerFetchMagicMethod()
-    registerObserveMagicMethod()
+    registerIntervalMagicMethod()
     registerTruncateMagicMethod()
     alpine(callback)
 }
 
 export default { 
-    registerIntervalMagicMethod,
+    registerComponentMagicMethod,
     registerFetchMagicMethod,
-    registerObserveMagicMethod,
+    registerIntervalMagicMethod,
     registerTruncateMagicMethod,
 }
