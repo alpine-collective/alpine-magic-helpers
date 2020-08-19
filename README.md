@@ -21,7 +21,7 @@ This adds three magic helpers to use with Alpine JS. ***More to come!***
     1. `$suspend` - Render a different while waiting on some other data `x-show="$suspend(data, 'templateName')"`
     1. `$visible` - Do something when the component is visible on the screen `x-init="$visible(loadImages())"` or `x-show.transition="$visible('full')"` which could wait until the element is fully visible
     1. `$breakpoint` - Similar to `$visible`, do something when at a specific breakpoint `x-show="$breakpoint('max-width:600px')"` or possibly `x-show="$breakpoint('md')"`
-    1. `$render` - Force update the component state `@on-custom-event="$render()"` for example if you need to set a property value in a non-conventional way and force the component to update
+    1. `$forceRender` - Force update the component state `@on-custom-event="$forceRender()"` for example if you need to set a property value in a non-conventional way and force the component to update
     1. `$graphql` - Similar to `$fetch` but with common features expected with GraphQL requests.
     1. `$route` - Not entirely sure about this one, but possibly let the component do something depending on the current route.
 1. Write tests - This will start soon after some initial content is included, especially if demand increases.
