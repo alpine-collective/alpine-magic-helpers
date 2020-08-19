@@ -20,6 +20,9 @@ function registerComponentMagicMethod() {
             for (let i = 0; i < mutations.length; i++) {
                 const closestParentComponent = mutations[i].target.closest('[x-data]')
                 if ((closestParentComponent && closestParentComponent.isSameNode($el))) continue
+                if (!closestParentComponent.__x) {
+                    throw 'Error locating $parent data'
+                }
                 $el.$parent = allowTwoWayCommunication(closestParentComponent.__x.getUnobservedData(), parentComponent)
                 $el.__x.updateElements($el)
             }
@@ -60,6 +63,9 @@ function registerComponentMagicMethod() {
                 for (let i = 0; i < mutations.length; i++) {
                     const closestParentComponent = mutations[i].target.closest('[x-data]')
                     if ((closestParentComponent && closestParentComponent.isSameNode(this.$el))) continue
+                    if (!closestParentComponent.__x) {
+                        throw 'Error locating $component data'
+                    }
                     this[componentName] = allowTwoWayCommunication(closestParentComponent.__x.getUnobservedData(), componentBeingObserved)
                 }
             })
