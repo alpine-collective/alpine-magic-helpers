@@ -8,16 +8,25 @@ A set of magic helpers to use with AlpineJS
 This adds three magic helpers to use with Alpine JS. ***More to come!***
 | Magic Helpers | Description |
 | --- | --- |
-| [`$component`](#component) | Access data natively from other components or the parent component. |
+| [`$component/$parent`](#component) | Natively access and update data from other components or the parent component. |
 | [`$fetch`](#fetch) | Using Axios, fetch JSON from an external source.  |
 | [`$interval`](#interval) | Run a function every n milliseconds. Optionally start and stop the timer. |
 | [`$truncate`](#truncate) |  Limit a text string to a specific number of characters or words. |
 
 🚀 If you have ideas for more magic helpers, please let me know on [Twitter](https://twitter.com/kevinbatdorf) or on the [AlpineJS Discord](https://discord.gg/snmCYk3)
 ##### TODO:
-1. Add more useful magic helpers
-1. Create better examples with example pages
-1. Write tests
+1. Add more useful magic helpers - Some ideas include (rough ideas):
+    1. `$reset` - Reset state to the initial state, or reset a specific property only `@click="$reset('color')"`
+    1. `$undo` - Keep track of state changes and undo the last mutation `@click="$undo('count')"`
+    1. `$suspend` - Render a different while waiting on some other data `x-show="$suspend(data, 'templateName')"`
+    1. `$visible` - Do something when the component is visible on the screen `x-init="$visible(loadImages())"` or `x-show.transition="$visible('full')"` which could wait until the element is fully visible
+    1. `$breakpoint` - Similar to `$visible`, do something when at a specific breakpoint `x-show="$breakpoint('max-width:600px')"` or possibly `x-show="$breakpoint('md')"`
+    1. `$render` - Force update the component state `@on-custom-event="$render()"` for example if you need to set a property value in a non-conventional way and force the component to update
+    1. `$graphql` - Similar to `$fetch` but with common features expected with GraphQL requests.
+    1. `$route` - Not entirely sure about this one, but possibly let the component do something depending on the current route.
+1. Write tests - This will start soon after some initial content is included, especially if demand increases.
+
+> ℹ Be sure to star this repo to show your interest in this project
 
 
 ## Installation
@@ -33,7 +42,7 @@ Or only use the specific methods you need:
 ```html
 <script src="https://cdn.jsdelivr.net/gh/kevinbatdorf/alpine-magic-helpers@0.3.x/dist/fetch.js"></script>
 <script src="https://cdn.jsdelivr.net/gh/kevinbatdorf/alpine-magic-helpers@0.3.x/dist/interval.js"></script>
-<script src="https://cdn.jsdelivr.net/gh/kevinbatdorf/alpine-magic-helpers@0.3.x/dist/observe.js"></script>
+<script src="https://cdn.jsdelivr.net/gh/kevinbatdorf/alpine-magic-helpers@0.3.x/dist/component.js"></script>
 <script src="https://cdn.jsdelivr.net/gh/kevinbatdorf/alpine-magic-helpers@0.3.x/dist/truncate.js"></script>
 ```
 
@@ -44,7 +53,7 @@ Or only use the specific methods you need:
 If you wish to create your own bundle:
 
 ```bash
-npm install kevinbatdorf/alpine-magic-helpers --save
+npm install alpine-magic-helpers --save
 ```
 
 Then add the following to your script:
@@ -100,7 +109,7 @@ By default, `$fetch` will return the JSON data object. However, because we are u
 
 ```html
 <div x-data="{ url: 'https://jsonplaceholder.typicode.com/todos/1' }"
-    x-init="$fetch({ url: url, method: 'post' }).then({ data } => console.log(data))">
+    x-init="$fetch({ url: url, method: 'post' }).then(({ data }) => console.log(data))">
 </div>
 ```
 > Note that this will return the entire response object, whereas by default `$fetch` will only return the data
@@ -129,7 +138,7 @@ By default, `$interval ` will run your function every `nth` millisecond when bro
 | --- | --- |
 | `timer` | Timer in milliseconds.  |
 | `delay` | Delay the first run. N.B. The first run is also delayed by the timer time. |
-| `forceInterval` |  Ignore the browser animation request mechinism. Default is false |
+| `forceInterval` |  Ignore the browser animation request mechanism. Default is false |
 
 > ⚠️ We also add a hidden property `autoIntervalTest` that will play/pause the timer depending on it's "truthyness"
 

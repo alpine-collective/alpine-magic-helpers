@@ -10,13 +10,13 @@
 
 <body class="flex flex-col items-center justify-center m-24">
     
-    <p class="mb-4 font-bold">The child component uses the color name set on the parent in x-text</p>
+    <p class="mb-4 font-bold">The child component uses the color name set on the parent in x-text. You can also update properties on the component you are watching (click on the text to instruct the child to update the parent color to pink)</p>
     <div
         x-data="{ color: 'blue' }"
         class="w-64 h-64 mb-6 flex items-center justify-center"
         :class="`bg-${color}-400`"
         @click="color = color === 'blue' ? 'red' : 'blue'">
-        <p x-data x-text="$parent.color"></p>
+        <p x-data x-text="$parent.color" @click.stop="$parent.color = 'pink'"></p>
     </div>
     
     <p class="mb-4 font-bold">This component is the same as above, but also watches the third component's color as well</p>

@@ -1,6 +1,6 @@
 {
-  "name": "@kevinbatdorf/alpine-magic-helpers",
-  "version": "0.1.0",
+  "name": "alpine-magic-helpers",
+  "version": "0.3.0",
   "description": "A set of magic helpers to use with AlpineJS",
   "main": "dist/index.js",
   "publishConfig": {

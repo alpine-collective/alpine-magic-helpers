@@ -1,3 +1,4 @@
+// TODO: These can be refactored some to combine functionality
 function registerComponentMagicMethod() {
     Alpine.addMagicProperty('parent', function ($el) {
         if (typeof $el.$parent !== 'undefined') return $el.$parent
@@ -13,13 +14,13 @@ function registerComponentMagicMethod() {
             data = saferEval(parentComponent.getAttribute('x-data'), parentComponent)
         }
 
-        $el.$parent = disableUpdatingPropertyDirectly(data, '$parent')
+        $el.$parent = allowTwoWayCommunication(data, parentComponent)
 
         const parentObserver = new MutationObserver(mutations => {
             for (let i = 0; i < mutations.length; i++) {
                 const closestParentComponent = mutations[i].target.closest('[x-data]')
                 if ((closestParentComponent && closestParentComponent.isSameNode($el))) continue
-                $el.$parent = disableUpdatingPropertyDirectly(closestParentComponent.__x.getUnobservedData(), '$parent')
+                $el.$parent = allowTwoWayCommunication(closestParentComponent.__x.getUnobservedData(), parentComponent)
                 $el.__x.updateElements($el)
             }
         })
@@ -53,13 +54,13 @@ function registerComponentMagicMethod() {
                 data = saferEval(componentBeingObserved.getAttribute('x-data'), componentBeingObserved)
             }
 
-            this[componentName] = disableUpdatingPropertyDirectly(data, '$component')
+            this[componentName] = allowTwoWayCommunication(data, componentBeingObserved)
 
             const observer = new MutationObserver(mutations => {
                 for (let i = 0; i < mutations.length; i++) {
                     const closestParentComponent = mutations[i].target.closest('[x-data]')
                     if ((closestParentComponent && closestParentComponent.isSameNode(this.$el))) continue
-                    this[componentName] = disableUpdatingPropertyDirectly(closestParentComponent.__x.getUnobservedData(), '$component')
+                    this[componentName] = allowTwoWayCommunication(closestParentComponent.__x.getUnobservedData(), componentBeingObserved)
                 }
             })
             observer.observe(componentBeingObserved, {
@@ -71,10 +72,15 @@ function registerComponentMagicMethod() {
             return this[componentName]
         }
     })
-    function disableUpdatingPropertyDirectly(data, type) {
+    function allowTwoWayCommunication(data, observedComponent) {
         return new Proxy(data, {
-            set() {
-                throw `Updating the ${type} magic helper is not supported.`
+            set(object, prop, value) {
+                if (!observedComponent.__x) {
+                    throw 'Error communicating with observed component'
+                }
+                observedComponent.__x.$data[prop] = value
+                observedComponent.__x.updateElements(observedComponent)
+                return true
             }
         })
     }
