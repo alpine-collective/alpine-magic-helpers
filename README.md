@@ -67,7 +67,7 @@ Arguably more useful, this also adds a `$parent` magic helper to access parent d
 ```
 [Demo](https://codepen.io/KevinBatdorf/pen/XWdjWrr)
 
-You may watch other components, but you must give them each an id using `x-observable-id`:
+You may watch other components, but you must give them each an id using the 'id' attribute or `x-id` if you need more flexability:
 ```html
 <div x-data="{ color: 'blue' }">
     <p
@@ -78,7 +78,7 @@ You may watch other components, but you must give them each an id using `x-obser
     </p>
 </div>
 
-<div x-observable-id="yellowSquare" x-data="{ color: 'yellow' }"></div>
+<div x-id="yellowSquare" x-data="{ color: 'yellow' }"></div>
 ```
 
 

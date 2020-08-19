@@ -32,9 +32,9 @@
         </p>
     </div>
 
-    <p class="mb-4 font-bold">This watches a non-parent component. It requires adding an `x-observable-id` attribute so the component can be identified</p>
+    <p class="mb-4 font-bold">This watches a non-parent component. It requires adding an `id` attribute or `x-id` so the component can be identified</p>
     <div
-        x-observable-id="yellowSquare"
+        x-id="yellowSquare"
         x-data="{ color: 'yellow' }"
         class="w-64 h-64"
         :class="`bg-${color}-400`"

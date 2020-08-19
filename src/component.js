@@ -39,7 +39,10 @@ function registerComponentMagicMethod() {
 
             if (typeof this[componentName] !== 'undefined') return this[componentName]
 
-            const componentBeingObserved = document.querySelector(`[x-data][x-observable-id="${componentName}"]`)
+            const componentBeingObserved = document.querySelector(`[x-data][x-id="${componentName}"], [x-data]#${componentName}`)
+            if (!componentBeingObserved) {
+                throw 'Component not found'
+            }
             
             // Set initial state
             let data
