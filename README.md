@@ -76,7 +76,7 @@ Arguably more useful, this also adds a `$parent` magic helper to access parent d
 ```
 [Demo](https://codepen.io/KevinBatdorf/pen/XWdjWrr)
 
-You may watch other components, but you must give them each an id using the 'id' attribute or `x-id` if you need more flexability:
+You may watch other components, but you must give them each an id using the 'id' attribute or `x-id` if you need more flexibility:
 ```html
 <div x-data="{ color: 'blue' }">
     <p
@@ -101,7 +101,7 @@ You may watch other components, but you must give them each an id using the 'id'
 ```
 [Demo](https://codepen.io/KevinBatdorf/pen/poyyXKj)
 
-**Optionally pass in an options**
+**Optionally pass in an options object**
 
 By default, `$fetch` will return the JSON data object. However, because we are using Axios behind the scenes, you may pass in an object to customize the request [See all options](https://github.com/axios/axios).
 
@@ -140,7 +140,7 @@ By default, `$interval ` will run your function every `nth` millisecond when bro
 | `delay` | Delay the first run. N.B. The first run is also delayed by the timer time. |
 | `forceInterval` |  Ignore the browser animation request mechanism. Default is false |
 
-> ⚠️ We also add a hidden property `autoIntervalTest` that will play/pause the timer depending on it's "truthyness"
+> ⚠️ We also add a hidden property `autoIntervalTest` that will play/pause the timer depending on it's "truthiness"
 
 **Example:**
 
