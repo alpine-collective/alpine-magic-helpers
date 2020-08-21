@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+
+<head>
+	<script type="module" src="https://cdn.jsdelivr.net/gh/alpinejs/alpine@v2.x.x/dist/alpine.min.js"></script>
+	<script nomodule src="https://cdn.jsdelivr.net/gh/alpinejs/alpine@v2.x.x/dist/alpine-ie11.min.js" defer></script>
+	<script src="../dist/component.js"></script>
+	<link href="https://unpkg.com/tailwindcss@^1.0/dist/tailwind.min.css" rel="stylesheet">
+
+</head>
+
+<body class="flex flex-col items-center justify-center m-24">
+    
+    <p class="mb-4 font-bold">The child component uses the color name set on the parent in x-text. You can also update properties on the component you are watching (click on the text to instruct the child to update the parent color to pink)</p>
+    <div
+        x-data="{ color: 'blue' }"
+        class="w-64 h-64 mb-6 flex items-center justify-center"
+        :class="`bg-${color}-400`"
+        @click="color = color === 'blue' ? 'red' : 'blue'">
+        <p x-data x-text="$parent.color" @click.stop="$parent.color = 'pink'"></p>
+    </div>
+    
+    <p class="mb-4 font-bold">This component is the same as above, but also watches the third component's color as well</p>
+    <div
+        x-data="{ color: 'blue' }"
+        class="w-64 h-64 mb-6 flex items-center justify-center"
+        :class="`bg-${color}-400`"
+        @click="color = color === 'blue' ? 'red' : 'blue'">
+        <p
+            x-data
+            x-text="$parent.color"
+            :class="`bg-${$component('yellowSquare').color}-400`">
+        </p>
+    </div>
+
+    <p class="mb-4 font-bold">This watches a non-parent component. It requires adding an `id` attribute or `x-id` so the component can be identified</p>
+    <div
+        x-id="yellowSquare"
+        x-data="{ color: 'yellow' }"
+        class="w-64 h-64"
+        :class="`bg-${color}-400`"
+        @click="color = color === 'yellow' ? 'green' : 'yellow'">
+    </div>
+    <p x-data x-text="$component('yellowSquare').color"></p>
+
+	<script src="http://localhost:35729/livereload.js"></script>
+</body>

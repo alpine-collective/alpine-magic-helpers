@@ -1,4 +1,5 @@
 {
+    "/dist/component.js": "/dist/component.js",
     "/dist/fetch.js": "/dist/fetch.js",
     "/dist/index.js": "/dist/index.js",
     "/dist/interval.js": "/dist/interval.js",

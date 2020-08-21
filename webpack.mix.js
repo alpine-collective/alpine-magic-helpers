@@ -13,6 +13,7 @@ const LiveReloadPlugin = require('webpack-livereload-plugin')
  */
 
 mix.js('index.js', 'dist/')
+mix.js('src/component.js', 'dist/')
 mix.js('src/fetch.js', 'dist/')
 mix.js('src/interval.js', 'dist/')
 mix.js('src/truncate.js', 'dist/')

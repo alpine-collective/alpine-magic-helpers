@@ -10,7 +10,7 @@
 
 <body class="flex flex-col m-24">
     <div class="mt-4 pt-4 border-t">
-        <h2 class="text-2xl font-black">Fetch:</h2>
+        <h2 class="text-2xl font-black">$fetch:</h2>
         <p class="mb-4">A title will load below</p>
         <div x-data="{ url: 'https://jsonplaceholder.typicode.com/todos/1', title: ''}"
             x-init="$fetch(url).then(response => title = response.title)" x-text="title">
@@ -18,7 +18,7 @@
     </div>
 
     <div class="mt-4 pt-4 border-t">
-        <h2 class="text-2xl font-black">Interval:</h2>
+        <h2 class="text-2xl font-black">$interval:</h2>
         <div x-data="{
                 timer: 500,
                 autoIntervalTest: true, // optional to start/stop the timer
@@ -34,7 +34,32 @@
     </div>
 
     <div class="mt-4 pt-4 border-t">
-        <h2 class="text-2xl font-black">Truncate:</h2>
+        <h2 class="text-2xl font-black">$parent:</h2>
+        <p class="mb-4">The child component uses the color name set on the parent in x-text</p>
+            <div
+                x-data="{ color: 'blue' }"
+                class="w-64 h-64 mb-6 flex items-center justify-center"
+                :class="`bg-${color}-400`"
+                @click="color = color === 'blue' ? 'red' : 'blue'">
+                <p x-data x-text="$parent.color"></p>
+            </div>
+    </div>
+
+    <div class="mt-4 pt-4 border-t">
+        <h2 class="text-2xl font-black">$component:</h2>
+        <p class="mb-4">This watches a non-parent component. It requires adding an id attribute, or `x-id` attribute so the component can be identified</p>
+        <div
+            x-id="yellowSquare"
+            x-data="{ color: 'yellow' }"
+            class="w-64 h-64"
+            :class="`bg-${color}-400`"
+            @click="color = color === 'yellow' ? 'green' : 'yellow'">
+        </div>
+        <p x-data x-text="$component('yellowSquare').color"></p>
+    </div>
+
+    <div class="mt-4 pt-4 border-t">
+        <h2 class="text-2xl font-black">$truncate:</h2>
         <p class="mb-4">Truncate to specific characters (click the truncated text to update from 50 characters to unlimited)</p>
         <div
             x-data="{ characters: 50, string: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.'}"

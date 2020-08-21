@@ -8,15 +8,25 @@ A set of magic helpers to use with AlpineJS
 This adds three magic helpers to use with Alpine JS. ***More to come!***
 | Magic Helpers | Description |
 | --- | --- |
+| [`$component/$parent`](#component) | Natively access and update data from other components or the parent component. |
 | [`$fetch`](#fetch) | Using Axios, fetch JSON from an external source.  |
 | [`$interval`](#interval) | Run a function every n milliseconds. Optionally start and stop the timer. |
 | [`$truncate`](#truncate) |  Limit a text string to a specific number of characters or words. |
 
 🚀 If you have ideas for more magic helpers, please let me know on [Twitter](https://twitter.com/kevinbatdorf) or on the [AlpineJS Discord](https://discord.gg/snmCYk3)
 ##### TODO:
-1. Add more useful magic helpers
-1. Create better examples with example pages
-1. Write tests
+1. Add more useful magic helpers - Some ideas include (rough ideas):
+    1. `$reset` - Reset state to the initial state, or reset a specific property only `@click="$reset('color')"`
+    1. `$undo` - Keep track of state changes and undo the last mutation `@click="$undo('count')"`
+    1. `$suspend` - Render a different while waiting on some other data `x-show="$suspend(data, 'templateName')"`
+    1. `$visible` - Do something when the component is visible on the screen `x-init="$visible(loadImages())"` or `x-show.transition="$visible('full')"` which could wait until the element is fully visible
+    1. `$breakpoint` - Similar to `$visible`, do something when at a specific breakpoint `x-show="$breakpoint('max-width:600px')"` or possibly `x-show="$breakpoint('md')"`
+    1. `$forceRender` - Force update the component state `@on-custom-event="$forceRender()"` for example if you need to set a property value in a non-conventional way and force the component to update
+    1. `$graphql` - Similar to `$fetch` but with common features expected with GraphQL requests.
+    1. `$route` - Not entirely sure about this one, but possibly let the component do something depending on the current route.
+1. Write tests - This will start soon after some initial content is included, especially if demand increases.
+
+> ℹ Be sure to star this repo to show your interest in this project
 
 
 ## Installation
@@ -24,15 +34,16 @@ This adds three magic helpers to use with Alpine JS. ***More to come!***
 Include the following `<script>` tag in the `<head>` of your document (before Alpine):
 
 ```html
-<script src="https://cdn.jsdelivr.net/gh/kevinbatdorf/alpine-magic-helpers@0.2.x/dist/index.js"></script>
+<script src="https://cdn.jsdelivr.net/gh/kevinbatdorf/alpine-magic-helpers@0.3.x/dist/index.js"></script>
 ```
 
 Or only use the specific methods you need:
 
 ```html
-<script src="https://cdn.jsdelivr.net/gh/kevinbatdorf/alpine-magic-helpers@0.2.x/dist/fetch.js"></script>
-<script src="https://cdn.jsdelivr.net/gh/kevinbatdorf/alpine-magic-helpers@0.2.x/dist/interval.js"></script>
-<script src="https://cdn.jsdelivr.net/gh/kevinbatdorf/alpine-magic-helpers@0.2.x/dist/truncate.js"></script>
+<script src="https://cdn.jsdelivr.net/gh/kevinbatdorf/alpine-magic-helpers@0.3.x/dist/fetch.js"></script>
+<script src="https://cdn.jsdelivr.net/gh/kevinbatdorf/alpine-magic-helpers@0.3.x/dist/interval.js"></script>
+<script src="https://cdn.jsdelivr.net/gh/kevinbatdorf/alpine-magic-helpers@0.3.x/dist/component.js"></script>
+<script src="https://cdn.jsdelivr.net/gh/kevinbatdorf/alpine-magic-helpers@0.3.x/dist/truncate.js"></script>
 ```
 
 ---
@@ -53,6 +64,33 @@ import 'alpinejs'
 ```
 
 
+### `$component`
+**Example:**
+
+Arguably more useful, this also adds a `$parent` magic helper to access parent data
+```html
+<div x-data="{ color: 'blue' }">
+    <p x-data x-text="$parent.color"></p>
+    <!-- The text will say blue -->
+</div>
+```
+[Demo](https://codepen.io/KevinBatdorf/pen/XWdjWrr)
+
+You may watch other components, but you must give them each an id using the 'id' attribute or `x-id` if you need more flexibility:
+```html
+<div x-data="{ color: 'blue' }">
+    <p
+        x-data
+        x-text="$component('yellowSquare').color"
+        :class="`text-${$parent.color}-700`">
+        <!-- This text will have blue background color and the text will say yellow -->
+    </p>
+</div>
+
+<div x-id="yellowSquare" x-data="{ color: 'yellow' }"></div>
+```
+
+
 ### `$fetch`
 **Example:**
 ```html
@@ -63,7 +101,7 @@ import 'alpinejs'
 ```
 [Demo](https://codepen.io/KevinBatdorf/pen/poyyXKj)
 
-**Optionally pass in an options**
+**Optionally pass in an options object**
 
 By default, `$fetch` will return the JSON data object. However, because we are using Axios behind the scenes, you may pass in an object to customize the request [See all options](https://github.com/axios/axios).
 
@@ -102,7 +140,7 @@ By default, `$interval ` will run your function every `nth` millisecond when bro
 | `delay` | Delay the first run. N.B. The first run is also delayed by the timer time. |
 | `forceInterval` |  Ignore the browser animation request mechanism. Default is false |
 
-> ⚠️ We also add a hidden property `autoIntervalTest` that will play/pause the timer depending on it's "truthyness"
+> ⚠️ We also add a hidden property `autoIntervalTest` that will play/pause the timer depending on it's "truthiness"
 
 **Example:**
 
