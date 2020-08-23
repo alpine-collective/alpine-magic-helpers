@@ -28,6 +28,7 @@
   },
   "homepage": "https://github.com/kevinbatdorf/alpine-magic-helpers#readme",
   "devDependencies": {
+    "alpine-test-utils": "0.0.6",
     "alpinejs": "^2.4.1",
     "cross-env": "^7.0.2",
     "jest": "^26.0.1",
