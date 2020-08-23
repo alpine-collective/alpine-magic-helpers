@@ -19,7 +19,7 @@ function registerComponentMagicMethod() {
         const parentObserver = new MutationObserver(mutations => {
             for (let i = 0; i < mutations.length; i++) {
                 const closestParentComponent = mutations[i].target.closest('[x-data]')
-                if ((closestParentComponent && closestParentComponent.isSameNode($el))) continue
+                if ((closestParentComponent && !closestParentComponent.isSameNode(parentComponent))) continue
                 if (!closestParentComponent.__x) {
                     throw 'Error locating $parent data'
                 }
@@ -47,7 +47,7 @@ function registerComponentMagicMethod() {
             if (!componentBeingObserved) {
                 throw 'Component not found'
             }
-            
+
             // Set initial state
             let data
             if (componentBeingObserved.__x) {
