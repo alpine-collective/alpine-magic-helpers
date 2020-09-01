@@ -41,7 +41,12 @@
         "alpinejs": "^2.6"
     },
     "devDependencies": {
-        "jest": "^26.0.1",
+        "@babel/preset-env": "^7.11.5",
+        "@testing-library/dom": "^7.23.0",
+        "@testing-library/jest-dom": "^5.11.4",
+        "alpinejs": "^2.6.0",
+        "jest": "^26.4.2",
+        "jsdom-simulant": "^1.1.2",
         "microbundle": "^0.12.3"
     },
     "publishConfig": {
