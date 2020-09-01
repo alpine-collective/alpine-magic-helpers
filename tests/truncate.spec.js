@@ -1,5 +1,6 @@
 import Alpine from 'alpinejs'
 import AlpineTruncateMagicMethod from '../dist/truncate.umd'
+import { waitFor } from '@testing-library/dom'
 
 beforeAll(() => {
     window.Alpine = Alpine
@@ -43,4 +44,23 @@ test('$truncate > can shorten text with custom suffix', () => {
     Alpine.start()
 
     expect(document.querySelector('p').innerText).toEqual('Lorem (read more)')
+})
+
+test('$truncate > will react to changes in arguments', async () => {
+    document.body.innerHTML = `
+        <div x-data="{ characters: 5, string: 'Lorem ipsum'}">
+            <p x-text="$truncate(string, characters)"></p>
+            <button @click="characters = 2"></button>
+        </div>
+    `
+
+    Alpine.start()
+
+    expect(document.querySelector('p').innerText).toEqual('Lorem…')
+
+    document.querySelector('button').click()
+
+    await waitFor(() => {
+        expect(document.querySelector('p').innerText).toEqual('Lo…')
+    })
 })
