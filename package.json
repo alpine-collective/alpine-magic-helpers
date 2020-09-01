@@ -2,9 +2,16 @@
     "name": "@alpine-collective/magic-helpers",
     "version": "0.3.1",
     "description": "A collection of magic properties and helper functions for use with Alpine.",
+    "source": [
+        "src/index.js",
+        "src/component.js",
+        "src/fetch.js",
+        "src/interval.js",
+        "src/truncate.js"
+    ],
     "main": "dist/index.js",
     "scripts": {
-        "build": "microbundle",
+        "build": "microbundle -f umd",
         "watch": "microbundle watch",
         "test": "jest",
         "test-watch": "jest --watch"
