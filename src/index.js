@@ -1,20 +1,22 @@
 import AlpineComponentMagicMethod from './component'
 import AlpineFetchMagicMethod from './fetch'
 import AlpineIntervalMagicMethod from './interval'
-import registerTruncateMagicMethod from './src/truncate.js'
+import AlpineTruncateMagicMethod from './truncate'
 
 const alpine = window.deferLoadingAlpine || ((alpine) => alpine())
+
 window.deferLoadingAlpine = function (callback) {
-    registerComponentMagicMethod()
-    registerFetchMagicMethod()
-    registerIntervalMagicMethod()
-    registerTruncateMagicMethod()
+    AlpineComponentMagicMethod.start()
+    AlpineFetchMagicMethod.start()
+    AlpineIntervalMagicMethod.start()
+    AlpineTruncateMagicMethod.start()
+
     alpine(callback)
 }
 
 export default {
-    registerComponentMagicMethod,
-    registerFetchMagicMethod,
-    registerIntervalMagicMethod,
-    registerTruncateMagicMethod,
+    AlpineComponentMagicMethod,
+    AlpineFetchMagicMethod,
+    AlpineIntervalMagicMethod,
+    AlpineTruncateMagicMethod
 }
