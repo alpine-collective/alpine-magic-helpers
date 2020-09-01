@@ -13,7 +13,7 @@ window.deferLoadingAlpine = function (callback) {
     alpine(callback)
 }
 
-export default { 
+export default {
     registerComponentMagicMethod,
     registerFetchMagicMethod,
     registerIntervalMagicMethod,

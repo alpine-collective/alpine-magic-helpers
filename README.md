@@ -1,4 +1,5 @@
 # Alpine Magic Helpers
+
 A set of magic helpers to use with AlpineJS
 
 ![GitHub tag (latest by date)](https://img.shields.io/github/v/tag/kevinbatdorf/alpine-magic-helpers?label=version&style=flat-square)

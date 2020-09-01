@@ -1,45 +1,43 @@
 {
-  "name": "alpine-magic-helpers",
-  "version": "0.3.1",
-  "description": "A set of magic helpers to use with AlpineJS",
-  "main": "dist/index.js",
-  "publishConfig": {
-    "access": "public"
-  },
-  "scripts": {
-    "test": "jest",
-    "test-watch": "jest --watch",
-    "dev": "npm run development",
-    "development": "cross-env NODE_ENV=development node_modules/webpack/bin/webpack.js --progress --hide-modules --config=node_modules/laravel-mix/setup/webpack.config.js",
-    "watch": "npm run development -- --watch",
-    "build": "cross-env NODE_ENV=production node_modules/webpack/bin/webpack.js --no-progress --hide-modules --config=node_modules/laravel-mix/setup/webpack.config.js"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/kevinbatdorf/alpine-magic-helpers.git"
-  },
-  "keywords": [
-    "alpinejs"
-  ],
-  "author": "Kevin Batdorf",
-  "license": "MIT",
-  "bugs": {
-    "url": "https://github.com/kevinbatdorf/alpine-magic-helpers/issues"
-  },
-  "homepage": "https://github.com/kevinbatdorf/alpine-magic-helpers#readme",
-  "devDependencies": {
-    "alpinejs": "^2.4.1",
-    "cross-env": "^7.0.2",
-    "jest": "^26.0.1",
-    "laravel-mix": "^5.0.4",
-    "vue-template-compiler": "^2.6.11",
-    "webpack-livereload-plugin": "^1.2.0"
-  },
-  "directories": {
-    "example": "example",
-    "test": "test"
-  },
-  "dependencies": {
-    "axios": "^0.19.2"
-  }
+    "name": "@alpine-collective/magic-helpers",
+    "version": "0.3.1",
+    "description": "A collection of magic properties and helper functions for use with Alpine.",
+    "main": "dist/index.js",
+    "scripts": {
+        "build": "microbundle",
+        "watch": "microbundle watch",
+        "test": "jest",
+        "test-watch": "jest --watch"
+    },
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/alpine-collective/magic-helpers.git"
+    },
+    "keywords": [
+        "alpinejs",
+        "magic properties",
+        "alpine"
+    ],
+    "author": {
+        "name": "Kevin Batdorf",
+        "url": "https://kevinbatdorf.com"
+    },
+    "license": "MIT",
+    "bugs": {
+        "url": "https://github.com/alpine-collective/magic-helpers/issues"
+    },
+    "homepage": "https://github.com/alpine-collective/magic-helpers#readme",
+    "dependencies": {
+        "axios": "^0.20"
+    },
+    "peerDependencies": {
+        "alpinejs": "^2.6"
+    },
+    "devDependencies": {
+        "jest": "^26.0.1",
+        "microbundle": "^0.12.3"
+    },
+    "publishConfig": {
+        "access": "public"
+    }
 }
