@@ -29,4 +29,4 @@ window.deferLoadingAlpine = function (callback) {
     alpine(callback)
 }
 
-export default registerFetchMagicMethod
+export default AlpineFetchMagicMethod

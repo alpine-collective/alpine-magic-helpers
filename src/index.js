@@ -1,8 +1,7 @@
-import registerComponentMagicMethod from './src/component.js'
-import registerFetchMagicMethod from './src/fetch.js'
-import registerIntervalMagicMethod from './src/interval.js'
+import AlpineComponentMagicMethod from './component'
+import AlpineFetchMagicMethod from './fetch'
+import AlpineIntervalMagicMethod from './interval'
 import registerTruncateMagicMethod from './src/truncate.js'
-
 
 const alpine = window.deferLoadingAlpine || ((alpine) => alpine())
 window.deferLoadingAlpine = function (callback) {
