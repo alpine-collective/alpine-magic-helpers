@@ -3,5 +3,6 @@
     "/dist/fetch.js": "/dist/fetch.js",
     "/dist/index.js": "/dist/index.js",
     "/dist/interval.js": "/dist/interval.js",
+    "/dist/scroll.js": "/dist/scroll.js",
     "/dist/truncate.js": "/dist/truncate.js"
 }
