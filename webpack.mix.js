@@ -17,6 +17,7 @@ mix.js('src/component.js', 'dist/')
 mix.js('src/fetch.js', 'dist/')
 mix.js('src/interval.js', 'dist/')
 mix.js('src/truncate.js', 'dist/')
+mix.js('src/scroll.js', 'dist/')
 
 mix.webpackConfig({
 	plugins: [
