@@ -13,7 +13,14 @@ const AlpineScrollMagicMethod = {
                 const offset = options['offset'] ? parseInt(options['offset'], 10) : 0
                 delete options.offset
 
+                // Support integers specified as strings
+                // We do a strict check first because we don't whant to support things like "100foo"
+                if (typeof target === 'string' && /^[0-9]+?/g.test(target)) {
+                    target = parseInt(target, 10)
+                }
+
                 // Support for CSS query selector
+                let element = null
                 if (typeof target === 'string') {
                     target = document.querySelector(target)
                 }
