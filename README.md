@@ -11,7 +11,7 @@ This adds three magic helpers to use with Alpine JS. ***More to come!***
 | [`$component/$parent`](#component) | Natively access and update data from other components or the parent component. |
 | [`$fetch`](#fetch) | Using Axios, fetch JSON from an external source.  |
 | [`$interval`](#interval) | Run a function every n milliseconds. Optionally start and stop the timer. |
-| [`$scroll`](#scroll) | Scroll the page to a specific point (smoothly if supported by the browser). |
+| [`$scroll`](#scroll) | Scroll the page to a specific point. |
 | [`$truncate`](#truncate) |  Limit a text string to a specific number of characters or words. |
 
 🚀 If you have ideas for more magic helpers, please let me know on [Twitter](https://twitter.com/kevinbatdorf) or on the [AlpineJS Discord](https://discord.gg/snmCYk3)
