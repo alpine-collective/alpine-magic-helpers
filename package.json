@@ -32,6 +32,7 @@
     "cross-env": "^7.0.2",
     "jest": "^26.0.1",
     "laravel-mix": "^5.0.4",
+    "smoothscroll-polyfill": "^0.4.4",
     "vue-template-compiler": "^2.6.11",
     "webpack-livereload-plugin": "^1.2.0"
   },
