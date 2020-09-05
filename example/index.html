@@ -22,8 +22,9 @@
         <div x-data>
             <p x-ref="myref">myref</p>
             <button x-on:click="$scroll(0)" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">Scroll to top</button>
-            <button x-on:click="$scroll('#yellowsquare')" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">Scroll to yellowsquare</button>
+            <button x-on:click="$scroll('#yellowsquare')" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">Scroll to ID yellowsuare</button>
             <button x-on:click="$scroll($refs.myref)" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">Scroll to myref</button>
+            <button x-on:click="$scroll($refs.myref, {offset: 50})" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">Scroll to myref with offset</button>
         </div>
     </div>
 
