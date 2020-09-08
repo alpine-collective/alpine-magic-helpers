@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 
 <head>
+    <script src="https://cdn.jsdelivr.net/gh/kevinbatdorf/alpine-inline-devtools@0.5.1/dist/index.js"></script>
 	<script type="module" src="https://cdn.jsdelivr.net/gh/alpinejs/alpine@v2.x.x/dist/alpine.min.js"></script>
 	<script nomodule src="https://cdn.jsdelivr.net/gh/alpinejs/alpine@v2.x.x/dist/alpine-ie11.min.js" defer></script>
 	<script src="../dist/component.js"></script>
@@ -41,6 +42,17 @@
         @click="color = color === 'yellow' ? 'green' : 'yellow'">
     </div>
     <p x-data x-text="$component('yellowSquare').color"></p>
+
+    <p class="my-4 font-bold">Watch a parent component and external component that does not have a visible mutation</p>
+    <div
+        x-id="tealSquare"
+        x-data="{ color: 'teal' }"
+        class="w-64 h-64 mb-6 flex flex-col items-center justify-center bg-teal-500"
+        @click="color = color === 'teal' ? 'indigo' : 'teal'">
+        <p x-data x-text="$parent.color"></p>
+        <p x-data x-text="$parent.color"></p>
+    </div>
+    <p x-data x-text="$component('tealSquare').color"></p>
 
 	<script src="http://localhost:35729/livereload.js"></script>
 </body>
