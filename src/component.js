@@ -26,6 +26,7 @@ function registerComponentMagicMethod() {
                 if ((mutatedComponent && !mutatedComponent.isSameNode(parentComponent))) continue
                 $el.$parent = allowTwoWayCommunication(parentComponent.__x.getUnobservedData(), parentComponent)
                 $el.__x.updateElements($el)
+                return
             }
         })
 
@@ -67,6 +68,7 @@ function registerComponentMagicMethod() {
                     const closestParentComponent = mutations[i].target.closest('[x-data]')
                     if ((closestParentComponent && closestParentComponent.isSameNode(this.$el))) continue
                     this[componentName] = allowTwoWayCommunication(componentBeingObserved.__x.getUnobservedData(), componentBeingObserved)
+                    return
                 }
             })
             observer.observe(componentBeingObserved, {
