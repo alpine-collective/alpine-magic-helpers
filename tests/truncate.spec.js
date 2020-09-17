@@ -1,5 +1,5 @@
 import Alpine from 'alpinejs'
-import AlpineTruncateMagicMethod from '../dist/truncate.umd'
+import AlpineTruncateMagicMethod from '../dist/truncate'
 import { waitFor } from '@testing-library/dom'
 
 beforeAll(() => {
