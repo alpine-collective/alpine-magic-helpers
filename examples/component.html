@@ -42,5 +42,16 @@
     </div>
     <p x-data x-text="$component('yellowSquare').color"></p>
 
+    <p class="my-4 font-bold">Watch a parent component and external component that does not have a visible mutation</p>
+    <div
+        x-id="tealSquare"
+        x-data="{ color: 'teal' }"
+        class="w-64 h-64 mb-6 flex flex-col items-center justify-center bg-teal-500"
+        @click="color = color === 'teal' ? 'indigo' : 'teal'">
+        <p x-data x-text="$parent.color"></p>
+        <p x-data x-text="$parent.color"></p>
+    </div>
+    <p x-data x-text="$component('tealSquare').color"></p>
+
 	<script src="http://localhost:35729/livereload.js"></script>
 </body>

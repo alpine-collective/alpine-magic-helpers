@@ -48,13 +48,13 @@
     },
     "devDependencies": {
         "@babel/preset-env": "^7.11.5",
-        "@testing-library/dom": "^7.23.0",
+        "@testing-library/dom": "^7.24.2",
         "@testing-library/jest-dom": "^5.11.4",
-        "alpinejs": "^2.6.0",
+        "alpinejs": "^2.7.0",
         "axios": "^0.20",
         "jest": "^26.4.2",
         "jsdom-simulant": "^1.1.2",
-        "rollup": "^2.27.0"
+        "rollup": "^2.27.1"
     },
     "publishConfig": {
         "access": "public"
