@@ -38,7 +38,6 @@ function registerComponentMagicMethod() {
         })
 
         // Alpine won't pick up on magic properties added only in events until the event is fired
-        // This is a workaround until/if such an addition is added to Alpine
         // This only runs if the magic helper is first encountered inside the event, so it doesn't add
         // any overhead except for those edge cases.
 		if (parentComponent.__x && $el.__x) {
