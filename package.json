@@ -1,6 +1,6 @@
 {
   "name": "alpine-magic-helpers",
-  "version": "0.3.2",
+  "version": "0.3.3",
   "description": "A set of magic helpers to use with AlpineJS",
   "main": "dist/index.js",
   "publishConfig": {
@@ -28,7 +28,7 @@
   },
   "homepage": "https://github.com/kevinbatdorf/alpine-magic-helpers#readme",
   "devDependencies": {
-    "alpinejs": "^2.4.1",
+    "alpinejs": "^2.7.0",
     "cross-env": "^7.0.2",
     "jest": "^26.4.2",
     "laravel-mix": "^5.0.5",
