@@ -1,4 +1,3 @@
-// TODO: These can be refactored some to combine functionality
 function registerComponentMagicMethod() {
     Alpine.magicProperties.hasOwnProperty('parent') ||
     Alpine.addMagicProperty('parent', function ($el) {
@@ -43,8 +42,8 @@ function registerComponentMagicMethod() {
 			$el.__x.unobservedData.$nextTick(() => {
 				Object.entries($el.__x.unobservedData.$parent).forEach(value => {
 					parentComponent.__x.$data[value[0]] = value[1]
-					parentComponent.__x.updateElements(parentComponent)
 				})
+                parentComponent.__x.updateElements(parentComponent)
 			})
         }
 
