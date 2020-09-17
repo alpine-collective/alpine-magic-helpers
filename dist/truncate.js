@@ -1,2 +1,66 @@
-!function(e,r){"object"==typeof exports&&"undefined"!=typeof module?module.exports=r():"function"==typeof define&&define.amd?define(r):(e="undefined"!=typeof globalThis?globalThis:e||self).truncate=r()}(this,function(){"use strict";var e={start:function(){!function(){if(!window.Alpine)throw new Error("[Magic Helpers] Alpine is required for the magic helpers to function correctly.")}(),Alpine.addMagicProperty("truncate",function(){return function(){for(var e=arguments.length,r=new Array(e),n=0;n<e;n++)r[n]=arguments[n];if("string"!=typeof r[0])return r[0];var t="…";return r[1]?"object"!=typeof r[1]?(void 0!==r[2]&&(t=r[2]),r[0].slice(0,r[1])+t):(r[1].hasOwnProperty("ellipsis")&&(t=r[1].ellipsis),r[1].hasOwnProperty("words")&&r[1].words?r[0].split(" ").splice(0,r[1].words).join(" ")+t:r[1].hasOwnProperty("characters")&&r[1].characters?r[0].slice(0,r[1].characters)+t:r[0]):r[0]}})}},r=window.deferLoadingAlpine||function(e){return e()};return window.deferLoadingAlpine=function(n){e.start(),r(n)},e});
-//# sourceMappingURL=truncate.js.map
+(function (global, factory) {
+    typeof exports === 'object' && typeof module !== 'undefined' ? module.exports = factory() :
+    typeof define === 'function' && define.amd ? define(factory) :
+    (global = typeof globalThis !== 'undefined' ? globalThis : global || self, global.truncate = factory());
+}(this, (function () { 'use strict';
+
+    var checkForAlpine = function checkForAlpine() {
+      if (!window.Alpine) {
+        throw new Error('[Magic Helpers] Alpine is required for the magic helpers to function correctly.');
+      }
+    };
+
+    var AlpineTruncateMagicMethod = {
+      start: function start() {
+        checkForAlpine();
+        Alpine.addMagicProperty('truncate', function () {
+          return function () {
+            for (var _len = arguments.length, parameters = new Array(_len), _key = 0; _key < _len; _key++) {
+              parameters[_key] = arguments[_key];
+            }
+
+            if (typeof parameters[0] !== 'string') return parameters[0];
+            var ellipsis = '…'; // If the second parameter isn't truthy, return the full string
+
+            if (!parameters[1]) return parameters[0]; // if only a number or string is passed in, keep it simple
+
+            if (typeof parameters[1] !== 'object') {
+              if (typeof parameters[2] !== 'undefined') {
+                ellipsis = parameters[2];
+              }
+
+              return parameters[0].slice(0, parameters[1]) + ellipsis;
+            } // Customize the …
+
+
+            if (parameters[1].hasOwnProperty('ellipsis')) {
+              ellipsis = parameters[1].ellipsis;
+            } // If words or characters is set, also check that they are truthy. Setting to 0, for example, shoudld show all
+
+
+            if (parameters[1].hasOwnProperty('words') && parameters[1].words) {
+              return parameters[0].split(" ").splice(0, parameters[1].words).join(" ") + ellipsis;
+            }
+
+            if (parameters[1].hasOwnProperty('characters') && parameters[1].characters) {
+              return parameters[0].slice(0, parameters[1]['characters']) + ellipsis;
+            }
+
+            return parameters[0];
+          };
+        });
+      }
+    };
+
+    var alpine = window.deferLoadingAlpine || function (alpine) {
+      return alpine();
+    };
+
+    window.deferLoadingAlpine = function (callback) {
+      AlpineTruncateMagicMethod.start();
+      alpine(callback);
+    };
+
+    return AlpineTruncateMagicMethod;
+
+})));

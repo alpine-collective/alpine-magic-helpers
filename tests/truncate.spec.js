@@ -19,7 +19,7 @@ test('$truncate > can shorten text by character count', () => {
 
     Alpine.start()
 
-    expect(document.querySelector('p').innerText).toEqual('Lorem…')
+    expect(document.querySelector('p').textContent).toEqual('Lorem…')
 })
 
 test('$truncate > can shorten text by word count', () => {
@@ -31,7 +31,7 @@ test('$truncate > can shorten text by word count', () => {
 
     Alpine.start()
 
-    expect(document.querySelector('p').innerText).toEqual('Lorem ipsum dolor sit amet,…')
+    expect(document.querySelector('p').textContent).toEqual('Lorem ipsum dolor sit amet,…')
 })
 
 test('$truncate > can shorten text with custom suffix', () => {
@@ -43,7 +43,7 @@ test('$truncate > can shorten text with custom suffix', () => {
 
     Alpine.start()
 
-    expect(document.querySelector('p').innerText).toEqual('Lorem (read more)')
+    expect(document.querySelector('p').textContent).toEqual('Lorem (read more)')
 })
 
 test('$truncate > will react to changes in arguments', async () => {
@@ -56,11 +56,11 @@ test('$truncate > will react to changes in arguments', async () => {
 
     Alpine.start()
 
-    expect(document.querySelector('p').innerText).toEqual('Lorem…')
+    expect(document.querySelector('p').textContent).toEqual('Lorem…')
 
     document.querySelector('button').click()
 
     await waitFor(() => {
-        expect(document.querySelector('p').innerText).toEqual('Lo…')
+        expect(document.querySelector('p').textContent).toEqual('Lo…')
     })
 })

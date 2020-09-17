@@ -3,7 +3,6 @@ import commonjs from '@rollup/plugin-commonjs'
 import filesize from 'rollup-plugin-filesize'
 import json from '@rollup/plugin-json'
 import resolve from '@rollup/plugin-node-resolve'
-import { terser } from 'rollup-plugin-terser'
 
 const createConfig = (filename) => ({
   input: `src/${filename}.js`,
@@ -11,7 +10,6 @@ const createConfig = (filename) => ({
     {
       file: `dist/${filename}.js`,
       format: 'umd',
-      sourcemap: true,
       name: `${filename}`,
     }
   ],
@@ -34,18 +32,6 @@ const createConfig = (filename) => ({
       include: /\/node_modules\//,
     }),
     json(),
-    terser({
-      compress: {
-        keep_infinity: true,
-        pure_getters: true,
-        passes: 10,
-      },
-      output: {
-        wrap_func_args: false,
-        comments: false,
-      },
-      ecma: 5
-    }),
     filesize(),
   ]
 })
