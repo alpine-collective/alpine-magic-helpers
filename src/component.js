@@ -37,9 +37,8 @@ function registerComponentMagicMethod() {
             subtree: true,
         })
 
-        // Alpine won't pick up on magic properties added only in events until the event is fired
-        // This only runs if the magic helper is first encountered inside the event, so it doesn't add
-        // any overhead except for those edge cases.
+        // This only runs after Alpine is fully initialized, and is needed for when
+        // $parent is called **only** from within an event listener and not elsewhere.
 		if (parentComponent.__x && $el.__x) {
 			$el.__x.unobservedData.$nextTick(() => {
 				Object.entries($el.__x.unobservedData.$parent).forEach(value => {
