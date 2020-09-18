@@ -1,7 +1,6 @@
 name: Run Jest Tests
 
-on:
-    pull_request:
+on: pull_request
 
 jobs:
   build:
