@@ -38,13 +38,13 @@ function registerComponentMagicMethod() {
 
         // This only runs after Alpine is fully initialized, and is needed for when
         // $parent is called **only** from within an event listener and not elsewhere.
-		if (parentComponent.__x && $el.__x) {
-			$el.__x.unobservedData.$nextTick(() => {
-				Object.entries($el.__x.unobservedData.$parent).forEach(value => {
-					parentComponent.__x.$data[value[0]] = value[1]
-				})
+        if (parentComponent.__x && $el.__x) {
+            $el.__x.unobservedData.$nextTick(() => {
+                Object.entries($el.__x.unobservedData.$parent).forEach(value => {
+                    parentComponent.__x.$data[value[0]] = value[1]
+                })
                 parentComponent.__x.updateElements(parentComponent)
-			})
+            })
         }
 
         return data
