@@ -43,11 +43,12 @@
     <p x-data x-text="$component('yellowSquare').color"></p>
 
     <p class="my-4 font-bold">Watch a parent component and external component that does not have a visible mutation</p>
+    <p>NB: Color should remain teal since no mutation</p>
     <div
         x-id="tealSquare"
-        x-data="{ color: 'teal' }"
+        x-data="{ color: 'foo' }"
         class="w-64 h-64 mb-6 flex flex-col items-center justify-center bg-teal-500"
-        @click="color = color === 'teal' ? 'indigo' : 'teal'">
+        @click="color = color === 'foo' ? 'bar' : 'foo'">
         <p x-data x-text="$parent.color"></p>
         <p x-data x-text="$parent.color"></p>
     </div>
