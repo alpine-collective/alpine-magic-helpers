@@ -61,5 +61,20 @@
         <p x-data @click="$parent.color = $parent.color === 'pink' ? 'indigo' : 'pink'">press here</p>
     </div>
 
+    <p class="my-4 font-bold">Updating nested property (`$parent.square.color`)</p>
+    <div
+        x-data="{ square: {  color: 'orange' }, circle: { color: 'red' } }"
+        class="w-64 h-64 mb-6 flex flex-col items-center justify-center"
+        :class="`bg-${square.color}-500`">
+        <p x-data @click="$parent.square.color = $parent.square.color === 'orange' ? 'indigo' : 'orange'">press here</p>
+    </div>
+    <p class="my-4 font-bold">Updating deeper nested property (`$parent.shape.square.color`)</p>
+    <div
+        x-data="{ shape: { square: {  color: 'purple' }, circle: { color: 'red' } } }"
+        class="w-64 h-64 mb-6 flex flex-col items-center justify-center"
+        :class="`bg-${shape.square.color}-500`">
+        <p x-data @click="$parent.shape.square.color = $parent.shape.square.color === 'purple' ? 'red' : 'purple'">press here</p>
+    </div>
+
 	<script src="http://localhost:35729/livereload.js"></script>
 </body>

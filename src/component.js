@@ -78,16 +78,25 @@ function registerComponentMagicMethod() {
         }
     })
     function allowTwoWayCommunication(data, observedComponent) {
-        return new Proxy(data, {
-            set(object, prop, value) {
-                if (!observedComponent.__x) {
-                    throw 'Error communicating with observed component'
+        const handler = (scope = null) => {
+            return {
+                get(target, key) {
+                    if (typeof target[key] != null && typeof target[key] === 'object') {
+                        const path = scope ? `${scope}.${key}` : key
+                        return new Proxy(target[key], handler(path))
+                    }
+                    return target[key]
+                },
+                set(target, key, value) {
+                    if (!observedComponent.__x) {
+                        throw 'Error communicating with observed component'
+                    }
+                    const path = scope ? `${scope}.${key}` : key
+                    return objectSetDeep(observedComponent.__x.$data, path, value)
                 }
-                observedComponent.__x.$data[prop] = value
-                observedComponent.__x.updateElements(observedComponent)
-                return true
             }
-        })
+        }
+        return new Proxy(data, handler())
     }
 
     // This was taken from AlpineJs unaltered
@@ -98,6 +107,25 @@ function registerComponentMagicMethod() {
         return (new Function(['$data', ...Object.keys(additionalHelperVariables)], `var __alpine_result; with($data) { __alpine_result = ${expression} }; return __alpine_result`))(
             dataContext, ...Object.values(additionalHelperVariables)
         )
+    }
+
+    // Borrowed from https://stackoverflow.com/a/54733755/1437789
+    function objectSetDeep (object, path, value) {
+        try {
+            path = path.toString().match(/[^.[\]]+/g) || [];
+            path.slice(0, -1).reduce((a, currentKey, index) => // Iterate all of them except the last one
+                Object(a[currentKey]) === a[currentKey] // Does the key exist and is its value an object?
+                    // Yes: then follow that path
+                    ? a[currentKey]
+                    // No: create the key. Is the next key a potential array-index?
+                    : a[currentKey] = Math.abs(path[index + 1]) >> 0 === +path[index + 1]
+                        ? [] // Yes: assign a new array object
+                        : {}, // No: assign a new plain object
+                object)[path[path.length - 1]] = value // Finally assign the value to the last key
+            return true
+        } catch {
+            return false
+        }
     }
 }
 
