@@ -70,11 +70,13 @@
     </div>
     <p class="my-4 font-bold">Updating deeper nested property (`$parent.shape.square.color`)</p>
     <div
+        x-id="purple"
         x-data="{ shape: { square: {  color: 'purple' }, circle: { color: 'red' } } }"
         class="w-64 h-64 mb-6 flex flex-col items-center justify-center"
         :class="`bg-${shape.square.color}-500`">
         <p x-data @click="$parent.shape.square.color = $parent.shape.square.color === 'purple' ? 'red' : 'purple'">press here</p>
     </div>
+    <button x-data @click="$component('purple').shape.square.color = 'green'">Press to make green</button>
 
 	<script src="http://localhost:35729/livereload.js"></script>
 </body>
