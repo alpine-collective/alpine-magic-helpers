@@ -92,7 +92,8 @@ function registerComponentMagicMethod() {
                         throw 'Error communicating with observed component'
                     }
                     const path = scope ? `${scope}.${key}` : key
-                    return objectSetDeep(observedComponent.__x.$data, path, value)
+                    objectSetDeep(observedComponent.__x.$data, path, value)
+                    return true
                 }
             }
         }
@@ -111,21 +112,17 @@ function registerComponentMagicMethod() {
 
     // Borrowed from https://stackoverflow.com/a/54733755/1437789
     function objectSetDeep (object, path, value) {
-        try {
-            path = path.toString().match(/[^.[\]]+/g) || [];
-            path.slice(0, -1).reduce((a, currentKey, index) => // Iterate all of them except the last one
-                Object(a[currentKey]) === a[currentKey] // Does the key exist and is its value an object?
-                    // Yes: then follow that path
-                    ? a[currentKey]
-                    // No: create the key. Is the next key a potential array-index?
-                    : a[currentKey] = Math.abs(path[index + 1]) >> 0 === +path[index + 1]
-                        ? [] // Yes: assign a new array object
-                        : {}, // No: assign a new plain object
-                object)[path[path.length - 1]] = value // Finally assign the value to the last key
-            return true
-        } catch {
-            return false
-        }
+        path = path.toString().match(/[^.[\]]+/g) || [];
+        path.slice(0, -1).reduce((a, currentKey, index) => // Iterate all of them except the last one
+            Object(a[currentKey]) === a[currentKey] // Does the key exist and is its value an object?
+                // Yes: then follow that path
+                ? a[currentKey]
+                // No: create the key. Is the next key a potential array-index?
+                : a[currentKey] = Math.abs(path[index + 1]) >> 0 === +path[index + 1]
+                    ? [] // Yes: assign a new array object
+                    : {}, // No: assign a new plain object
+            object)[path[path.length - 1]] = value // Finally assign the value to the last key
+        return object
     }
 }
 
