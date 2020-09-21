@@ -1,4 +1,3 @@
-// TODO: These can be refactored some to combine functionality
 function registerComponentMagicMethod() {
     Alpine.magicProperties.hasOwnProperty('parent') ||
     Alpine.addMagicProperty('parent', function ($el) {
@@ -29,15 +28,13 @@ function registerComponentMagicMethod() {
                 return
             }
         })
-
         parentObserver.observe(parentComponent, {
             attributes: true,
             childList: true,
             characterData: true,
             subtree: true,
         })
-
-        return data
+        return $el.$parent
     })
 
     Alpine.magicProperties.hasOwnProperty('component') ||
