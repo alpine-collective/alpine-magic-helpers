@@ -1,4 +1,3 @@
-
 import { checkForAlpine, saferEval } from './utils'
 
 // TODO: These can be refactored some to combine functionality
@@ -42,7 +41,7 @@ const AlpineComponentMagicMethod = {
                 subtree: true,
             })
 
-            return data
+            return $el.$parent
         })
 
         Alpine.addMagicProperty('component', function ($el) {
@@ -94,7 +93,6 @@ const allowTwoWayCommunication = function(data, observedComponent) {
                     throw 'Error communicating with observed component'
                 }
                 observedComponent.__x.$data[prop] = value
-                observedComponent.__x.updateElements(observedComponent)
                 return true
             }
         })

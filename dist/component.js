@@ -57,7 +57,7 @@
             characterData: true,
             subtree: true
           });
-          return data;
+          return $el.$parent;
         });
         Alpine.addMagicProperty('component', function ($el) {
           return function (componentName) {
@@ -107,9 +107,6 @@
           }
 
           observedComponent.__x.$data[prop] = value;
-
-          observedComponent.__x.updateElements(observedComponent);
-
           return true;
         }
       });

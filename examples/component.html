@@ -53,5 +53,13 @@
     </div>
     <p x-data x-text="$component('tealSquare').color"></p>
 
+    <p class="my-4 font-bold">Parent is first encountered inside an event</p>
+    <div
+        x-data="{ color: 'pink' }"
+        class="w-64 h-64 mb-6 flex flex-col items-center justify-center"
+        :class="`bg-${color}-500`">
+        <p x-data @click="$parent.color = $parent.color === 'pink' ? 'indigo' : 'pink'">press here</p>
+    </div>
+
 	<script src="http://localhost:35729/livereload.js"></script>
 </body>

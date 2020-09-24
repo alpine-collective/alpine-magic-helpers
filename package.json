@@ -1,6 +1,6 @@
 {
     "name": "@alpine-collective/magic-helpers",
-    "version": "0.3.2",
+    "version": "0.3.3",
     "description": "A collection of magic properties and helper functions for use with Alpine.",
     "source": [
         "src/index.js",
@@ -55,7 +55,7 @@
     "devDependencies": {
         "@babel/preset-env": "^7.11.5",
         "@rollup/plugin-babel": "^5.2.1",
-        "@rollup/plugin-commonjs": "^15.0.0",
+        "@rollup/plugin-commonjs": "^15.1.0",
         "@rollup/plugin-json": "^4.1.0",
         "@rollup/plugin-node-resolve": "^9.0.0",
         "@testing-library/dom": "^7.24.2",
@@ -64,7 +64,7 @@
         "axios": "^0.20",
         "jest": "^26.4.2",
         "jsdom-simulant": "^1.1.2",
-        "rollup": "^2.27.1",
+        "rollup": "^2.28.2",
         "rollup-plugin-filesize": "^9.0.2"
     },
     "publishConfig": {
