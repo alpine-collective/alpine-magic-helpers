@@ -100,16 +100,50 @@
     };
 
     var allowTwoWayCommunication = function allowTwoWayCommunication(data, observedComponent) {
-      return new Proxy(data, {
-        set: function set(object, prop, value) {
-          if (!observedComponent.__x) {
-            throw 'Error communicating with observed component';
-          }
-
-          observedComponent.__x.$data[prop] = value;
-          return true;
+      var handler = function handler(scope) {
+        if (scope === void 0) {
+          scope = null;
         }
-      });
+
+        return {
+          get: function get(target, key) {
+            if (typeof target[key] != null && typeof target[key] === 'object') {
+              var path = scope ? scope + "." + key : key;
+              return new Proxy(target[key], handler(path));
+            }
+
+            return target[key];
+          },
+          set: function set(target, key, value) {
+            if (!observedComponent.__x) {
+              throw 'Error communicating with observed component';
+            }
+
+            var path = scope ? scope + "." + key : key;
+            objectSetDeep(observedComponent.__x.$data, path, value);
+            return true;
+          }
+        };
+      };
+
+      return new Proxy(data, handler());
+    }; // Borrowed from https://stackoverflow.com/a/54733755/1437789
+
+
+    var objectSetDeep = function objectSetDeep(object, path, value) {
+      path = path.toString().match(/[^.[\]]+/g) || [];
+      path.slice(0, -1).reduce(function (a, currentKey, index) {
+        return (// Iterate all of them except the last one
+          Object(a[currentKey]) === a[currentKey] // Does the key exist and is its value an object?
+          // Yes: then follow that path
+          ? a[currentKey] // No: create the key. Is the next key a potential array-index?
+          : a[currentKey] = Math.abs(path[index + 1]) >> 0 === +path[index + 1] ? [] // Yes: assign a new array object
+          : {}
+        );
+      }, // No: assign a new plain object
+      object)[path[path.length - 1]] = value; // Finally assign the value to the last key
+
+      return object;
     };
 
     var alpine = window.deferLoadingAlpine || function (alpine) {

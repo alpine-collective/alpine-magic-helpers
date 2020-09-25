@@ -87,16 +87,42 @@ const AlpineComponentMagicMethod = {
 }
 
 const allowTwoWayCommunication = function(data, observedComponent) {
-        return new Proxy(data, {
-            set(object, prop, value) {
+    const handler = (scope = null) => {
+        return {
+            get(target, key) {
+                if (typeof target[key] != null && typeof target[key] === 'object') {
+                    const path = scope ? `${scope}.${key}` : key
+                    return new Proxy(target[key], handler(path))
+                }
+                return target[key]
+            },
+            set(target, key, value) {
                 if (!observedComponent.__x) {
                     throw 'Error communicating with observed component'
                 }
-                observedComponent.__x.$data[prop] = value
+                const path = scope ? `${scope}.${key}` : key
+                objectSetDeep(observedComponent.__x.$data, path, value)
                 return true
             }
-        })
+        }
     }
+    return new Proxy(data, handler())
+}
+
+// Borrowed from https://stackoverflow.com/a/54733755/1437789
+const objectSetDeep = function (object, path, value) {
+    path = path.toString().match(/[^.[\]]+/g) || [];
+    path.slice(0, -1).reduce((a, currentKey, index) => // Iterate all of them except the last one
+        Object(a[currentKey]) === a[currentKey] // Does the key exist and is its value an object?
+            // Yes: then follow that path
+            ? a[currentKey]
+            // No: create the key. Is the next key a potential array-index?
+            : a[currentKey] = Math.abs(path[index + 1]) >> 0 === +path[index + 1]
+                ? [] // Yes: assign a new array object
+                : {}, // No: assign a new plain object
+        object)[path[path.length - 1]] = value // Finally assign the value to the last key
+    return object
+}
 
 const alpine = window.deferLoadingAlpine || ((alpine) => alpine())
 
