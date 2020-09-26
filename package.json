@@ -12,7 +12,7 @@
     "main": "dist/index.js",
     "scripts": {
         "build": "rollup -c",
-        "watch": "rollup -c -w",
+        "watch": "concurrently \"rollup -c -w\" \"browser-sync examples --ss . -f examples dist\"",
         "test": "jest",
         "test-watch": "jest --watch"
     },
@@ -62,6 +62,8 @@
         "@testing-library/jest-dom": "^5.11.4",
         "alpinejs": "^2.7.0",
         "axios": "^0.20",
+        "browser-sync": "^2.26.12",
+        "concurrently": "^5.3.0",
         "jest": "^26.4.2",
         "jsdom-simulant": "^1.1.2",
         "rollup": "^2.28.2",
