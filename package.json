@@ -12,7 +12,7 @@
     "main": "dist/index.js",
     "scripts": {
         "build": "rollup -c",
-        "watch": "concurrently \"rollup -c -w\" \"browser-sync examples --ss . -f examples dist\"",
+        "watch": "concurrently \"rollup -c -w\" \"browser-sync examples --ss . -f examples dist/index.js\"",
         "test": "jest",
         "test-watch": "jest --watch"
     },
