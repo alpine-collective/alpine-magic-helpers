@@ -2,7 +2,6 @@ import babel from '@rollup/plugin-babel'
 import commonjs from '@rollup/plugin-commonjs'
 import filesize from 'rollup-plugin-filesize'
 import json from '@rollup/plugin-json'
-import livereload from 'rollup-plugin-livereload'
 import resolve from '@rollup/plugin-node-resolve'
 
 const createConfig = (filename) => ({
@@ -32,11 +31,6 @@ const createConfig = (filename) => ({
     commonjs({
       include: /\/node_modules\//,
     }),
-    {
-        ...livereload({
-            watch:['dist', 'examples/**/*']
-        }), banner: null
-    },
     json(),
     filesize(),
   ]
