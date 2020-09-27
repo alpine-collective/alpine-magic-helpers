@@ -1458,7 +1458,24 @@
     if (!window.Alpine) {
       throw new Error('[Magic Helpers] Alpine is required for the magic helpers to function correctly.');
     }
+
+    if (!window.Alpine.version || !isValidVersion('2.5.0', window.Alpine.version)) {
+      throw new Error('Invalid Alpine version. Please use Alpine version 2.5.0 or above');
+    }
   };
+
+  function isValidVersion(required, current) {
+    var requiredArray = required.split('.');
+    var currentArray = current.split('.');
+
+    for (var i = 0; i < requiredArray.length; i++) {
+      if (!currentArray[i] || parseInt(currentArray[i]) < parseInt(requiredArray[i])) {
+        return false;
+      }
+    }
+
+    return true;
+  }
 
   var AlpineFetchMagicMethod = {
     start: function start() {
@@ -1471,7 +1488,7 @@
 
           if (typeof parameters[0] === 'string' && parameters[0].length) {
             return axios$1.get(parameters[0]).then(function (response) {
-              return response.hasOwnProperty('data') ? response.data : response;
+              return Object.prototype.hasOwnProperty.call(response, 'data') ? response.data : response;
             });
           }
 
