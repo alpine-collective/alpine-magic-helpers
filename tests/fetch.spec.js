@@ -11,12 +11,12 @@ beforeEach(function () {
 })
 
 test('$fetch > accept strings', async () => {
-    let xhrMock = {
+    const xhrMock = {
         open: jest.fn(),
         send: jest.fn(),
         readyState: 4,
-        responseText: JSON.stringify({"title": "bar"}),
-        status: 200
+        responseText: JSON.stringify({ title: 'bar' }),
+        status: 200,
     }
 
     window.XMLHttpRequest = jest.fn(() => xhrMock)
@@ -43,12 +43,12 @@ test('$fetch > accept strings', async () => {
 })
 
 test('$fetch > accept objects', async () => {
-    let xhrMock = {
+    const xhrMock = {
         open: jest.fn(),
         send: jest.fn(),
         readyState: 4,
-        responseText: JSON.stringify({"title": "bar"}),
-        status: 200
+        responseText: JSON.stringify({ title: 'bar' }),
+        status: 200,
     }
 
     window.XMLHttpRequest = jest.fn(() => xhrMock)

@@ -18,5 +18,5 @@ export default {
     AlpineComponentMagicMethod,
     AlpineFetchMagicMethod,
     AlpineIntervalMagicMethod,
-    AlpineTruncateMagicMethod
+    AlpineTruncateMagicMethod,
 }
