@@ -8,27 +8,27 @@ const AlpineIntervalMagicMethod = {
             return function (...parameters) {
                 if (typeof parameters[0] !== 'function') return parameters[0]
 
-                let timer = parameters[1],
-                    delay = 0,
-                    forceInterval = false
+                let timer = parameters[1]
+                let delay = 0
+                let forceInterval = false
 
                 // Users can pass in an object as a second parameter instead
                 if (typeof parameters[1] === 'object') {
-                    if (parameters[1].hasOwnProperty('timer')) {
+                    if (Object.prototype.hasOwnProperty.call(parameters[1], 'timer')) {
                         timer = parameters[1].timer
                     }
 
-                    if (parameters[1].hasOwnProperty('delay')) {
+                    if (Object.prototype.hasOwnProperty.call(parameters[1], 'delay')) {
                         delay = parameters[1].delay
                     }
 
-                    if (parameters[1].hasOwnProperty('forceInterval')) {
+                    if (Object.prototype.hasOwnProperty.call(parameters[1], 'forceInterval')) {
                         forceInterval = parameters[1].forceInterval
                     }
                 }
 
-                let loop = () => {
-                    const test = this.hasOwnProperty('autoIntervalTest') ? this.autoIntervalTest : true
+                const loop = () => {
+                    const test = Object.prototype.hasOwnProperty.call(this, 'autoIntervalTest') ? this.autoIntervalTest : true
 
                     setTimeout(() => {
                         if (!this.autoIntervalLoop) return
@@ -58,7 +58,7 @@ const AlpineIntervalMagicMethod = {
                 })
             }
         })
-    }
+    },
 }
 
 const alpine = window.deferLoadingAlpine || ((alpine) => alpine())

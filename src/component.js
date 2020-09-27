@@ -9,7 +9,7 @@ const AlpineComponentMagicMethod = {
             if (typeof $el.$parent !== 'undefined') return $el.$parent
 
             const parentComponent = $el.parentNode.closest('[x-data]')
-            if (!parentComponent) throw 'Parent component not found'
+            if (!parentComponent) throw new Error('Parent component not found')
 
             // Add this to trigger mutations on update
             parentComponent.setAttribute('x-bind:data-last-refresh', 'Date.now()')
@@ -46,11 +46,10 @@ const AlpineComponentMagicMethod = {
 
         Alpine.addMagicProperty('component', function ($el) {
             return function (componentName) {
-
                 if (typeof this[componentName] !== 'undefined') return this[componentName]
 
                 const componentBeingObserved = document.querySelector(`[x-data][x-id="${componentName}"], [x-data]#${componentName}`)
-                if (!componentBeingObserved) throw 'Component not found'
+                if (!componentBeingObserved) throw new Error('Component not found')
 
                 // Add this to trigger mutations on update
                 componentBeingObserved.setAttribute('x-bind:data-last-refresh', 'Date.now()')
@@ -83,14 +82,14 @@ const AlpineComponentMagicMethod = {
                 return this[componentName]
             }
         })
-    }
+    },
 }
 
-const allowTwoWayCommunication = function(data, observedComponent) {
+const allowTwoWayCommunication = function (data, observedComponent) {
     const handler = (scope = null) => {
         return {
             get(target, key) {
-                if (typeof target[key] != null && typeof target[key] === 'object') {
+                if (target[key] !== null && typeof target[key] === 'object') {
                     const path = scope ? `${scope}.${key}` : key
                     return new Proxy(target[key], handler(path))
                 }
@@ -98,12 +97,12 @@ const allowTwoWayCommunication = function(data, observedComponent) {
             },
             set(target, key, value) {
                 if (!observedComponent.__x) {
-                    throw 'Error communicating with observed component'
+                    throw new Error('Error communicating with observed component')
                 }
                 const path = scope ? `${scope}.${key}` : key
                 objectSetDeep(observedComponent.__x.$data, path, value)
                 return true
-            }
+            },
         }
     }
     return new Proxy(data, handler())
@@ -111,16 +110,18 @@ const allowTwoWayCommunication = function(data, observedComponent) {
 
 // Borrowed from https://stackoverflow.com/a/54733755/1437789
 const objectSetDeep = function (object, path, value) {
-    path = path.toString().match(/[^.[\]]+/g) || [];
-    path.slice(0, -1).reduce((a, currentKey, index) => // Iterate all of them except the last one
-        Object(a[currentKey]) === a[currentKey] // Does the key exist and is its value an object?
-            // Yes: then follow that path
-            ? a[currentKey]
-            // No: create the key. Is the next key a potential array-index?
-            : a[currentKey] = Math.abs(path[index + 1]) >> 0 === +path[index + 1]
+    path = path.toString().match(/[^.[\]]+/g) || []
+    // Iterate all of them except the last one
+    path.slice(0, -1).reduce((a, currentKey, index) => {
+        // If the key does not exist or its value is not an object, create/override the key
+        if (Object(a[currentKey]) !== a[currentKey]) {
+            // Is the next key a potential array-index?
+            a[currentKey] = Math.abs(path[index + 1]) >> 0 === +path[index + 1]
                 ? [] // Yes: assign a new array object
-                : {}, // No: assign a new plain object
-        object)[path[path.length - 1]] = value // Finally assign the value to the last key
+                : {} // No: assign a new plain object
+        }
+        return a[currentKey]
+    }, object)[path[path.length - 1]] = value // Finally assign the value to the last key
     return object
 }
 
