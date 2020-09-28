@@ -81,7 +81,7 @@ function registerComponentMagicMethod() {
         const handler = (scope = null) => {
             return {
                 get(target, key) {
-                    if (typeof target[key] != null && typeof target[key] === 'object') {
+                    if (target[key] != null && typeof target[key] === 'object') {
                         const path = scope ? `${scope}.${key}` : key
                         return new Proxy(target[key], handler(path))
                     }
