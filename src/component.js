@@ -79,6 +79,7 @@ const AlpineComponentMagicMethod = {
                     characterData: true,
                     subtree: true,
                 })
+
                 return this[componentName]
             }
         })
