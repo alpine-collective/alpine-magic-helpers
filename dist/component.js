@@ -1,1 +1,179 @@
-!function(t){var e={};function r(n){if(e[n])return e[n].exports;var o=e[n]={i:n,l:!1,exports:{}};return t[n].call(o.exports,o,o.exports,r),o.l=!0,o.exports}r.m=t,r.c=e,r.d=function(t,e,n){r.o(t,e)||Object.defineProperty(t,e,{enumerable:!0,get:n})},r.r=function(t){"undefined"!=typeof Symbol&&Symbol.toStringTag&&Object.defineProperty(t,Symbol.toStringTag,{value:"Module"}),Object.defineProperty(t,"__esModule",{value:!0})},r.t=function(t,e){if(1&e&&(t=r(t)),8&e)return t;if(4&e&&"object"==typeof t&&t&&t.__esModule)return t;var n=Object.create(null);if(r.r(n),Object.defineProperty(n,"default",{enumerable:!0,value:t}),2&e&&"string"!=typeof t)for(var o in t)r.d(n,o,function(e){return t[e]}.bind(null,o));return n},r.n=function(t){var e=t&&t.__esModule?function(){return t.default}:function(){return t};return r.d(e,"a",e),e},r.o=function(t,e){return Object.prototype.hasOwnProperty.call(t,e)},r.p="/",r(r.s=33)}({10:function(t,e,r){"use strict";function n(t){return function(t){if(Array.isArray(t))return o(t)}(t)||function(t){if("undefined"!=typeof Symbol&&Symbol.iterator in Object(t))return Array.from(t)}(t)||function(t,e){if(!t)return;if("string"==typeof t)return o(t,e);var r=Object.prototype.toString.call(t).slice(8,-1);"Object"===r&&t.constructor&&(r=t.constructor.name);if("Map"===r||"Set"===r)return Array.from(t);if("Arguments"===r||/^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(r))return o(t,e)}(t)||function(){throw new TypeError("Invalid attempt to spread non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.")}()}function o(t,e){(null==e||e>t.length)&&(e=t.length);for(var r=0,n=new Array(e);r<e;r++)n[r]=t[r];return n}function a(t){return(a="function"==typeof Symbol&&"symbol"==typeof Symbol.iterator?function(t){return typeof t}:function(t){return t&&"function"==typeof Symbol&&t.constructor===Symbol&&t!==Symbol.prototype?"symbol":typeof t})(t)}function i(){function t(t,e){return new Proxy(t,function t(){var n=arguments.length>0&&void 0!==arguments[0]?arguments[0]:null;return{get:function(e,r){if(null!=typeof e[r]&&"object"===a(e[r])){var o=n?"".concat(n,".").concat(r):r;return new Proxy(e[r],t(o))}return e[r]},set:function(t,o,a){if(!e.__x)throw"Error communicating with observed component";var i=n?"".concat(n,".").concat(o):o;return r(e.__x.$data,i,a),!0}}}())}function e(t,e){var r=arguments.length>2&&void 0!==arguments[2]?arguments[2]:{};return"function"==typeof t?t.call(e):new Function(["$data"].concat(n(Object.keys(r))),"var __alpine_result; with($data) { __alpine_result = ".concat(t," }; return __alpine_result")).apply(void 0,[e].concat(n(Object.values(r))))}function r(t,e,r){return(e=e.toString().match(/[^.[\]]+/g)||[]).slice(0,-1).reduce((function(t,r,n){return Object(t[r])===t[r]?t[r]:t[r]=Math.abs(e[n+1])>>0==+e[n+1]?[]:{}}),t)[e[e.length-1]]=r,t}Alpine.magicProperties.hasOwnProperty("parent")||Alpine.addMagicProperty("parent",(function(r){if(void 0!==r.$parent)return r.$parent;var n,o=r.parentNode.closest("[x-data]");if(!o)throw"Parent component not found";return o.setAttribute("x-bind:data-last-refresh","Date.now()"),n=o.__x?o.__x.getUnobservedData():e(o.getAttribute("x-data"),o),r.$parent=t(n,o),new MutationObserver((function(e){for(var n=0;n<e.length;n++){var a=e[n].target.closest("[x-data]");if(!a||a.isSameNode(o))return r.$parent=t(o.__x.getUnobservedData(),o),void r.__x.updateElements(r)}})).observe(o,{attributes:!0,childList:!0,characterData:!0,subtree:!0}),r.$parent})),Alpine.magicProperties.hasOwnProperty("component")||Alpine.addMagicProperty("component",(function(r){return function(r){var n=this;if(void 0!==this[r])return this[r];var o,a=document.querySelector('[x-data][x-id="'.concat(r,'"], [x-data]#').concat(r));if(!a)throw"Component not found";return a.setAttribute("x-bind:data-last-refresh","Date.now()"),o=a.__x?a.__x.getUnobservedData():e(a.getAttribute("x-data"),a),this[r]=t(o,a),new MutationObserver((function(e){for(var o=0;o<e.length;o++){var i=e[o].target.closest("[x-data]");if(!i||!i.isSameNode(n.$el))return void(n[r]=t(a.__x.getUnobservedData(),a))}})).observe(a,{attributes:!0,childList:!0,characterData:!0,subtree:!0}),this[r]}}))}r.r(e);var u=window.deferLoadingAlpine||function(t){return t()};window.deferLoadingAlpine=function(t){u(t),i()},e.default=i},33:function(t,e,r){t.exports=r(10)}});
+(function (global, factory) {
+    typeof exports === 'object' && typeof module !== 'undefined' ? module.exports = factory() :
+    typeof define === 'function' && define.amd ? define(factory) :
+    (global = typeof globalThis !== 'undefined' ? globalThis : global || self, global.component = factory());
+}(this, (function () { 'use strict';
+
+    var checkForAlpine = function checkForAlpine() {
+      if (!window.Alpine) {
+        throw new Error('[Magic Helpers] Alpine is required for the magic helpers to function correctly.');
+      }
+
+      if (!window.Alpine.version || !isValidVersion('2.5.0', window.Alpine.version)) {
+        throw new Error('Invalid Alpine version. Please use Alpine version 2.5.0 or above');
+      }
+    };
+    var saferEval = function saferEval(expression, dataContext, additionalHelperVariables) {
+      if (additionalHelperVariables === void 0) {
+        additionalHelperVariables = {};
+      }
+
+      if (typeof expression === 'function') {
+        return expression.call(dataContext);
+      } // eslint-disable-next-line no-new-func
+
+
+      return new Function(['$data'].concat(Object.keys(additionalHelperVariables)), "var __alpine_result; with($data) { __alpine_result = " + expression + " }; return __alpine_result").apply(void 0, [dataContext].concat(Object.values(additionalHelperVariables)));
+    };
+
+    function isValidVersion(required, current) {
+      var requiredArray = required.split('.');
+      var currentArray = current.split('.');
+
+      for (var i = 0; i < requiredArray.length; i++) {
+        if (!currentArray[i] || parseInt(currentArray[i]) < parseInt(requiredArray[i])) {
+          return false;
+        }
+      }
+
+      return true;
+    }
+
+    var AlpineComponentMagicMethod = {
+      start: function start() {
+        checkForAlpine();
+        Alpine.addMagicProperty('parent', function ($el) {
+          if (typeof $el.$parent !== 'undefined') return $el.$parent;
+          var parentComponent = $el.parentNode.closest('[x-data]');
+          if (!parentComponent) throw new Error('Parent component not found'); // Add this to trigger mutations on update
+
+          parentComponent.setAttribute('x-bind:data-last-refresh', 'Date.now()');
+          var data;
+
+          if (parentComponent.__x) {
+            data = parentComponent.__x.getUnobservedData();
+          } else {
+            // Component isn't ready yet so lets try to get its initial state
+            data = saferEval(parentComponent.getAttribute('x-data'), parentComponent);
+          }
+
+          $el.$parent = allowTwoWayCommunication(data, parentComponent);
+          var parentObserver = new MutationObserver(function (mutations) {
+            for (var i = 0; i < mutations.length; i++) {
+              var mutatedComponent = mutations[i].target.closest('[x-data]');
+              if (mutatedComponent && !mutatedComponent.isSameNode(parentComponent)) continue;
+              $el.$parent = allowTwoWayCommunication(parentComponent.__x.getUnobservedData(), parentComponent);
+
+              $el.__x.updateElements($el);
+
+              return;
+            }
+          });
+          parentObserver.observe(parentComponent, {
+            attributes: true,
+            childList: true,
+            characterData: true,
+            subtree: true
+          });
+          return $el.$parent;
+        });
+        Alpine.addMagicProperty('component', function ($el) {
+          return function (componentName) {
+            var _this = this;
+
+            if (typeof this[componentName] !== 'undefined') return this[componentName];
+            var componentBeingObserved = document.querySelector("[x-data][x-id=\"" + componentName + "\"], [x-data]#" + componentName);
+            if (!componentBeingObserved) throw new Error('Component not found'); // Add this to trigger mutations on update
+
+            componentBeingObserved.setAttribute('x-bind:data-last-refresh', 'Date.now()'); // Set initial state
+
+            var data;
+
+            if (componentBeingObserved.__x) {
+              data = componentBeingObserved.__x.getUnobservedData();
+            } else {
+              // Component isn't ready yet so lets try to get its initial state
+              data = saferEval(componentBeingObserved.getAttribute('x-data'), componentBeingObserved);
+            }
+
+            this[componentName] = allowTwoWayCommunication(data, componentBeingObserved);
+            var observer = new MutationObserver(function (mutations) {
+              for (var i = 0; i < mutations.length; i++) {
+                var closestParentComponent = mutations[i].target.closest('[x-data]');
+                if (closestParentComponent && closestParentComponent.isSameNode(_this.$el)) continue;
+                _this[componentName] = allowTwoWayCommunication(componentBeingObserved.__x.getUnobservedData(), componentBeingObserved);
+                return;
+              }
+            });
+            observer.observe(componentBeingObserved, {
+              attributes: true,
+              childList: true,
+              characterData: true,
+              subtree: true
+            });
+            return this[componentName];
+          };
+        });
+      }
+    };
+
+    var allowTwoWayCommunication = function allowTwoWayCommunication(data, observedComponent) {
+      var handler = function handler(scope) {
+        if (scope === void 0) {
+          scope = null;
+        }
+
+        return {
+          get: function get(target, key) {
+            if (target[key] !== null && typeof target[key] === 'object') {
+              var path = scope ? scope + "." + key : key;
+              return new Proxy(target[key], handler(path));
+            }
+
+            return target[key];
+          },
+          set: function set(target, key, value) {
+            if (!observedComponent.__x) {
+              throw new Error('Error communicating with observed component');
+            }
+
+            var path = scope ? scope + "." + key : key;
+            objectSetDeep(observedComponent.__x.$data, path, value);
+            return true;
+          }
+        };
+      };
+
+      return new Proxy(data, handler());
+    }; // Borrowed from https://stackoverflow.com/a/54733755/1437789
+
+
+    var objectSetDeep = function objectSetDeep(object, path, value) {
+      path = path.toString().match(/[^.[\]]+/g) || []; // Iterate all of them except the last one
+
+      path.slice(0, -1).reduce(function (a, currentKey, index) {
+        // If the key does not exist or its value is not an object, create/override the key
+        if (Object(a[currentKey]) !== a[currentKey]) {
+          // Is the next key a potential array-index?
+          a[currentKey] = Math.abs(path[index + 1]) >> 0 === +path[index + 1] ? [] // Yes: assign a new array object
+          : {}; // No: assign a new plain object
+        }
+
+        return a[currentKey];
+      }, object)[path[path.length - 1]] = value; // Finally assign the value to the last key
+
+      return object;
+    };
+
+    var alpine = window.deferLoadingAlpine || function (alpine) {
+      return alpine();
+    };
+
+    window.deferLoadingAlpine = function (callback) {
+      alpine(callback);
+      AlpineComponentMagicMethod.start();
+    };
+
+    return AlpineComponentMagicMethod;
+
+})));

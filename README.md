@@ -1,5 +1,6 @@
-# Alpine Magic Helpers
-A set of magic helpers to use with AlpineJS
+# Magic Helpers
+
+A collection of magic properties and helper functions for use with Alpine.
 
 ![GitHub tag (latest by date)](https://img.shields.io/github/v/tag/alpine-collective/alpine-magic-helpers?label=version&style=flat-square)
 
