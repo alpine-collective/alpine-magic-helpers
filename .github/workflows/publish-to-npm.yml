@@ -35,6 +35,11 @@ jobs:
         run: git tag -d $RELEASE_VERSION
       - name: Update version in package.json
         run: npm version $RELEASE_VERSION
+      - name: Generate version for cdn links
+        run: CDN_VERSION=$(echo $RELEASE_VERSION | sed 's/\([0-9]\)\.\([0-9]\)\.[0-9]/\1.\2.x/g')
+      - name: Commit README #it fails if nothing has changed so we allow an error
+        run: git commit -am 'Update version in README'
+        continue-on-error: true
       - name: Push changed files to master
         run: git push origin HEAD:master
       - name: Recreate tag
