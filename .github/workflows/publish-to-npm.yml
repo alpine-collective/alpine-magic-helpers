@@ -36,7 +36,7 @@ jobs:
       - name: Update version in package.json
         run: npm version $RELEASE_VERSION
       - name: Generate version for cdn links
-        run: echo ::set-env name=CDN_VERSION::$(echo $RELEASE_VERSION | sed 's/\([0-9]\)\.\([0-9]\)\.[0-9]/\1.\2.x/g')
+        run: echo ::set-env name=CDN_VERSION::$(echo $RELEASE_VERSION | sed 's/v\([0-9]\)\.\([0-9]\)\.[0-9]/\1.\2.x/g')
       - name: Update README
         run: sed -i "s/[0-9]\.[0-9]\.x/$CDN_VERSION/g" README.md
       - name: Commit README if needed #it fails if nothing has changed so we allow an error
