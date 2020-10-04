@@ -2,6 +2,7 @@ import AlpineComponentMagicMethod from './component'
 import AlpineFetchMagicMethod from './fetch'
 import AlpineIntervalMagicMethod from './interval'
 import AlpineTruncateMagicMethod from './truncate'
+import AlpineUndoMagicMethod from './undo'
 
 const alpine = window.deferLoadingAlpine || ((alpine) => alpine())
 
@@ -10,6 +11,7 @@ window.deferLoadingAlpine = function (callback) {
     AlpineFetchMagicMethod.start()
     AlpineIntervalMagicMethod.start()
     AlpineTruncateMagicMethod.start()
+    AlpineUndoMagicMethod.start()
 
     alpine(callback)
 }

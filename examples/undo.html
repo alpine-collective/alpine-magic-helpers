@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+
+<head>
+	<script type="module" src="https://cdn.jsdelivr.net/gh/alpinejs/alpine@v2.x.x/dist/alpine.min.js" defer></script>
+	<script nomodule src="https://cdn.jsdelivr.net/gh/alpinejs/alpine@v2.x.x/dist/alpine-ie11.min.js"></script>
+	<script src="../dist/undo.js"></script>
+    <link href="https://unpkg.com/tailwindcss@^1.0/dist/tailwind.min.css" rel="stylesheet">
+
+</head>
+
+<body class="flex flex-col items-center justify-center m-24">
+    <p class="mb-4 font-bold">A random number generator</p>
+    <div
+        x-data="{ number: 0, history: [] }"
+        x-init="$track()">
+        <button
+            class="focus:outline-none bg-gray-200 border border-gray-400 py-1 px-1 w-24 rounded-md shadow"
+            @click="number = Math.floor(Math.random() * 10);history.push(number)"
+            x-text="number"></button>
+        <button
+            class="focus:outline-none bg-blue-600 text-white border border-blue-300 py-1 px-2 rounded-md shadow absolute ml-2"
+            @click="$undo()">
+                undo
+        </button>
+        <div class="fixed top-0">
+            <template x-for="num in history">
+                <span x-text="num"></span>
+            </template>
+        </div>
+    </div>
+
+</body>
