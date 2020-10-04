@@ -24,13 +24,14 @@ const AlpineUndoMagicMethod = {
                     const previous = JSON.parse($el.previousComponentState)
                     const fresh = JSON.parse(JSON.stringify($el.__x.getUnobservedData()))
                     const changes = DeepDiff.diff(previous, fresh, true)
-                    $el.changes.push(changes)
-
-                    $el.previousComponentState = JSON.stringify(fresh)
-                    $el.__x.$data.$nextTick(() => {
-                        $el.dontTrackForOneTick = true
-                        $el.__x.updateElements($el)
-                    })
+                    if (changes) {
+                        $el.changes.push(changes)
+                        $el.previousComponentState = JSON.stringify(fresh)
+                        $el.__x.$data.$nextTick(() => {
+                            $el.dontTrackForOneTick = true
+                            $el.__x.updateElements($el)
+                        })
+                    }
                 })
             }
         })

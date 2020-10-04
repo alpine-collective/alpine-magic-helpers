@@ -617,14 +617,17 @@
               var previous = JSON.parse($el.previousComponentState);
               var fresh = JSON.parse(JSON.stringify($el.__x.getUnobservedData()));
               var changes = deepDiff.DeepDiff.diff(previous, fresh, true);
-              $el.changes.push(changes);
-              $el.previousComponentState = JSON.stringify(fresh);
 
-              $el.__x.$data.$nextTick(function () {
-                $el.dontTrackForOneTick = true;
+              if (changes) {
+                $el.changes.push(changes);
+                $el.previousComponentState = JSON.stringify(fresh);
 
-                $el.__x.updateElements($el);
-              });
+                $el.__x.$data.$nextTick(function () {
+                  $el.dontTrackForOneTick = true;
+
+                  $el.__x.updateElements($el);
+                });
+              }
             });
           };
         });
