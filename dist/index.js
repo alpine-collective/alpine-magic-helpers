@@ -38,7 +38,7 @@
             }
 
             var path = scope ? scope + "." + key : key;
-            callback.call(this, observedComponent.__x.$data, path, value);
+            callback.call(observedComponent, observedComponent.__x.$data, path, value);
             return true;
           }
         };
@@ -2361,7 +2361,8 @@
       AlpineComponentMagicMethod: AlpineComponentMagicMethod,
       AlpineFetchMagicMethod: AlpineFetchMagicMethod,
       AlpineIntervalMagicMethod: AlpineIntervalMagicMethod,
-      AlpineTruncateMagicMethod: AlpineTruncateMagicMethod
+      AlpineTruncateMagicMethod: AlpineTruncateMagicMethod,
+      AlpineUndoMagicMethod: AlpineUndoMagicMethod
     };
 
     return index;
