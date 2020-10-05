@@ -77,9 +77,7 @@ test('componentData > can extract data BEFORE Alpine is initialized', () => {
 
 test('componentData > can extract data AFTER Alpine is initialized', async () => {
     document.body.innerHTML = `
-        <div x-data="{foo: 'bar'}">
-            <button @click="foo = 'baz'"></button>
-        </div>
+        <div x-data="{foo: 'bar'}"></div>
     `
     Alpine.start()
 
