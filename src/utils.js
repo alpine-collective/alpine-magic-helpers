@@ -25,7 +25,7 @@ export const syncWithObservedComponent = function (data, observedComponent, call
                     throw new Error('Error communicating with observed component')
                 }
                 const path = scope ? `${scope}.${key}` : key
-                callback.call(this, observedComponent.__x.$data, path, value)
+                callback.call(observedComponent, observedComponent.__x.$data, path, value)
                 return true
             },
         }
