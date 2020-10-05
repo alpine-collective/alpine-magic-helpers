@@ -13,24 +13,16 @@ const AlpineUndoMagicMethod = {
                 // TODO: Possibly scope to specific properties
                 $el.changes = []
                 $el.initialComponentState = componentData($el)
-                $el.previousComponentState = JSON.stringify({})
+                $el.previousComponentState = JSON.stringify($el.initialComponentState)
 
                 updateOnMutation($el, () => {
-                    if ($el.dontTrackForOneTick) {
-                        $el.dontTrackForOneTick = null
-                        return
-                    }
-
                     const previous = JSON.parse($el.previousComponentState)
                     const fresh = JSON.parse(JSON.stringify($el.__x.getUnobservedData()))
                     const changes = DeepDiff.diff(previous, fresh, true)
                     if (changes) {
                         $el.changes.push(changes)
                         $el.previousComponentState = JSON.stringify(fresh)
-                        $el.__x.$data.$nextTick(() => {
-                            $el.dontTrackForOneTick = true
-                            $el.__x.updateElements($el)
-                        })
+                        $el.__x.updateElements($el)
                     }
                 })
             }
@@ -46,17 +38,11 @@ const AlpineUndoMagicMethod = {
                     DeepDiff.revertChange(fresh, $el.__x.getUnobservedData(), diff)
                 })
 
-                if (!Object.keys(fresh).length) return
-                Object.entries(fresh).forEach(item => {
+                Object.keys(fresh).length && Object.entries(fresh).forEach(item => {
                     $el.__x.$data[item[0]] = item[1]
                 })
 
-                $el.previousComponentState = JSON.stringify(fresh)
-                $el.dontTrackForOneTick = true
-                $el.__x.$data.$nextTick(() => {
-                    $el.dontTrackForOneTick = true
-                    $el.__x.updateElements($el)
-                })
+                $el.previousComponentState = JSON.stringify($el.__x.getUnobservedData())
             }
         })
     },

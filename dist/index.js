@@ -2302,13 +2302,8 @@
             // TODO: Possibly scope to specific properties
             $el.changes = [];
             $el.initialComponentState = componentData($el);
-            $el.previousComponentState = JSON.stringify({});
+            $el.previousComponentState = JSON.stringify($el.initialComponentState);
             updateOnMutation($el, function () {
-              if ($el.dontTrackForOneTick) {
-                $el.dontTrackForOneTick = null;
-                return;
-              }
-
               var previous = JSON.parse($el.previousComponentState);
               var fresh = JSON.parse(JSON.stringify($el.__x.getUnobservedData()));
               var changes = deepDiff.DeepDiff.diff(previous, fresh, true);
@@ -2317,11 +2312,7 @@
                 $el.changes.push(changes);
                 $el.previousComponentState = JSON.stringify(fresh);
 
-                $el.__x.$data.$nextTick(function () {
-                  $el.dontTrackForOneTick = true;
-
-                  $el.__x.updateElements($el);
-                });
+                $el.__x.updateElements($el);
               }
             });
           };
@@ -2335,18 +2326,10 @@
             diffs.forEach(function (diff) {
               deepDiff.DeepDiff.revertChange(fresh, $el.__x.getUnobservedData(), diff);
             });
-            if (!Object.keys(fresh).length) return;
-            Object.entries(fresh).forEach(function (item) {
+            Object.keys(fresh).length && Object.entries(fresh).forEach(function (item) {
               $el.__x.$data[item[0]] = item[1];
             });
-            $el.previousComponentState = JSON.stringify(fresh);
-            $el.dontTrackForOneTick = true;
-
-            $el.__x.$data.$nextTick(function () {
-              $el.dontTrackForOneTick = true;
-
-              $el.__x.updateElements($el);
-            });
+            $el.previousComponentState = JSON.stringify($el.__x.getUnobservedData());
           };
         });
       }
