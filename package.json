@@ -7,8 +7,7 @@
         "src/component.js",
         "src/fetch.js",
         "src/interval.js",
-        "src/truncate.js",
-        "src/undo.js"
+        "src/truncate.js"
     ],
     "main": "dist/index.js",
     "scripts": {
