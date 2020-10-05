@@ -14,6 +14,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Added this changelog
 - Added Jest and added some tests for each helper
 - Added esLint (+ husky and lint-staged to run the linter before each commits) and fixed code standard errors
+- Added workflow to automate README update and publish new versions to npm
 
 ## [0.3.4] - 2020-09-27
 ### Fixed
