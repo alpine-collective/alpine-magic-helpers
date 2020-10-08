@@ -1,1 +1,83 @@
-!function(e){var r={};function t(n){if(r[n])return r[n].exports;var o=r[n]={i:n,l:!1,exports:{}};return e[n].call(o.exports,o,o.exports,t),o.l=!0,o.exports}t.m=e,t.c=r,t.d=function(e,r,n){t.o(e,r)||Object.defineProperty(e,r,{enumerable:!0,get:n})},t.r=function(e){"undefined"!=typeof Symbol&&Symbol.toStringTag&&Object.defineProperty(e,Symbol.toStringTag,{value:"Module"}),Object.defineProperty(e,"__esModule",{value:!0})},t.t=function(e,r){if(1&r&&(e=t(e)),8&r)return e;if(4&r&&"object"==typeof e&&e&&e.__esModule)return e;var n=Object.create(null);if(t.r(n),Object.defineProperty(n,"default",{enumerable:!0,value:e}),2&r&&"string"!=typeof e)for(var o in e)t.d(n,o,function(r){return e[r]}.bind(null,o));return n},t.n=function(e){var r=e&&e.__esModule?function(){return e.default}:function(){return e};return t.d(r,"a",r),r},t.o=function(e,r){return Object.prototype.hasOwnProperty.call(e,r)},t.p="/",t(t.s=38)}({13:function(e,r){function t(e){return(t="function"==typeof Symbol&&"symbol"==typeof Symbol.iterator?function(e){return typeof e}:function(e){return e&&"function"==typeof Symbol&&e.constructor===Symbol&&e!==Symbol.prototype?"symbol":typeof e})(e)}function n(){Alpine.addMagicProperty("truncate",(function(e){return function(){for(var e=arguments.length,r=new Array(e),n=0;n<e;n++)r[n]=arguments[n];if("string"!=typeof r[0])return r[0];var o="…";return r[1]?"object"!==t(r[1])?(void 0!==r[2]&&(o=r[2]),r[0].slice(0,r[1])+o):(r[1].hasOwnProperty("ellipsis")&&(o=r[1].ellipsis),r[1].hasOwnProperty("words")&&r[1].words?r[0].split(" ").splice(0,r[1].words).join(" ")+o:r[1].hasOwnProperty("characters")&&r[1].characters?r[0].slice(0,r[1].characters)+o:r[0]):r[0]}}))}var o=window.deferLoadingAlpine||function(e){return e()};window.deferLoadingAlpine=function(e){n(),o(e)},e.exports=n},38:function(e,r,t){e.exports=t(13)}});
+(function (global, factory) {
+    typeof exports === 'object' && typeof module !== 'undefined' ? module.exports = factory() :
+    typeof define === 'function' && define.amd ? define(factory) :
+    (global = typeof globalThis !== 'undefined' ? globalThis : global || self, global.truncate = factory());
+}(this, (function () { 'use strict';
+
+    var checkForAlpine = function checkForAlpine() {
+      if (!window.Alpine) {
+        throw new Error('[Magic Helpers] Alpine is required for the magic helpers to function correctly.');
+      }
+
+      if (!window.Alpine.version || !isValidVersion('2.5.0', window.Alpine.version)) {
+        throw new Error('Invalid Alpine version. Please use Alpine version 2.5.0 or above');
+      }
+    };
+
+    function isValidVersion(required, current) {
+      var requiredArray = required.split('.');
+      var currentArray = current.split('.');
+
+      for (var i = 0; i < requiredArray.length; i++) {
+        if (!currentArray[i] || parseInt(currentArray[i]) < parseInt(requiredArray[i])) {
+          return false;
+        }
+      }
+
+      return true;
+    }
+
+    var AlpineTruncateMagicMethod = {
+      start: function start() {
+        checkForAlpine();
+        Alpine.addMagicProperty('truncate', function () {
+          return function () {
+            for (var _len = arguments.length, parameters = new Array(_len), _key = 0; _key < _len; _key++) {
+              parameters[_key] = arguments[_key];
+            }
+
+            if (typeof parameters[0] !== 'string') return parameters[0];
+            var ellipsis = '…'; // If the second parameter isn't truthy, return the full string
+
+            if (!parameters[1]) return parameters[0]; // if only a number or string is passed in, keep it simple
+
+            if (typeof parameters[1] !== 'object') {
+              if (typeof parameters[2] !== 'undefined') {
+                ellipsis = parameters[2];
+              }
+
+              return parameters[0].slice(0, parameters[1]) + ellipsis;
+            } // Customize the …
+
+
+            if (Object.prototype.hasOwnProperty.call(parameters[1], 'ellipsis')) {
+              ellipsis = parameters[1].ellipsis;
+            } // If words or characters is set, also check that they are truthy. Setting to 0, for example, shoudld show all
+
+
+            if (Object.prototype.hasOwnProperty.call(parameters[1], 'words') && parameters[1].words) {
+              return parameters[0].split(' ').splice(0, parameters[1].words).join(' ') + ellipsis;
+            }
+
+            if (Object.prototype.hasOwnProperty.call(parameters[1], 'characters') && parameters[1].characters) {
+              return parameters[0].slice(0, parameters[1].characters) + ellipsis;
+            }
+
+            return parameters[0];
+          };
+        });
+      }
+    };
+
+    var alpine = window.deferLoadingAlpine || function (alpine) {
+      return alpine();
+    };
+
+    window.deferLoadingAlpine = function (callback) {
+      AlpineTruncateMagicMethod.start();
+      alpine(callback);
+    };
+
+    return AlpineTruncateMagicMethod;
+
+})));

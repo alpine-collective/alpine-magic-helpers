@@ -1,7 +1,8 @@
-# Alpine Magic Helpers
-A set of magic helpers to use with AlpineJS
+# Magic Helpers
 
-![GitHub tag (latest by date)](https://img.shields.io/github/v/tag/kevinbatdorf/alpine-magic-helpers?label=version&style=flat-square)
+A collection of magic properties and helper functions for use with Alpine.
+
+![GitHub tag (latest by date)](https://img.shields.io/github/v/tag/alpine-collective/alpine-magic-helpers?label=version&style=flat-square)
 
 ## About
 
@@ -14,38 +15,24 @@ This adds three magic helpers to use with Alpine JS. ***More to come!***
 | [`$scroll`](#scroll) | Scroll the page to a specific point. |
 | [`$truncate`](#truncate) |  Limit a text string to a specific number of characters or words. |
 
-🚀 If you have ideas for more magic helpers, please let me know on [Twitter](https://twitter.com/kevinbatdorf) or on the [AlpineJS Discord](https://discord.gg/snmCYk3)
-##### TODO:
-1. Add more useful magic helpers - Some ideas include (rough ideas):
-    1. `$reset` - Reset state to the initial state, or reset a specific property only `@click="$reset('color')"`
-    1. `$undo` - Keep track of state changes and undo the last mutation `@click="$undo('count')"`
-    1. `$suspend` - Render a different while waiting on some other data `x-show="$suspend(data, 'templateName')"`
-    1. `$visible` - Do something when the component is visible on the screen `x-init="$visible(loadImages())"` or `x-show.transition="$visible('full')"` which could wait until the element is fully visible
-    1. `$breakpoint` - Similar to `$visible`, do something when at a specific breakpoint `x-show="$breakpoint('max-width:600px')"` or possibly `x-show="$breakpoint('md')"`
-    1. `$forceRender` - Force update the component state `@on-custom-event="$forceRender()"` for example if you need to set a property value in a non-conventional way and force the component to update
-    1. `$graphql` - Similar to `$fetch` but with common features expected with GraphQL requests.
-    1. `$route` - Not entirely sure about this one, but possibly let the component do something depending on the current route.
-1. Write tests - This will start soon after some initial content is included, especially if demand increases.
-
-> ℹ Be sure to star this repo to show your interest in this project
-
+🚀 If you have ideas for more magic helpers, please open a [discussion](https://github.com/alpine-collective/alpine-magic-helpers/discussions) or join us on the [AlpineJS Discord](https://discord.gg/snmCYk3)
 
 ## Installation
 
 Include the following `<script>` tag in the `<head>` of your document (before Alpine):
 
 ```html
-<script src="https://cdn.jsdelivr.net/gh/kevinbatdorf/alpine-magic-helpers@0.3.x/dist/index.js"></script>
+<script src="https://cdn.jsdelivr.net/gh/alpine-collective/alpine-magic-helpers@0.3.x/dist/index.js"></script>
 ```
 
 Or only use the specific methods you need:
 
 ```html
-<script src="https://cdn.jsdelivr.net/gh/kevinbatdorf/alpine-magic-helpers@0.3.x/dist/fetch.js"></script>
-<script src="https://cdn.jsdelivr.net/gh/kevinbatdorf/alpine-magic-helpers@0.3.x/dist/interval.js"></script>
-<script src="https://cdn.jsdelivr.net/gh/kevinbatdorf/alpine-magic-helpers@0.3.x/dist/component.js"></script>
-<script src="https://cdn.jsdelivr.net/gh/kevinbatdorf/alpine-magic-helpers@0.3.x/dist/truncate.js"></script>
-<script src="https://cdn.jsdelivr.net/gh/kevinbatdorf/alpine-magic-helpers@master/dist/scroll.js"></script>
+<script src="https://cdn.jsdelivr.net/gh/alpine-collective/alpine-magic-helpers@0.3.x/dist/fetch.js"></script>
+<script src="https://cdn.jsdelivr.net/gh/alpine-collective/alpine-magic-helpers@0.3.x/dist/interval.js"></script>
+<script src="https://cdn.jsdelivr.net/gh/alpine-collective/alpine-magic-helpers@0.3.x/dist/component.js"></script>
+<script src="https://cdn.jsdelivr.net/gh/alpine-collective/alpine-magic-helpers@0.3.x/dist/truncate.js"></script>
+<script src="https://cdn.jsdelivr.net/gh/alpine-collective/alpine-magic-helpers@0.4.x/dist/scroll.js"></script>
 ```
 
 ---
@@ -64,7 +51,6 @@ Then add the following to your script:
 import 'alpine-magic-helpers'
 import 'alpinejs'
 ```
-
 
 ### `$component`
 **Example:**
@@ -225,7 +211,7 @@ By default, `$truncate` will return take characters as a parameter. Instead you 
 </div>
 ```
 [Demo](https://codepen.io/KevinBatdorf/pen/BaKKgGg?editors=1000) (same as above)
-> Behind the scenes, for words, this uses `sentence.split(" ").splice(0, words).join(" ")` which does not define a word in all languages. 
+> Behind the scenes, for words, this uses `sentence.split(" ").splice(0, words).join(" ")` which does not define a word in all languages.
 
 ---
 

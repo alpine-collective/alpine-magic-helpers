@@ -1,46 +1,102 @@
 {
-  "name": "alpine-magic-helpers",
-  "version": "0.3.1",
-  "description": "A set of magic helpers to use with AlpineJS",
-  "main": "dist/index.js",
-  "publishConfig": {
-    "access": "public"
-  },
-  "scripts": {
-    "test": "jest",
-    "test-watch": "jest --watch",
-    "dev": "npm run development",
-    "development": "cross-env NODE_ENV=development node_modules/webpack/bin/webpack.js --progress --hide-modules --config=node_modules/laravel-mix/setup/webpack.config.js",
-    "watch": "npm run development -- --watch",
-    "build": "cross-env NODE_ENV=production node_modules/webpack/bin/webpack.js --no-progress --hide-modules --config=node_modules/laravel-mix/setup/webpack.config.js"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/kevinbatdorf/alpine-magic-helpers.git"
-  },
-  "keywords": [
-    "alpinejs"
-  ],
-  "author": "Kevin Batdorf",
-  "license": "MIT",
-  "bugs": {
-    "url": "https://github.com/kevinbatdorf/alpine-magic-helpers/issues"
-  },
-  "homepage": "https://github.com/kevinbatdorf/alpine-magic-helpers#readme",
-  "devDependencies": {
-    "alpinejs": "^2.4.1",
-    "cross-env": "^7.0.2",
-    "jest": "^26.0.1",
-    "laravel-mix": "^5.0.4",
-    "smoothscroll-polyfill": "^0.4.4",
-    "vue-template-compiler": "^2.6.11",
-    "webpack-livereload-plugin": "^1.2.0"
-  },
-  "directories": {
-    "example": "example",
-    "test": "test"
-  },
-  "dependencies": {
-    "axios": "^0.19.2"
-  }
+    "name": "@alpine-collective/magic-helpers",
+    "version": "0.3.5",
+    "description": "A collection of magic properties and helper functions for use with Alpine.",
+    "source": [
+        "src/index.js",
+        "src/component.js",
+        "src/fetch.js",
+        "src/interval.js",
+        "src/truncate.js"
+    ],
+    "main": "dist/index.js",
+    "scripts": {
+        "build": "rollup -c",
+        "watch": "concurrently \"rollup -c -w\" \"browser-sync examples --ss . -f examples dist/index.js\"",
+        "test": "jest",
+        "test-watch": "jest --watch",
+        "lint": "eslint .",
+        "lint-fix": "eslint . --fix"
+    },
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/alpine-collective/magic-helpers.git"
+    },
+    "keywords": [
+        "alpinejs",
+        "magic properties",
+        "alpine"
+    ],
+    "authors": [
+        {
+            "name": "Kevin Batdorf",
+            "url": "https://kevinbatdorf.com"
+        },
+        {
+            "name": "Ryan Chandler",
+            "url": "https://ryangjchandler.co.uk"
+        },
+        {
+            "name": "Simone Todaro",
+            "url": "https://github.com/SimoTod"
+        },
+        {
+            "name": "Hugo DF",
+            "url": "https://codewithhugo.com"
+        }
+    ],
+    "license": "MIT",
+    "bugs": {
+        "url": "https://github.com/alpine-collective/magic-helpers/issues"
+    },
+    "homepage": "https://github.com/alpine-collective/magic-helpers#readme",
+    "dependencies": {},
+    "peerDependencies": {
+        "alpinejs": "^2.6"
+    },
+    "devDependencies": {
+        "@babel/preset-env": "^7.11.5",
+        "@rollup/plugin-babel": "^5.2.1",
+        "@rollup/plugin-commonjs": "^15.1.0",
+        "@rollup/plugin-json": "^4.1.0",
+        "@rollup/plugin-node-resolve": "^9.0.0",
+        "@testing-library/dom": "^7.24.2",
+        "@testing-library/jest-dom": "^5.11.4",
+        "alpinejs": "^2.7.0",
+        "axios": "^0.20",
+        "browser-sync": "^2.26.12",
+        "concurrently": "^5.3.0",
+        "eslint": "^7.10.0",
+        "eslint-config-standard": "^14.1.1",
+        "eslint-plugin-import": "^2.22.0",
+        "eslint-plugin-node": "^11.1.0",
+        "eslint-plugin-promise": "^4.2.1",
+        "eslint-plugin-standard": "^4.0.1",
+        "husky": "^4.3.0",
+        "jest": "^26.4.2",
+        "jsdom-simulant": "^1.1.2",
+        "lint-staged": "^10.4.0",
+        "rollup": "^2.28.2",
+        "rollup-plugin-filesize": "^9.0.2",
+        "smoothscroll-polyfill": "^0.4.4"
+    },
+    "publishConfig": {
+        "access": "public"
+    },
+    "files": [
+        "dist/*",
+        "package.json",
+        "LICENSE.md",
+        "README.md"
+    ],
+    "husky": {
+        "hooks": {
+            "pre-commit": "lint-staged"
+        }
+    },
+    "lint-staged": {
+        "*.js": [
+            "eslint --fix"
+        ]
+    }
 }
