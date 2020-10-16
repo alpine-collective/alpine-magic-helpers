@@ -85,13 +85,10 @@
     }; // Returns component data if Alpine has made it available, otherwise computes it with saferEval()
 
     var componentData = function componentData(component, properties) {
-      if (properties === void 0) {
-        properties = [];
-      }
-
       var data = component.__x ? component.__x.getUnobservedData() : saferEval(component.getAttribute('x-data'), component);
 
-      if (properties.length) {
+      if (properties) {
+        properties = Array.isArray(properties) ? properties : [properties];
         return properties.reduce(function (object, key) {
           object[key] = data[key];
           return object;

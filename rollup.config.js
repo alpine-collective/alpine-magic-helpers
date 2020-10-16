@@ -42,5 +42,4 @@ export default [
     'fetch',
     'interval',
     'truncate',
-    'undo',
 ].map(createConfig)

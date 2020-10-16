@@ -85,13 +85,10 @@
     }; // Returns component data if Alpine has made it available, otherwise computes it with saferEval()
 
     var componentData = function componentData(component, properties) {
-      if (properties === void 0) {
-        properties = [];
-      }
-
       var data = component.__x ? component.__x.getUnobservedData() : saferEval(component.getAttribute('x-data'), component);
 
-      if (properties.length) {
+      if (properties) {
+        properties = Array.isArray(properties) ? properties : [properties];
         return properties.reduce(function (object, key) {
           object[key] = data[key];
           return object;
@@ -2317,16 +2314,9 @@
             var _$el$__xc, _propertiesToWatch;
 
             $el.__xc = (_$el$__xc = $el.__xc) != null ? _$el$__xc : {};
-            propertiesToWatch = (_propertiesToWatch = propertiesToWatch) != null ? _propertiesToWatch : Object.keys(componentData($el));
+            propertiesToWatch = (_propertiesToWatch = propertiesToWatch) != null ? _propertiesToWatch : Object.keys(componentData($el)); // These are computed on load once, so won't last when Alpine.clone() is called
 
-            if (!Array.isArray(propertiesToWatch)) {
-              propertiesToWatch = [propertiesToWatch];
-            } // These are computed on load once, so won't last when Alpine.clone() is called
-
-
-            $el.__xc.propertiesBeingWatched = propertiesToWatch.filter(function (key) {
-              return key !== '$history';
-            });
+            $el.__xc.propertiesBeingWatched = propertiesToWatch;
             $el.__xc.initialComponentState = componentData($el, $el.__xc.propertiesBeingWatched);
             $el.__xc.previousComponentState = JSON.stringify($el.__xc.initialComponentState);
             updateOnMutation($el, function () {

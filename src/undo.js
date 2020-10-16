@@ -20,12 +20,9 @@ const AlpineUndoMagicMethod = {
             return function (propertiesToWatch) {
                 $el.__xc = $el.__xc ?? {}
                 propertiesToWatch = propertiesToWatch ?? Object.keys(componentData($el))
-                if (!Array.isArray(propertiesToWatch)) {
-                    propertiesToWatch = [propertiesToWatch]
-                }
 
                 // These are computed on load once, so won't last when Alpine.clone() is called
-                $el.__xc.propertiesBeingWatched = propertiesToWatch.filter(key => key !== '$history')
+                $el.__xc.propertiesBeingWatched = propertiesToWatch
                 $el.__xc.initialComponentState = componentData($el, $el.__xc.propertiesBeingWatched)
                 $el.__xc.previousComponentState = JSON.stringify($el.__xc.initialComponentState)
 

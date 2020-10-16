@@ -7,8 +7,7 @@
         "src/component.js",
         "src/fetch.js",
         "src/interval.js",
-        "src/truncate.js",
-        "src/undo.js"
+        "src/truncate.js"
     ],
     "main": "dist/index.js",
     "scripts": {
@@ -51,9 +50,7 @@
         "url": "https://github.com/alpine-collective/magic-helpers/issues"
     },
     "homepage": "https://github.com/alpine-collective/magic-helpers#readme",
-    "dependencies": {
-        "deep-diff": "^1.0.2"
-    },
+    "dependencies": {},
     "peerDependencies": {
         "alpinejs": "^2.6"
     },
