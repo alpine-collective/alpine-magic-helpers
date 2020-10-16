@@ -84,12 +84,21 @@
       return object;
     }; // Returns component data if Alpine has made it available, otherwise computes it with saferEval()
 
-    var componentData = function componentData(component) {
-      if (component.__x) {
-        return component.__x.getUnobservedData();
+    var componentData = function componentData(component, properties) {
+      if (properties === void 0) {
+        properties = [];
       }
 
-      return saferEval(component.getAttribute('x-data'), component);
+      var data = component.__x ? component.__x.getUnobservedData() : saferEval(component.getAttribute('x-data'), component);
+
+      if (properties.length) {
+        return properties.reduce(function (object, key) {
+          object[key] = data[key];
+          return object;
+        }, {});
+      }
+
+      return data;
     };
 
     function isValidVersion(required, current) {
