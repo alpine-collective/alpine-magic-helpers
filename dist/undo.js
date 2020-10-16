@@ -624,7 +624,10 @@
             $el.__xc = (_$el$__xc = $el.__xc) != null ? _$el$__xc : {};
             propertiesToWatch = (_propertiesToWatch = propertiesToWatch) != null ? _propertiesToWatch : Object.keys(componentData($el)); // These are computed on load once, so won't last when Alpine.clone() is called
 
-            $el.__xc.propertiesBeingWatched = Array.isArray(propertiesToWatch) ? propertiesToWatch : [propertiesToWatch];
+            propertiesToWatch = Array.isArray(propertiesToWatch) ? propertiesToWatch : [propertiesToWatch];
+            $el.__xc.propertiesBeingWatched = propertiesToWatch.filter(function (key) {
+              return key !== '__xc';
+            });
             $el.__xc.initialComponentState = componentData($el, $el.__xc.propertiesBeingWatched);
             $el.__xc.previousComponentState = JSON.stringify($el.__xc.initialComponentState);
             updateOnMutation($el, function () {
