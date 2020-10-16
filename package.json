@@ -51,7 +51,9 @@
         "url": "https://github.com/alpine-collective/magic-helpers/issues"
     },
     "homepage": "https://github.com/alpine-collective/magic-helpers#readme",
-    "dependencies": {},
+    "dependencies": {
+        "deep-diff": "^1.0.2"
+    },
     "peerDependencies": {
         "alpinejs": "^2.6"
     },
