@@ -610,52 +610,78 @@
     var AlpineUndoMagicMethod = {
       start: function start() {
         checkForAlpine();
+        Alpine.addMagicProperty('history', function ($el) {
+          if ($el.__x && $el.__xc && $el.__x.__xc.__xhistory.length) {
+            return $el.__x.__xc.__xhistory;
+          }
+
+          return [];
+        });
         Alpine.addMagicProperty('track', function ($el) {
           return function (propertiesToWatch) {
             var _$el$__xc, _propertiesToWatch;
 
-            // TODO: accept "something.nested"
-            var initialComponentState = componentData($el);
-
-            if (!Array.isArray(initialComponentState.__xhistory)) {
-              throw new Error('$track() requires adding the property `__xhistory: []`');
-            }
-
             $el.__xc = (_$el$__xc = $el.__xc) != null ? _$el$__xc : {};
-            propertiesToWatch = (_propertiesToWatch = propertiesToWatch) != null ? _propertiesToWatch : Object.keys(initialComponentState);
-            $el.__xc.propertiesBeingWatched = Object.keys(initialComponentState).filter(function (key) {
-              return propertiesToWatch.includes(key);
-            }).filter(function (key) {
-              return key !== '__xhistory';
+            propertiesToWatch = (_propertiesToWatch = propertiesToWatch) != null ? _propertiesToWatch : Object.keys(componentData($el));
+
+            if (!Array.isArray(propertiesToWatch)) {
+              propertiesToWatch = [propertiesToWatch];
+            } // These are computed on load once, so won't last when Alpine.clone() is called
+
+
+            $el.__xc.propertiesBeingWatched = propertiesToWatch.filter(function (key) {
+              return key !== '$history';
             });
             $el.__xc.initialComponentState = componentData($el, $el.__xc.propertiesBeingWatched);
             $el.__xc.previousComponentState = JSON.stringify($el.__xc.initialComponentState);
             updateOnMutation($el, function () {
-              var previous = JSON.parse($el.__xc.previousComponentState);
+              preserveState($el);
+              var previous = JSON.parse($el.__x.__xc.previousComponentState);
               var fresh = JSON.parse(JSON.stringify(componentData($el, $el.__xc.propertiesBeingWatched)));
               var changes = deepDiff.DeepDiff.diff(previous, fresh, true);
               changes = changes ? changes.filter(function (change) {
-                return $el.__xc.propertiesBeingWatched.includes(change.path.join('.'));
+                // Filter down to the properties we want (top level only)
+                return $el.__xc.propertiesBeingWatched.some(function (prop) {
+                  return change.path.join('.').startsWith(prop);
+                });
               }) : [];
 
               if (changes.length) {
-                $el.__x.$data.__xhistory.push(changes);
+                $el.__x.__xc.__xhistory.push(changes);
 
-                $el.__xc.previousComponentState = JSON.stringify(fresh);
+                $el.__x.__xc.previousComponentState = JSON.stringify(fresh);
 
                 $el.__x.updateElements($el);
               }
             });
-          };
+          }; // If this isn't setup the information will get lost on Alpine.clone()
+
+          function preserveState($el) {
+            var _$el$__x$__xc;
+
+            $el.__x.__xc = (_$el$__x$__xc = $el.__x.__xc) != null ? _$el$__x$__xc : {};
+
+            if (typeof $el.__x.__xc.__xhistory === 'undefined') {
+              $el.__x.__xc.__xhistory = [];
+            }
+
+            if (typeof $el.__x.__xc.initialComponentState === 'undefined') {
+              $el.__x.__xc.initialComponentState = $el.__xc.initialComponentState;
+            }
+
+            if (typeof $el.__x.__xc.previousComponentState === 'undefined') {
+              $el.__x.__xc.previousComponentState = $el.__xc.previousComponentState;
+            }
+          }
         });
         Alpine.addMagicProperty('undo', function ($el) {
           return function () {
             var _fresh;
 
-            var diffs = $el.__x.$data.__xhistory.pop();
+            var diffs = $el.__x.__xc.__xhistory.pop();
 
-            var fresh = JSON.parse($el.__xc.previousComponentState);
-            fresh = (_fresh = fresh) != null ? _fresh : $el.__xc.initialComponentState;
+            var fresh = JSON.parse($el.__x.__xc.previousComponentState);
+            fresh = (_fresh = fresh) != null ? _fresh : $el.__x.__xc.initialComponentState;
             diffs && diffs.forEach(function (diff) {
               deepDiff.DeepDiff.revertChange(fresh, componentData($el, $el.__xc.propertiesBeingWatched), diff);
             }); // This could probbaly be extracted to a utility method like updateComponentProperties()
@@ -668,7 +694,7 @@
               $el.__x.$data = Object.assign($el.__x.$data, newData);
             }
 
-            $el.__xc.previousComponentState = JSON.stringify(componentData($el, $el.__xc.propertiesBeingWatched));
+            $el.__x.__xc.previousComponentState = JSON.stringify(componentData($el, $el.__xc.propertiesBeingWatched));
           };
         });
       }

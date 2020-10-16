@@ -15,7 +15,6 @@
         x-data="{
             number: 0,
             numberTracking: [],
-            __xhistory: [],
         }"
         x-init="$track()">
         <button
@@ -24,7 +23,7 @@
             x-text="number"></button>
         <button
             class="focus:outline-none bg-blue-600 text-white border border-blue-300 py-1 px-2 rounded-md shadow absolute ml-2"
-            x-show.transition.1000="__xhistory.length"
+            x-show.transition.1000="$history.length"
             @click="$undo()">
                 undo
         </button>
