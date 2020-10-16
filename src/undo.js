@@ -10,8 +10,9 @@ const AlpineUndoMagicMethod = {
         checkForAlpine()
 
         Alpine.addMagicProperty('history', function ($el) {
-            if ($el.__x && $el.__xc && $el.__x.__xc.__xhistory.length) {
-                return $el.__x.__xc.__xhistory
+            if ($el.__x) {
+                $el.__x.$data.__xc = $el.__x.$data.__xc ?? {}
+                return $el.__x.$data.__xc.history.length ? $el.__x.$data.__xc.history : []
             }
             return []
         })
@@ -28,16 +29,16 @@ const AlpineUndoMagicMethod = {
 
                 updateOnMutation($el, () => {
                     preserveState($el)
-                    const previous = JSON.parse($el.__x.__xc.previousComponentState)
-                    const fresh = JSON.parse(JSON.stringify(componentData($el, $el.__xc.propertiesBeingWatched)))
+                    const previous = JSON.parse($el.__x.$data.__xc.previousComponentState)
+                    const fresh = JSON.parse(JSON.stringify(componentData($el, $el.__x.$data.__xc.propertiesBeingWatched)))
                     let changes = DeepDiff.diff(previous, fresh, true)
                     changes = changes ? changes.filter(change => {
                         // Filter down to the properties we want (top level only)
-                        return $el.__xc.propertiesBeingWatched.some(prop => change.path.join('.').startsWith(prop))
+                        return $el.__x.$data.__xc.propertiesBeingWatched.some(prop => change.path.join('.').startsWith(prop))
                     }) : []
                     if (changes.length) {
-                        $el.__x.__xc.__xhistory.push(changes)
-                        $el.__x.__xc.previousComponentState = JSON.stringify(fresh)
+                        $el.__x.$data.__xc.history.push(changes)
+                        $el.__x.$data.__xc.previousComponentState = JSON.stringify(fresh)
                         $el.__x.updateElements($el)
                     }
                 })
@@ -45,27 +46,30 @@ const AlpineUndoMagicMethod = {
 
             // If this isn't setup the information will get lost on Alpine.clone()
             function preserveState($el) {
-                $el.__x.__xc = $el.__x.__xc ?? {}
-                if (typeof $el.__x.__xc.__xhistory === 'undefined') {
-                    $el.__x.__xc.__xhistory = []
+                $el.__x.$data.__xc = $el.__x.$data.__xc ?? {}
+                if (typeof $el.__x.$data.__xc.history === 'undefined') {
+                    $el.__x.$data.__xc.history = []
                 }
-                if (typeof $el.__x.__xc.initialComponentState === 'undefined') {
-                    $el.__x.__xc.initialComponentState = $el.__xc.initialComponentState
+                if (typeof $el.__x.$data.__xc.initialComponentState === 'undefined') {
+                    $el.__x.$data.__xc.initialComponentState = $el.__xc.initialComponentState
                 }
-                if (typeof $el.__x.__xc.previousComponentState === 'undefined') {
-                    $el.__x.__xc.previousComponentState = $el.__xc.previousComponentState
+                if (typeof $el.__x.$data.__xc.previousComponentState === 'undefined') {
+                    $el.__x.$data.__xc.previousComponentState = $el.__xc.previousComponentState
+                }
+                if (typeof $el.__x.$data.__xc.propertiesBeingWatched === 'undefined') {
+                    $el.__x.$data.__xc.propertiesBeingWatched = $el.__xc.propertiesBeingWatched
                 }
             }
         })
 
         Alpine.addMagicProperty('undo', function ($el) {
             return function () {
-                const diffs = $el.__x.__xc.__xhistory.pop()
-                let fresh = JSON.parse($el.__x.__xc.previousComponentState)
-                fresh = fresh ?? $el.__x.__xc.initialComponentState
+                const diffs = $el.__x.$data.__xc.history.pop()
+                let fresh = JSON.parse($el.__x.$data.__xc.previousComponentState)
+                fresh = fresh ?? $el.__x.$data.__xc.initialComponentState
 
                 diffs && diffs.forEach(diff => {
-                    DeepDiff.revertChange(fresh, componentData($el, $el.__xc.propertiesBeingWatched), diff)
+                    DeepDiff.revertChange(fresh, componentData($el, $el.__x.$data.__xc.propertiesBeingWatched), diff)
                 })
 
                 // This could probbaly be extracted to a utility method like updateComponentProperties()
@@ -77,7 +81,7 @@ const AlpineUndoMagicMethod = {
                     $el.__x.$data = Object.assign($el.__x.$data, newData)
                 }
 
-                $el.__x.__xc.previousComponentState = JSON.stringify(componentData($el, $el.__xc.propertiesBeingWatched))
+                $el.__x.$data.__xc.previousComponentState = JSON.stringify(componentData($el, $el.__x.$data.__xc.propertiesBeingWatched))
             }
         })
     },

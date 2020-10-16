@@ -2303,8 +2303,11 @@
       start: function start() {
         checkForAlpine();
         Alpine.addMagicProperty('history', function ($el) {
-          if ($el.__x && $el.__xc && $el.__x.__xc.__xhistory.length) {
-            return $el.__x.__xc.__xhistory;
+          if ($el.__x) {
+            var _$el$__x$$data$__xc;
+
+            $el.__x.$data.__xc = (_$el$__x$$data$__xc = $el.__x.$data.__xc) != null ? _$el$__x$$data$__xc : {};
+            return $el.__x.$data.__xc.history.length ? $el.__x.$data.__xc.history : [];
           }
 
           return [];
@@ -2321,20 +2324,20 @@
             $el.__xc.previousComponentState = JSON.stringify($el.__xc.initialComponentState);
             updateOnMutation($el, function () {
               preserveState($el);
-              var previous = JSON.parse($el.__x.__xc.previousComponentState);
-              var fresh = JSON.parse(JSON.stringify(componentData($el, $el.__xc.propertiesBeingWatched)));
+              var previous = JSON.parse($el.__x.$data.__xc.previousComponentState);
+              var fresh = JSON.parse(JSON.stringify(componentData($el, $el.__x.$data.__xc.propertiesBeingWatched)));
               var changes = deepDiff.DeepDiff.diff(previous, fresh, true);
               changes = changes ? changes.filter(function (change) {
                 // Filter down to the properties we want (top level only)
-                return $el.__xc.propertiesBeingWatched.some(function (prop) {
+                return $el.__x.$data.__xc.propertiesBeingWatched.some(function (prop) {
                   return change.path.join('.').startsWith(prop);
                 });
               }) : [];
 
               if (changes.length) {
-                $el.__x.__xc.__xhistory.push(changes);
+                $el.__x.$data.__xc.history.push(changes);
 
-                $el.__x.__xc.previousComponentState = JSON.stringify(fresh);
+                $el.__x.$data.__xc.previousComponentState = JSON.stringify(fresh);
 
                 $el.__x.updateElements($el);
               }
@@ -2342,20 +2345,24 @@
           }; // If this isn't setup the information will get lost on Alpine.clone()
 
           function preserveState($el) {
-            var _$el$__x$__xc;
+            var _$el$__x$$data$__xc2;
 
-            $el.__x.__xc = (_$el$__x$__xc = $el.__x.__xc) != null ? _$el$__x$__xc : {};
+            $el.__x.$data.__xc = (_$el$__x$$data$__xc2 = $el.__x.$data.__xc) != null ? _$el$__x$$data$__xc2 : {};
 
-            if (typeof $el.__x.__xc.__xhistory === 'undefined') {
-              $el.__x.__xc.__xhistory = [];
+            if (typeof $el.__x.$data.__xc.history === 'undefined') {
+              $el.__x.$data.__xc.history = [];
             }
 
-            if (typeof $el.__x.__xc.initialComponentState === 'undefined') {
-              $el.__x.__xc.initialComponentState = $el.__xc.initialComponentState;
+            if (typeof $el.__x.$data.__xc.initialComponentState === 'undefined') {
+              $el.__x.$data.__xc.initialComponentState = $el.__xc.initialComponentState;
             }
 
-            if (typeof $el.__x.__xc.previousComponentState === 'undefined') {
-              $el.__x.__xc.previousComponentState = $el.__xc.previousComponentState;
+            if (typeof $el.__x.$data.__xc.previousComponentState === 'undefined') {
+              $el.__x.$data.__xc.previousComponentState = $el.__xc.previousComponentState;
+            }
+
+            if (typeof $el.__x.$data.__xc.propertiesBeingWatched === 'undefined') {
+              $el.__x.$data.__xc.propertiesBeingWatched = $el.__xc.propertiesBeingWatched;
             }
           }
         });
@@ -2363,12 +2370,12 @@
           return function () {
             var _fresh;
 
-            var diffs = $el.__x.__xc.__xhistory.pop();
+            var diffs = $el.__x.$data.__xc.history.pop();
 
-            var fresh = JSON.parse($el.__x.__xc.previousComponentState);
-            fresh = (_fresh = fresh) != null ? _fresh : $el.__x.__xc.initialComponentState;
+            var fresh = JSON.parse($el.__x.$data.__xc.previousComponentState);
+            fresh = (_fresh = fresh) != null ? _fresh : $el.__x.$data.__xc.initialComponentState;
             diffs && diffs.forEach(function (diff) {
-              deepDiff.DeepDiff.revertChange(fresh, componentData($el, $el.__xc.propertiesBeingWatched), diff);
+              deepDiff.DeepDiff.revertChange(fresh, componentData($el, $el.__x.$data.__xc.propertiesBeingWatched), diff);
             }); // This could probbaly be extracted to a utility method like updateComponentProperties()
 
             if (Object.keys(fresh).length) {
@@ -2379,7 +2386,7 @@
               $el.__x.$data = Object.assign($el.__x.$data, newData);
             }
 
-            $el.__x.__xc.previousComponentState = JSON.stringify(componentData($el, $el.__xc.propertiesBeingWatched));
+            $el.__x.$data.__xc.previousComponentState = JSON.stringify(componentData($el, $el.__x.$data.__xc.propertiesBeingWatched));
           };
         });
       }
