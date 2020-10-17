@@ -2299,97 +2299,66 @@
     }));
     });
 
+    var history = new WeakMap();
     var AlpineUndoMagicMethod = {
       start: function start() {
         checkForAlpine();
         Alpine.addMagicProperty('history', function ($el) {
-          if ($el.__x) {
-            var _$el$__x$$data$__xc;
-
-            $el.__x.$data.__xc = (_$el$__x$$data$__xc = $el.__x.$data.__xc) != null ? _$el$__x$$data$__xc : {};
-            return $el.__x.$data.__xc.history.length ? $el.__x.$data.__xc.history : [];
-          }
-
-          return [];
+          return history.has($el.__x) ? history.get($el.__x) : [];
         });
         Alpine.addMagicProperty('track', function ($el) {
           return function (propertiesToWatch) {
-            var _$el$__xc, _propertiesToWatch;
+            var _propertiesToWatch;
 
-            $el.__xc = (_$el$__xc = $el.__xc) != null ? _$el$__xc : {};
-            propertiesToWatch = (_propertiesToWatch = propertiesToWatch) != null ? _propertiesToWatch : Object.keys(componentData($el)); // These are computed on load once, so won't last when Alpine.clone() is called
-
+            propertiesToWatch = (_propertiesToWatch = propertiesToWatch) != null ? _propertiesToWatch : Object.keys(componentData($el));
             propertiesToWatch = Array.isArray(propertiesToWatch) ? propertiesToWatch : [propertiesToWatch];
-            $el.__xc.propertiesBeingWatched = propertiesToWatch.filter(function (key) {
-              return key !== '__xc';
-            });
-            $el.__xc.initialComponentState = componentData($el, $el.__xc.propertiesBeingWatched);
-            $el.__xc.previousComponentState = JSON.stringify($el.__xc.initialComponentState);
+            var initialState = JSON.stringify(componentData($el, propertiesToWatch));
             updateOnMutation($el, function () {
-              preserveState($el);
-              var previous = JSON.parse($el.__x.$data.__xc.previousComponentState);
-              var fresh = JSON.parse(JSON.stringify(componentData($el, $el.__x.$data.__xc.propertiesBeingWatched)));
+              history.has($el.__x) || history.set($el.__x, {
+                props: propertiesToWatch,
+                previous: initialState,
+                changes: [],
+
+                get length() {
+                  return this.changes.length;
+                }
+
+              });
+              var fresh = componentData($el, history.get($el.__x).props);
+              var previous = JSON.parse(history.get($el.__x).previous);
               var changes = deepDiff.DeepDiff.diff(previous, fresh, true);
-              changes = changes ? changes.filter(function (change) {
-                // Filter down to the properties we want (top level only)
-                return $el.__x.$data.__xc.propertiesBeingWatched.some(function (prop) {
-                  return change.path.join('.').startsWith(prop);
+
+              if (changes && changes.length) {
+                changes = changes.filter(function (change) {
+                  return history.get($el.__x).props.some(function (prop) {
+                    return change.path.join('.').startsWith(prop);
+                  });
                 });
-              }) : [];
-
-              if (changes.length) {
-                $el.__x.$data.__xc.history.push(changes);
-
-                $el.__x.$data.__xc.previousComponentState = JSON.stringify(fresh);
+                history.get($el.__x).previous = JSON.stringify(fresh);
+                history.get($el.__x).changes.push(changes);
 
                 $el.__x.updateElements($el);
               }
             });
-          }; // If this isn't setup the information will get lost on Alpine.clone()
-
-          function preserveState($el) {
-            var _$el$__x$$data$__xc2;
-
-            $el.__x.$data.__xc = (_$el$__x$$data$__xc2 = $el.__x.$data.__xc) != null ? _$el$__x$$data$__xc2 : {};
-
-            if (typeof $el.__x.$data.__xc.history === 'undefined') {
-              $el.__x.$data.__xc.history = [];
-            }
-
-            if (typeof $el.__x.$data.__xc.initialComponentState === 'undefined') {
-              $el.__x.$data.__xc.initialComponentState = $el.__xc.initialComponentState;
-            }
-
-            if (typeof $el.__x.$data.__xc.previousComponentState === 'undefined') {
-              $el.__x.$data.__xc.previousComponentState = $el.__xc.previousComponentState;
-            }
-
-            if (typeof $el.__x.$data.__xc.propertiesBeingWatched === 'undefined') {
-              $el.__x.$data.__xc.propertiesBeingWatched = $el.__xc.propertiesBeingWatched;
-            }
-          }
+          };
         });
         Alpine.addMagicProperty('undo', function ($el) {
           return function () {
-            var _fresh;
-
-            var diffs = $el.__x.$data.__xc.history.pop();
-
-            var fresh = JSON.parse($el.__x.$data.__xc.previousComponentState);
-            fresh = (_fresh = fresh) != null ? _fresh : $el.__x.$data.__xc.initialComponentState;
-            diffs && diffs.forEach(function (diff) {
-              deepDiff.DeepDiff.revertChange(fresh, componentData($el, $el.__x.$data.__xc.propertiesBeingWatched), diff);
+            var changes = history.get($el.__x).changes.pop();
+            var previous = JSON.parse(history.get($el.__x).previous);
+            changes && changes.forEach(function (change) {
+              deepDiff.DeepDiff.revertChange(previous, componentData($el, history.get($el.__x).props), change);
             }); // This could probbaly be extracted to a utility method like updateComponentProperties()
 
-            if (Object.keys(fresh).length) {
+            if (Object.keys(previous).length) {
               var newData = {};
-              Object.entries(fresh).forEach(function (item) {
+              Object.entries(previous).forEach(function (item) {
                 newData[item[0]] = item[1];
               });
               $el.__x.$data = Object.assign($el.__x.$data, newData);
             }
 
-            $el.__x.$data.__xc.previousComponentState = JSON.stringify(componentData($el, $el.__x.$data.__xc.propertiesBeingWatched));
+            history.get($el.__x).previous = JSON.stringify(componentData($el, history.get($el.__x).props));
           };
         });
       }
