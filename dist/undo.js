@@ -608,9 +608,6 @@
     var AlpineUndoMagicMethod = {
       start: function start() {
         checkForAlpine();
-        Alpine.addMagicProperty('history', function ($el) {
-          return history.has($el.__x) ? history.get($el.__x) : [];
-        });
         Alpine.addMagicProperty('track', function ($el) {
           return function (propertiesToWatch) {
             var _propertiesToWatch;
@@ -665,6 +662,9 @@
 
             history.get($el.__x).previous = JSON.stringify(componentData($el, history.get($el.__x).props));
           };
+        });
+        Alpine.addMagicProperty('history', function ($el) {
+          return history.has($el.__x) ? history.get($el.__x) : {};
         });
       }
     };
