@@ -2302,6 +2302,8 @@
     var history = new WeakMap();
     var AlpineUndoMagicMethod = {
       start: function start() {
+        var _this = this;
+
         checkForAlpine();
         Alpine.addMagicProperty('track', function ($el) {
           return function (propertiesToWatch) {
@@ -2311,15 +2313,9 @@
             propertiesToWatch = Array.isArray(propertiesToWatch) ? propertiesToWatch : [propertiesToWatch];
             var initialState = JSON.stringify(componentData($el, propertiesToWatch));
             updateOnMutation($el, function () {
-              history.has($el.__x) || history.set($el.__x, {
+              history.has($el.__x) || _this.store($el, {
                 props: propertiesToWatch,
-                previous: initialState,
-                changes: [],
-
-                get length() {
-                  return this.changes.length;
-                }
-
+                previous: initialState
               });
               var fresh = componentData($el, history.get($el.__x).props);
               var previous = JSON.parse(history.get($el.__x).previous);
@@ -2359,8 +2355,20 @@
           };
         });
         Alpine.addMagicProperty('history', function ($el) {
-          return history.has($el.__x) ? history.get($el.__x) : {};
+          return history.has($el.__x) ? history.get($el.__x) : [];
         });
+      },
+      store: function store($el, $state) {
+        history.set($el.__x, Object.assign({
+          clone: false,
+          changes: [],
+
+          get length() {
+            return this.changes.length;
+          }
+
+        }, $state));
+        return history.get($el.__x);
       }
     };
 
