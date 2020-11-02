@@ -6,6 +6,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Fixed
+- Removed CharacterData option from mutation observer to match Alpine core
+
 ### Changed
 - Switched from using Laravel Mix using rollup.js
 - Switched from Using LiveReload to Browsersync
