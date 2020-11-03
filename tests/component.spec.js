@@ -91,6 +91,20 @@ test('$parent > component can update and watch deep object properties', async ()
     })
 })
 
+// This test was added to remove `characterData: true` from the MutationObserver options
+test('$parent > will not error on characterData edits', async () => {
+    document.body.innerHTML = `
+    <div x-data="{foo: 'bar'}">
+        <div x-data>
+            <p x-text="$parent.foo"></p>
+            <span>Some text</span>
+        </div>
+    </div>
+    `
+    Alpine.start()
+    document.querySelector('span').firstChild.appendData('Different text')
+})
+
 test('$component > component can access external scope', async () => {
     document.body.innerHTML = `
         <div x-data>
