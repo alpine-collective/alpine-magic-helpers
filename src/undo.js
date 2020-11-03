@@ -18,7 +18,7 @@ const AlpineUndoMagicMethod = {
                 const initialState = JSON.stringify(componentData($el, propertiesToWatch))
 
                 updateOnMutation($el, () => {
-                    history.has($el.__x) || this.store($el, {
+                    history.has($el.__x) || this.store($el.__x, {
                         props: propertiesToWatch,
                         previous: initialState,
                     })
@@ -38,8 +38,11 @@ const AlpineUndoMagicMethod = {
             }
         })
 
-        Alpine.addMagicProperty('undo', ($el) => {
+        Alpine.addMagicProperty('undo', ($el, $clone) => {
             return () => {
+                if ($el !== $clone) {
+                    $el = this.syncClone($el, $clone)
+                }
                 const changes = history.get($el.__x).changes.pop()
                 const previous = JSON.parse(history.get($el.__x).previous)
                 changes && changes.forEach(change => {
@@ -50,7 +53,7 @@ const AlpineUndoMagicMethod = {
                     )
                 })
 
-                // This could probbaly be extracted to a utility method like updateComponentProperties()
+                // This could probably be extracted to a utility method like updateComponentProperties()
                 if (Object.keys(previous).length) {
                     const newData = {}
                     Object.entries(previous).forEach(item => {
@@ -63,19 +66,30 @@ const AlpineUndoMagicMethod = {
             }
         })
 
-        Alpine.addMagicProperty('history', ($el) => {
+        Alpine.addMagicProperty('history', ($el, $clone) => {
+            if (!$clone.__x) return []
+            if ($el !== $clone) {
+                $el = this.syncClone($el, $clone)
+            }
             return history.has($el.__x) ? history.get($el.__x) : []
         })
     },
-    store($el, $state) {
-        history.set($el.__x, Object.assign({
-            clone: false,
+    store(key, state) {
+        history.set(key, Object.assign({
             changes: [],
             get length() {
                 return this.changes.length
             },
-        }, $state))
-        return history.get($el.__x)
+        }, state))
+        return history.get(key)
+    },
+    syncClone($el, $clone) {
+        this.store($clone.__x, {
+            props: history.get($el.__x).props,
+            previous: history.get($el.__x).previous,
+            changes: history.get($el.__x).changes,
+        })
+        return $clone
     },
 }
 

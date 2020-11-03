@@ -618,7 +618,7 @@
             propertiesToWatch = Array.isArray(propertiesToWatch) ? propertiesToWatch : [propertiesToWatch];
             var initialState = JSON.stringify(componentData($el, propertiesToWatch));
             updateOnMutation($el, function () {
-              history.has($el.__x) || _this.store($el, {
+              history.has($el.__x) || _this.store($el.__x, {
                 props: propertiesToWatch,
                 previous: initialState
               });
@@ -640,13 +640,17 @@
             });
           };
         });
-        Alpine.addMagicProperty('undo', function ($el) {
+        Alpine.addMagicProperty('undo', function ($el, $clone) {
           return function () {
+            if ($el !== $clone) {
+              $el = _this.syncClone($el, $clone);
+            }
+
             var changes = history.get($el.__x).changes.pop();
             var previous = JSON.parse(history.get($el.__x).previous);
             changes && changes.forEach(function (change) {
               deepDiff.DeepDiff.revertChange(previous, componentData($el, history.get($el.__x).props), change);
-            }); // This could probbaly be extracted to a utility method like updateComponentProperties()
+            }); // This could probably be extracted to a utility method like updateComponentProperties()
 
             if (Object.keys(previous).length) {
               var newData = {};
@@ -659,21 +663,34 @@
             history.get($el.__x).previous = JSON.stringify(componentData($el, history.get($el.__x).props));
           };
         });
-        Alpine.addMagicProperty('history', function ($el) {
+        Alpine.addMagicProperty('history', function ($el, $clone) {
+          if (!$clone.__x) return [];
+
+          if ($el !== $clone) {
+            $el = _this.syncClone($el, $clone);
+          }
+
           return history.has($el.__x) ? history.get($el.__x) : [];
         });
       },
-      store: function store($el, $state) {
-        history.set($el.__x, Object.assign({
-          clone: false,
+      store: function store(key, state) {
+        history.set(key, Object.assign({
           changes: [],
 
           get length() {
             return this.changes.length;
           }
 
-        }, $state));
-        return history.get($el.__x);
+        }, state));
+        return history.get(key);
+      },
+      syncClone: function syncClone($el, $clone) {
+        this.store($clone.__x, {
+          props: history.get($el.__x).props,
+          previous: history.get($el.__x).previous,
+          changes: history.get($el.__x).changes
+        });
+        return $clone;
       }
     };
 

@@ -65,7 +65,7 @@
         "@rollup/plugin-node-resolve": "^9.0.0",
         "@testing-library/dom": "^7.24.2",
         "@testing-library/jest-dom": "^5.11.4",
-        "alpinejs": "^2.7.0",
+        "alpinejs": "2.7.0",
         "axios": "^0.20",
         "browser-sync": "^2.26.12",
         "concurrently": "^5.3.0",
