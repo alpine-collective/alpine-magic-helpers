@@ -6,6 +6,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.3.6] - 2020-11-04
+### Fixed
+- Removed CharacterData option from mutation observer to match Alpine core
+- Fixed error where null values were throwing an error on proxy
+
 ### Changed
 - Switched from using Laravel Mix using rollup.js
 - Switched from Using LiveReload to Browsersync
@@ -14,6 +19,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Added this changelog
 - Added Jest and added some tests for each helper
 - Added esLint (+ husky and lint-staged to run the linter before each commits) and fixed code standard errors
+- Added workflow to automate README update and publish new versions to npm
+
+## [0.3.5] - 2020-09-28
+### Fixed:
+- [$parent/$component]: Updated an incorrect null check on the proxy get trap
 
 ## [0.3.4] - 2020-09-27
 ### Fixed

@@ -62,7 +62,6 @@
       observer.observe(componentBeingObserved, {
         attributes: true,
         childList: true,
-        characterData: true,
         subtree: true
       });
     }; // Borrowed from https://stackoverflow.com/a/54733755/1437789
