@@ -48,6 +48,7 @@ export const updateOnMutation = function (componentBeingObserved, callback) {
     observer.observe(componentBeingObserved, {
         attributes: true,
         childList: true,
+        characterData: true,
         subtree: true,
     })
 }
