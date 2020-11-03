@@ -6,6 +6,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+- [`$undo/$track/$history`]: Adds a set of helpers to track component state and revert changes on demand
+
 ## [0.3.6] - 2020-11-04
 ### Fixed
 - Removed CharacterData option from mutation observer to match Alpine core
