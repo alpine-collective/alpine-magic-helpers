@@ -60,7 +60,7 @@
         "@rollup/plugin-commonjs": "^16.0.0",
         "@rollup/plugin-json": "^4.1.0",
         "@rollup/plugin-node-resolve": "^10.0.0",
-        "@testing-library/dom": "^7.26.3",
+        "@testing-library/dom": "^7.26.4",
         "@testing-library/jest-dom": "^5.11.5",
         "alpinejs": "^2.7.0",
         "axios": "^0.21",

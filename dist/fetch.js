@@ -802,19 +802,12 @@
         delete requestHeaders['Content-Type']; // Let the browser set it
       }
 
-      if (
-        (utils.isBlob(requestData) || utils.isFile(requestData)) &&
-        requestData.type
-      ) {
-        delete requestHeaders['Content-Type']; // Let the browser set it
-      }
-
       var request = new XMLHttpRequest();
 
       // HTTP basic authentication
       if (config.auth) {
         var username = config.auth.username || '';
-        var password = unescape(encodeURIComponent(config.auth.password)) || '';
+        var password = config.auth.password ? unescape(encodeURIComponent(config.auth.password)) : '';
         requestHeaders.Authorization = 'Basic ' + btoa(username + ':' + password);
       }
 
@@ -1289,7 +1282,8 @@
     Axios.prototype[method] = function(url, config) {
       return this.request(mergeConfig(config || {}, {
         method: method,
-        url: url
+        url: url,
+        data: (config || {}).data
       }));
     };
   });
