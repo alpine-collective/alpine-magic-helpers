@@ -7,7 +7,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Added
-- [$range]: Added the $range helper to iterate over custom arrays
+- [$range]: Added the $range helper to iterate over custom ranges
 
 ## [0.3.6] - 2020-11-04
 ### Fixed
