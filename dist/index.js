@@ -1705,6 +1705,54 @@
       alpine$2(callback);
     };
 
+    var AlpineRangeMagicMethod = {
+      start: function start() {
+        checkForAlpine();
+        Alpine.addMagicProperty('range', function () {
+          return function (start, stop, step) {
+            if (step === void 0) {
+              step = 1;
+            }
+
+            // Accept $range(10) and expect 1...10
+            if (typeof stop === 'undefined') {
+              stop = start;
+              start = start ? 1 : 0;
+            } // Accept $range('a', 'f') and expect 97...102 (not 'a'...'f')
+
+
+            start = typeof start === 'string' ? start.charCodeAt(0) : start;
+            stop = typeof stop === 'string' ? stop.charCodeAt(0) : stop; // Accept $range(20, 10) and expect 20...10
+
+            var reverse = start > stop;
+
+            if (reverse) {
+              var _ref = [stop, start];
+              start = _ref[0];
+              stop = _ref[1];
+            } // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/from#Sequence_generator_range
+
+
+            var range = Array.from({
+              length: (stop - start) / step + 1
+            }, function (_, i) {
+              return start + i * step;
+            });
+            return reverse ? range.reverse() : range;
+          };
+        });
+      }
+    };
+
+    var alpine$3 = window.deferLoadingAlpine || function (alpine) {
+      return alpine();
+    };
+
+    window.deferLoadingAlpine = function (callback) {
+      AlpineRangeMagicMethod.start();
+      alpine$3(callback);
+    };
+
     var AlpineTruncateMagicMethod = {
       start: function start() {
         checkForAlpine();
@@ -1747,16 +1795,16 @@
       }
     };
 
-    var alpine$3 = window.deferLoadingAlpine || function (alpine) {
+    var alpine$4 = window.deferLoadingAlpine || function (alpine) {
       return alpine();
     };
 
     window.deferLoadingAlpine = function (callback) {
       AlpineTruncateMagicMethod.start();
-      alpine$3(callback);
+      alpine$4(callback);
     };
 
-    var alpine$4 = window.deferLoadingAlpine || function (alpine) {
+    var alpine$5 = window.deferLoadingAlpine || function (alpine) {
       return alpine();
     };
 
@@ -1764,8 +1812,9 @@
       AlpineComponentMagicMethod.start();
       AlpineFetchMagicMethod.start();
       AlpineIntervalMagicMethod.start();
+      AlpineRangeMagicMethod.start();
       AlpineTruncateMagicMethod.start();
-      alpine$4(callback);
+      alpine$5(callback);
     };
 
     var index = {

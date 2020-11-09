@@ -41,5 +41,6 @@ export default [
     'component',
     'fetch',
     'interval',
+    'range',
     'truncate',
 ].map(createConfig)

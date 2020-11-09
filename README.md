@@ -12,6 +12,7 @@ This adds three magic helpers to use with Alpine JS. ***More to come!***
 | [`$component/$parent`](#component) | Natively access and update data from other components or the parent component. |
 | [`$fetch`](#fetch) | Using Axios, fetch JSON from an external source.  |
 | [`$interval`](#interval) | Run a function every n milliseconds. Optionally start and stop the timer. |
+| [`$range`](#range) | Iterate over a range of value. |
 | [`$truncate`](#truncate) |  Limit a text string to a specific number of characters or words. |
 
 🚀 If you have ideas for more magic helpers, please open a [discussion](https://github.com/alpine-collective/alpine-magic-helpers/discussions) or join us on the [AlpineJS Discord](https://discord.gg/snmCYk3)
@@ -27,9 +28,10 @@ Include the following `<script>` tag in the `<head>` of your document (before Al
 Or only use the specific methods you need:
 
 ```html
+<script src="https://cdn.jsdelivr.net/gh/alpine-collective/alpine-magic-helpers@0.3.x/dist/component.js"></script>
 <script src="https://cdn.jsdelivr.net/gh/alpine-collective/alpine-magic-helpers@0.3.x/dist/fetch.js"></script>
 <script src="https://cdn.jsdelivr.net/gh/alpine-collective/alpine-magic-helpers@0.3.x/dist/interval.js"></script>
-<script src="https://cdn.jsdelivr.net/gh/alpine-collective/alpine-magic-helpers@0.3.x/dist/component.js"></script>
+<script src="https://cdn.jsdelivr.net/gh/alpine-collective/alpine-magic-helpers@0.3.x/dist/range.js"></script>
 <script src="https://cdn.jsdelivr.net/gh/alpine-collective/alpine-magic-helpers@0.3.x/dist/truncate.js"></script>
 ```
 
@@ -144,6 +146,21 @@ By default, `$interval ` will run your function every `nth` millisecond when bro
 </div>
 ```
 [Demo](https://codepen.io/KevinBatdorf/pen/poyyXQy?editors=1010)
+
+---
+
+### `$range`
+**Example:**
+
+The `$range` helper mostly mimics implementations found in other languages `$range(start, stop, step = 1)`
+```html
+<div x-data>
+    <template x-for="$range(1, 10)"></template>
+</div>
+```
+[Demo]()
+
+> N.B: You may use `$range(10)` which will compute to `[1...10]`
 
 ---
 

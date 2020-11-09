@@ -6,6 +6,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+- [$range]: Added the $range helper to iterate over custom arrays
+
 ## [0.3.6] - 2020-11-04
 ### Fixed
 - Removed CharacterData option from mutation observer to match Alpine core
