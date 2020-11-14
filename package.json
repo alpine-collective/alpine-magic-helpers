@@ -52,7 +52,6 @@
     },
     "homepage": "https://github.com/alpine-collective/magic-helpers#readme",
     "dependencies": {
-        "smoothscroll-polyfill": "^0.4.4"
     },
     "peerDependencies": {
         "alpinejs": "^2.7"
@@ -80,7 +79,8 @@
         "jsdom-simulant": "^1.1.2",
         "lint-staged": "^10.5.1",
         "rollup": "^2.33.1",
-        "rollup-plugin-filesize": "^9.0.2"
+        "rollup-plugin-filesize": "^9.0.2",
+        "smoothscroll-polyfill": "^0.4.4"
     },
     "publishConfig": {
         "access": "public"
