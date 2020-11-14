@@ -20,5 +20,6 @@ export default {
     AlpineComponentMagicMethod,
     AlpineFetchMagicMethod,
     AlpineIntervalMagicMethod,
+    AlpineScrollMagicMethod,
     AlpineTruncateMagicMethod,
 }
