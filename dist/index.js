@@ -1718,11 +1718,8 @@
             if (typeof stop === 'undefined') {
               stop = start;
               start = start ? 1 : 0;
-            } // Accept $range('a', 'f') and expect 97...102 (not 'a'...'f')
+            } // Accept $range(20, 10) and expect 20...10
 
-
-            start = typeof start === 'string' ? start.charCodeAt(0) : start;
-            stop = typeof stop === 'string' ? stop.charCodeAt(0) : stop; // Accept $range(20, 10) and expect 20...10
 
             var reverse = start > stop;
 

@@ -79,24 +79,6 @@ test('$range > can step over values', async () => {
     })
 })
 
-test('$range > can iterate over char values', async () => {
-    document.body.innerHTML = `
-        <div x-data>
-            <template x-for="(item, index) in $range('a', 'j')"><p x-text="item"></p></template>
-        </div>
-    `
-
-    expect(Array.from(document.querySelectorAll('p')).length).toEqual(0)
-
-    Alpine.start()
-
-    await waitFor(() => {
-        expect(Array.from(document.querySelectorAll('p')).length).toEqual(10)
-        expect(Array.from(document.querySelectorAll('p'))[0].textContent).toEqual('97')
-        expect(Array.from(document.querySelectorAll('p'))[1].textContent).toEqual('98')
-    })
-})
-
 test('$range > can iterate in reverse if the first param is greater', async () => {
     document.body.innerHTML = `
         <div x-data>

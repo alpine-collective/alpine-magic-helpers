@@ -12,10 +12,6 @@ const AlpineRangeMagicMethod = {
                     start = start ? 1 : 0
                 }
 
-                // Accept $range('a', 'f') and expect 97...102 (not 'a'...'f')
-                start = typeof start === 'string' ? start.charCodeAt(0) : start
-                stop = typeof stop === 'string' ? stop.charCodeAt(0) : stop
-
                 // Accept $range(20, 10) and expect 20...10
                 const reverse = start > stop
                 if (reverse) {
