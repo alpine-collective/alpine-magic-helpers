@@ -155,8 +155,9 @@ By default, `$interval ` will run your function every `nth` millisecond when bro
 The `$range` helper mostly mimics implementations found in other languages `$range(start, stop, step = 1)`
 ```html
 <div x-data>
-    <template x-for="$range(1, 10)"></template>
+    <template x-for="$range(1, 5)"></template>
 </div>
+<!-- This will output 5 iterations [1, 2, 3, 4, 5], modelled PHP's implimentation of range() -->
 ```
 [Demo]()
 
