@@ -1705,6 +1705,51 @@
       alpine$2(callback);
     };
 
+    var AlpineRangeMagicMethod = {
+      start: function start() {
+        checkForAlpine();
+        Alpine.addMagicProperty('range', function () {
+          return function (start, stop, step) {
+            if (step === void 0) {
+              step = 1;
+            }
+
+            // Accept $range(10) and expect 1...10
+            if (typeof stop === 'undefined') {
+              stop = start;
+              start = start ? 1 : 0;
+            } // Accept $range(20, 10) and expect 20...10
+
+
+            var reverse = start > stop;
+
+            if (reverse) {
+              var _ref = [stop, start];
+              start = _ref[0];
+              stop = _ref[1];
+            } // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/from#Sequence_generator_range
+
+
+            var range = Array.from({
+              length: (stop - start) / step + 1
+            }, function (_, i) {
+              return start + i * step;
+            });
+            return reverse ? range.reverse() : range;
+          };
+        });
+      }
+    };
+
+    var alpine$3 = window.deferLoadingAlpine || function (alpine) {
+      return alpine();
+    };
+
+    window.deferLoadingAlpine = function (callback) {
+      AlpineRangeMagicMethod.start();
+      alpine$3(callback);
+    };
+
     var AlpineTruncateMagicMethod = {
       start: function start() {
         checkForAlpine();
@@ -1747,13 +1792,13 @@
       }
     };
 
-    var alpine$3 = window.deferLoadingAlpine || function (alpine) {
+    var alpine$4 = window.deferLoadingAlpine || function (alpine) {
       return alpine();
     };
 
     window.deferLoadingAlpine = function (callback) {
       AlpineTruncateMagicMethod.start();
-      alpine$3(callback);
+      alpine$4(callback);
     };
 
     function createCommonjsModule(fn, basedir, module) {
@@ -2213,13 +2258,14 @@
 
             var originalTarget = target; // Check if we specified an offset
 
-            var offset = options['offset'] ? parseInt(options['offset'], 10) : 0;
+            var offset = options.offset ? parseInt(options.offset, 10) : 0;
             delete options.offset; // Support integers specified as strings
             // We do a strict check first because we don't whant to support things like "100foo"
 
             if (typeof target === 'string' && /^[0-9]+?/g.test(target)) {
               target = parseInt(target, 10);
             } // Support for CSS query selector
+
 
             if (typeof target === 'string') {
               target = document.querySelector(target);
@@ -2237,7 +2283,7 @@
             if (Number.isInteger(target)) {
               target = {
                 top: target - offset,
-                behavior: 'smooth' //default to smooth
+                behavior: 'smooth' // default to smooth
 
               };
             } // At this point target should be either be converted to a ScrollToOptions dictionary
@@ -2257,16 +2303,16 @@
       }
     };
 
-    var alpine$4 = window.deferLoadingAlpine || function (alpine) {
+    var alpine$5 = window.deferLoadingAlpine || function (alpine) {
       return alpine();
     };
 
     window.deferLoadingAlpine = function (callback) {
       AlpineScrollMagicMethod.start();
-      alpine$4(callback);
+      alpine$5(callback);
     };
 
-    var alpine$5 = window.deferLoadingAlpine || function (alpine) {
+    var alpine$6 = window.deferLoadingAlpine || function (alpine) {
       return alpine();
     };
 
@@ -2274,9 +2320,10 @@
       AlpineComponentMagicMethod.start();
       AlpineFetchMagicMethod.start();
       AlpineIntervalMagicMethod.start();
+      AlpineRangeMagicMethod.start();
       AlpineTruncateMagicMethod.start();
       AlpineScrollMagicMethod.start();
-      alpine$5(callback);
+      alpine$6(callback);
     };
 
     var index = {

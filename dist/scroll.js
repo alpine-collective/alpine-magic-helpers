@@ -461,13 +461,14 @@
 
 	        var originalTarget = target; // Check if we specified an offset
 
-	        var offset = options['offset'] ? parseInt(options['offset'], 10) : 0;
+	        var offset = options.offset ? parseInt(options.offset, 10) : 0;
 	        delete options.offset; // Support integers specified as strings
 	        // We do a strict check first because we don't whant to support things like "100foo"
 
 	        if (typeof target === 'string' && /^[0-9]+?/g.test(target)) {
 	          target = parseInt(target, 10);
 	        } // Support for CSS query selector
+
 
 	        if (typeof target === 'string') {
 	          target = document.querySelector(target);
@@ -485,7 +486,7 @@
 	        if (Number.isInteger(target)) {
 	          target = {
 	            top: target - offset,
-	            behavior: 'smooth' //default to smooth
+	            behavior: 'smooth' // default to smooth
 
 	          };
 	        } // At this point target should be either be converted to a ScrollToOptions dictionary

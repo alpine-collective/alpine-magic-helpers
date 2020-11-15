@@ -1,16 +1,15 @@
-import smoothscroll from 'smoothscroll-polyfill';
+import smoothscroll from 'smoothscroll-polyfill'
 
-smoothscroll.polyfill();
+smoothscroll.polyfill()
 
 const AlpineScrollMagicMethod = {
     start() {
-
         Alpine.addMagicProperty('scroll', function ($el) {
             return function (target, options = {}) {
                 const originalTarget = target
 
                 // Check if we specified an offset
-                const offset = options['offset'] ? parseInt(options['offset'], 10) : 0
+                const offset = options.offset ? parseInt(options.offset, 10) : 0
                 delete options.offset
 
                 // Support integers specified as strings
@@ -20,7 +19,6 @@ const AlpineScrollMagicMethod = {
                 }
 
                 // Support for CSS query selector
-                let element = null
                 if (typeof target === 'string') {
                     target = document.querySelector(target)
                 }
@@ -37,7 +35,7 @@ const AlpineScrollMagicMethod = {
                 if (Number.isInteger(target)) {
                     target = {
                         top: target - offset,
-                        behavior: 'smooth' //default to smooth
+                        behavior: 'smooth', // default to smooth
                     }
                 }
 
@@ -54,7 +52,7 @@ const AlpineScrollMagicMethod = {
                 window.scroll(target)
             }
         })
-    }
+    },
 }
 
 const alpine = window.deferLoadingAlpine || ((alpine) => alpine())

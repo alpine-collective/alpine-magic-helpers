@@ -1,12 +1,13 @@
 {
     "name": "alpine-magic-helpers",
-    "version": "0.3.6",
+    "version": "0.4.0",
     "description": "A collection of magic properties and helper functions for use with Alpine.",
     "source": [
         "src/index.js",
         "src/component.js",
         "src/fetch.js",
         "src/interval.js",
+        "src/range.js",
         "src/scroll.js",
         "src/truncate.js"
     ],
@@ -51,8 +52,7 @@
         "url": "https://github.com/alpine-collective/magic-helpers/issues"
     },
     "homepage": "https://github.com/alpine-collective/magic-helpers#readme",
-    "dependencies": {
-    },
+    "dependencies": {},
     "peerDependencies": {
         "alpinejs": "^2.7"
     },
