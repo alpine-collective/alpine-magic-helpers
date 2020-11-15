@@ -196,7 +196,7 @@ $scroll also supports integers to scroll to a specific point of the page.
 ```
 [Demo](https://codepen.io/KevinBatdorf/pen/PozVLPy?editors=1000) (same as above)
 
-$scroll optionally supports a second parameter where it possible to define the behavior mode `auto|smooth` (default smooth)`
+$scroll optionally supports a second parameter where it possible to define the behavior mode `auto|smooth` (default smooth):
 ```html
 <div x-data>
     <div x-ref="foo">
@@ -213,7 +213,7 @@ $scroll optionally supports a second parameter where it possible to define the b
 ...
 <button x-data x-on:click="$scroll(0, {behavior: auto}">Jump to top</scroll>
 ```
-the offset
+With offset:
 ```html
 <div x-data>
     <div x-ref="foo">
@@ -230,7 +230,7 @@ the offset
 ...
 <button x-data x-on:click="$scroll(0, {offset: 50}">Jump to 50px before top (a bit daft but supported)</scroll>
 ```
-or both
+With both:
 ```html
 <div x-data>
     <div x-ref="foo">
