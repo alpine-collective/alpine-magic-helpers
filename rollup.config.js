@@ -10,7 +10,7 @@ const createConfig = (filename) => ({
         {
             file: `dist/${filename}.js`,
             format: 'umd',
-            name: `${filename}`,
+            name: `AlpineMagicHelpers.${filename}`,
         },
     ],
     external: false,
@@ -42,5 +42,6 @@ export default [
     'fetch',
     'interval',
     'range',
+    'scroll',
     'truncate',
 ].map(createConfig)
