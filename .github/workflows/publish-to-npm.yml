@@ -37,8 +37,8 @@ jobs:
                 null
             restrictions: |
                 null
-            env:
-                GITHUB_TOKEN: ${{ secrets.GH_ADMIN_TOKEN }}
+        env:
+            GITHUB_TOKEN: ${{ secrets.GH_ADMIN_TOKEN }}
       - name: Build dist folder
         run: npm run build
       - name: Commit dist folder if needed #it fails if nothing has changed so we allow an error
@@ -79,8 +79,8 @@ jobs:
                 require_code_owner_reviews: true
             restrictions: |
                 null
-            env:
-                GITHUB_TOKEN: ${{ secrets.GH_ADMIN_TOKEN }}
+        env:
+            GITHUB_TOKEN: ${{ secrets.GH_ADMIN_TOKEN }}
       - name: Publish to npm
         run: npm publish --access public
         env:
