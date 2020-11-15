@@ -12,6 +12,7 @@ This adds three magic helpers to use with Alpine JS. ***More to come!***
 | [`$component/$parent`](#component) | Natively access and update data from other components or the parent component. |
 | [`$fetch`](#fetch) | Using Axios, fetch JSON from an external source.  |
 | [`$interval`](#interval) | Run a function every n milliseconds. Optionally start and stop the timer. |
+| [`$scroll`](#scroll) | Scroll the page vertically to a specific position. |
 | [`$truncate`](#truncate) |  Limit a text string to a specific number of characters or words. |
 
 🚀 If you have ideas for more magic helpers, please open a [discussion](https://github.com/alpine-collective/alpine-magic-helpers/discussions) or join us on the [AlpineJS Discord](https://discord.gg/snmCYk3)
@@ -30,6 +31,7 @@ Or only use the specific methods you need:
 <script src="https://cdn.jsdelivr.net/gh/alpine-collective/alpine-magic-helpers@0.3.x/dist/fetch.js"></script>
 <script src="https://cdn.jsdelivr.net/gh/alpine-collective/alpine-magic-helpers@0.3.x/dist/interval.js"></script>
 <script src="https://cdn.jsdelivr.net/gh/alpine-collective/alpine-magic-helpers@0.3.x/dist/component.js"></script>
+<script src="https://cdn.jsdelivr.net/gh/alpine-collective/alpine-magic-helpers@0.4.x/dist/scroll.js"></script>
 <script src="https://cdn.jsdelivr.net/gh/alpine-collective/alpine-magic-helpers@0.3.x/dist/truncate.js"></script>
 ```
 
@@ -144,6 +146,85 @@ By default, `$interval ` will run your function every `nth` millisecond when bro
 </div>
 ```
 [Demo](https://codepen.io/KevinBatdorf/pen/poyyXQy?editors=1010)
+
+---
+
+### `$scroll`
+**Example:**
+```html
+<div x-data>
+    <div x-ref="foo">
+        ...
+    </div>
+    <button x-on:click="$scroll($refs.foo)">Scroll to foo</scroll>
+</div>
+```
+
+Alternatively, you can pass a css selector to scroll to an element at any position.
+```html
+<div id="foo">
+</div>
+<div x-data>
+    <button x-on:click="$scroll('#foo')">Scroll to #foo</scroll>
+</div>
+```
+
+$scroll also supports integers to scroll to a specific point of the page.
+```html
+<button x-data x-on:click="$scroll(0)">Scroll to top</scroll>
+```
+
+$scroll optionally supports a second parameter where it possible to define the behavior mode `auto|smooth` (default smooth)`
+```html
+<div x-data>
+    <div x-ref="foo">
+        ...
+    </div>
+    <button x-on:click="$scroll($refs.foo, {behavior: auto})">Jump to foo</scroll>
+</div>
+...
+<div id="foo">
+</div>
+<div x-data>
+    <button x-on:click="$scroll('#foo, {behavior: auto}')">Jump to #foo</scroll>
+</div>
+...
+<button x-data x-on:click="$scroll(0, {behavior: auto}">Jump to top</scroll>
+```
+the offset
+```html
+<div x-data>
+    <div x-ref="foo">
+        ...
+    </div>
+    <button x-on:click="$scroll($refs.foo, {offset: 50})">Scroll to 50px before foo</scroll>
+</div>
+...
+<div id="foo">
+</div>
+<div x-data>
+    <button x-on:click="$scroll('#foo, {offset: 50}')">Scroll to 50px before #foo</scroll>
+</div>
+...
+<button x-data x-on:click="$scroll(0, {offset: 50}">Jump to 50px before top (a bit daft but supported)</scroll>
+```
+or both
+```html
+<div x-data>
+    <div x-ref="foo">
+        ...
+    </div>
+    <button x-on:click="$scroll($refs.foo, {behavior: auto, offset: 50})">Jump to 50px before foo</scroll>
+</div>
+...
+<div id="foo">
+</div>
+<div x-data>
+    <button x-on:click="$scroll('#foo, {behavior: auto, offset: 50}')">Jump to 50px before #foo</scroll>
+</div>
+...
+<button x-data x-on:click="$scroll(0, {behavior: auto, offset: 50}">Jump to 50px before top</scroll>
+```
 
 ---
 
