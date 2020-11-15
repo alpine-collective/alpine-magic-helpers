@@ -1750,57 +1750,6 @@
       alpine$3(callback);
     };
 
-    var AlpineTruncateMagicMethod = {
-      start: function start() {
-        checkForAlpine();
-        Alpine.addMagicProperty('truncate', function () {
-          return function () {
-            for (var _len = arguments.length, parameters = new Array(_len), _key = 0; _key < _len; _key++) {
-              parameters[_key] = arguments[_key];
-            }
-
-            if (typeof parameters[0] !== 'string') return parameters[0];
-            var ellipsis = '…'; // If the second parameter isn't truthy, return the full string
-
-            if (!parameters[1]) return parameters[0]; // if only a number or string is passed in, keep it simple
-
-            if (typeof parameters[1] !== 'object') {
-              if (typeof parameters[2] !== 'undefined') {
-                ellipsis = parameters[2];
-              }
-
-              return parameters[0].slice(0, parameters[1]) + ellipsis;
-            } // Customize the …
-
-
-            if (Object.prototype.hasOwnProperty.call(parameters[1], 'ellipsis')) {
-              ellipsis = parameters[1].ellipsis;
-            } // If words or characters is set, also check that they are truthy. Setting to 0, for example, shoudld show all
-
-
-            if (Object.prototype.hasOwnProperty.call(parameters[1], 'words') && parameters[1].words) {
-              return parameters[0].split(' ').splice(0, parameters[1].words).join(' ') + ellipsis;
-            }
-
-            if (Object.prototype.hasOwnProperty.call(parameters[1], 'characters') && parameters[1].characters) {
-              return parameters[0].slice(0, parameters[1].characters) + ellipsis;
-            }
-
-            return parameters[0];
-          };
-        });
-      }
-    };
-
-    var alpine$4 = window.deferLoadingAlpine || function (alpine) {
-      return alpine();
-    };
-
-    window.deferLoadingAlpine = function (callback) {
-      AlpineTruncateMagicMethod.start();
-      alpine$4(callback);
-    };
-
     function createCommonjsModule(fn, basedir, module) {
     	return module = {
     		path: basedir,
@@ -2303,12 +2252,63 @@
       }
     };
 
-    var alpine$5 = window.deferLoadingAlpine || function (alpine) {
+    var alpine$4 = window.deferLoadingAlpine || function (alpine) {
       return alpine();
     };
 
     window.deferLoadingAlpine = function (callback) {
       AlpineScrollMagicMethod.start();
+      alpine$4(callback);
+    };
+
+    var AlpineTruncateMagicMethod = {
+      start: function start() {
+        checkForAlpine();
+        Alpine.addMagicProperty('truncate', function () {
+          return function () {
+            for (var _len = arguments.length, parameters = new Array(_len), _key = 0; _key < _len; _key++) {
+              parameters[_key] = arguments[_key];
+            }
+
+            if (typeof parameters[0] !== 'string') return parameters[0];
+            var ellipsis = '…'; // If the second parameter isn't truthy, return the full string
+
+            if (!parameters[1]) return parameters[0]; // if only a number or string is passed in, keep it simple
+
+            if (typeof parameters[1] !== 'object') {
+              if (typeof parameters[2] !== 'undefined') {
+                ellipsis = parameters[2];
+              }
+
+              return parameters[0].slice(0, parameters[1]) + ellipsis;
+            } // Customize the …
+
+
+            if (Object.prototype.hasOwnProperty.call(parameters[1], 'ellipsis')) {
+              ellipsis = parameters[1].ellipsis;
+            } // If words or characters is set, also check that they are truthy. Setting to 0, for example, shoudld show all
+
+
+            if (Object.prototype.hasOwnProperty.call(parameters[1], 'words') && parameters[1].words) {
+              return parameters[0].split(' ').splice(0, parameters[1].words).join(' ') + ellipsis;
+            }
+
+            if (Object.prototype.hasOwnProperty.call(parameters[1], 'characters') && parameters[1].characters) {
+              return parameters[0].slice(0, parameters[1].characters) + ellipsis;
+            }
+
+            return parameters[0];
+          };
+        });
+      }
+    };
+
+    var alpine$5 = window.deferLoadingAlpine || function (alpine) {
+      return alpine();
+    };
+
+    window.deferLoadingAlpine = function (callback) {
+      AlpineTruncateMagicMethod.start();
       alpine$5(callback);
     };
 
@@ -2321,8 +2321,8 @@
       AlpineFetchMagicMethod.start();
       AlpineIntervalMagicMethod.start();
       AlpineRangeMagicMethod.start();
-      AlpineTruncateMagicMethod.start();
       AlpineScrollMagicMethod.start();
+      AlpineTruncateMagicMethod.start();
       alpine$6(callback);
     };
 
@@ -2330,6 +2330,7 @@
       AlpineComponentMagicMethod: AlpineComponentMagicMethod,
       AlpineFetchMagicMethod: AlpineFetchMagicMethod,
       AlpineIntervalMagicMethod: AlpineIntervalMagicMethod,
+      AlpineRangeMagicMethod: AlpineRangeMagicMethod,
       AlpineScrollMagicMethod: AlpineScrollMagicMethod,
       AlpineTruncateMagicMethod: AlpineTruncateMagicMethod
     };
