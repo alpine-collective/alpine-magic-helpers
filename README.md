@@ -196,7 +196,7 @@ $scroll also supports integers to scroll to a specific point of the page.
 ```
 [Demo](https://codepen.io/KevinBatdorf/pen/PozVLPy?editors=1000) (same as above)
 
-$scroll optionally supports a second parameter where it possible to define the behavior mode `auto|smooth` (default smooth):
+$scroll optionally supports a second parameter where it's possible to define the behavior mode, `auto|smooth` (default smooth):
 ```html
 <div x-data>
     <div x-ref="foo">

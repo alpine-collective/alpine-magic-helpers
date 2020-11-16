@@ -4,7 +4,7 @@ const AlpineTruncateMagicMethod = {
     start() {
         checkForAlpine()
 
-        Alpine.addMagicProperty('truncate', function () {
+        Alpine.addMagicProperty('truncate', () => {
             return (...parameters) => {
                 if (typeof parameters[0] !== 'string') return parameters[0]
                 let ellipsis = '…'
