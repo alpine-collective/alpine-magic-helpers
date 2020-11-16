@@ -2312,7 +2312,62 @@
       alpine$5(callback);
     };
 
+    var AlpineClipboardMagicMethod = {
+      start: function start() {
+        checkForAlpine();
+        Alpine.addMagicProperty('clipboard', function () {
+          return function (target) {
+            var value = target;
+
+            if (typeof value !== 'string') {
+              try {
+                value = JSON.stringify(value);
+              } catch (e) {
+                console.warn(e);
+              }
+            }
+
+            var container = document.createElement('textarea');
+            container.value = value;
+            container.setAttribute('readonly', '');
+            container.style.cssText = 'position:fixed;pointer-events:none;z-index:-9999;opacity:0;';
+            document.body.appendChild(container);
+
+            if (navigator.userAgent && navigator.userAgent.match(/ipad|ipod|iphone/i)) {
+              container.contentEditable = true;
+              container.readOnly = true;
+              var range = document.createRange();
+              range.selectNodeContents(container);
+              var selection = window.getSelection();
+              selection.removeAllRanges();
+              selection.addRange(range);
+              container.setSelectionRange(0, 999999);
+            } else {
+              container.select();
+            }
+
+            try {
+              document.execCommand('copy');
+            } catch (e) {
+              console.warn(e);
+            }
+
+            document.body.removeChild(container);
+          };
+        });
+      }
+    };
+
     var alpine$6 = window.deferLoadingAlpine || function (alpine) {
+      return alpine();
+    };
+
+    window.deferLoadingAlpine = function (callback) {
+      AlpineClipboardMagicMethod.start();
+      alpine$6(callback);
+    };
+
+    var alpine$7 = window.deferLoadingAlpine || function (alpine) {
       return alpine();
     };
 
@@ -2323,7 +2378,8 @@
       AlpineRangeMagicMethod.start();
       AlpineScrollMagicMethod.start();
       AlpineTruncateMagicMethod.start();
-      alpine$6(callback);
+      AlpineClipboardMagicMethod.start();
+      alpine$7(callback);
     };
 
     var index = {
@@ -2332,7 +2388,8 @@
       AlpineIntervalMagicMethod: AlpineIntervalMagicMethod,
       AlpineRangeMagicMethod: AlpineRangeMagicMethod,
       AlpineScrollMagicMethod: AlpineScrollMagicMethod,
-      AlpineTruncateMagicMethod: AlpineTruncateMagicMethod
+      AlpineTruncateMagicMethod: AlpineTruncateMagicMethod,
+      AlpineClipboardMagicMethod: AlpineClipboardMagicMethod
     };
 
     return index;
