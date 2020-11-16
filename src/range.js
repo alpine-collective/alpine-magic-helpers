@@ -4,7 +4,7 @@ const AlpineRangeMagicMethod = {
     start() {
         checkForAlpine()
 
-        Alpine.addMagicProperty('range', function () {
+        Alpine.addMagicProperty('range', () => {
             return function (start, stop, step = 1) {
                 // Accept $range(10) and expect 1...10
                 if (typeof stop === 'undefined') {

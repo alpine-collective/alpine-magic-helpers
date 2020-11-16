@@ -10,7 +10,7 @@ const AlpineComponentMagicMethod = {
     start() {
         checkForAlpine()
 
-        Alpine.addMagicProperty('parent', function ($el) {
+        Alpine.addMagicProperty('parent', ($el) => {
             if (typeof $el.$parent !== 'undefined') return $el.$parent
 
             const parentComponent = $el.parentNode.closest('[x-data]')
@@ -24,7 +24,7 @@ const AlpineComponentMagicMethod = {
             return $el.$parent
         })
 
-        Alpine.addMagicProperty('component', function ($el) {
+        Alpine.addMagicProperty('component', ($el) => {
             return function (componentName) {
                 if (typeof this[componentName] !== 'undefined') return this[componentName]
 
