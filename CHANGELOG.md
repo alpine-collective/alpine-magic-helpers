@@ -6,6 +6,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.4.1] - 2020-11-16
+### Fixed
+- [$truncate]: Fixes an issue where the ellipsis would show even if the source length was shorter.
+
 ## [0.4.0] - 2020-11-15
 ### Added
 - [$range]: Added the $range helper to iterate over custom ranges
