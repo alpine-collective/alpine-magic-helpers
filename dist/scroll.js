@@ -453,7 +453,7 @@
 	smoothscroll.polyfill();
 	var AlpineScrollMagicMethod = {
 	  start: function start() {
-	    Alpine.addMagicProperty('scroll', function ($el) {
+	    Alpine.addMagicProperty('scroll', function () {
 	      return function (target, options) {
 	        if (options === void 0) {
 	          options = {};
