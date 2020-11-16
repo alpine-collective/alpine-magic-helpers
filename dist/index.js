@@ -1750,6 +1750,89 @@
       alpine$3(callback);
     };
 
+    var AlpineScreenMagicMethod = {
+      start: function start() {
+        Alpine.addMagicProperty('screen', function ($el) {
+          return function (breakpoint, framework) {
+            if (breakpoint === void 0) {
+              breakpoint = 'xs';
+            }
+
+            if (framework === void 0) {
+              framework = 'tw';
+            }
+
+            // Get current window innerWidth
+            var width = window.innerWidth; // bind resize event to window with debounce
+
+            var update;
+            window.addEventListener('resize', function () {
+              clearTimeout(update);
+              update = setTimeout(function () {
+                $el.__x.updateElements($el);
+              }, 150);
+            }); // Frameworks and Breakpoints
+
+            var breakpoints = {
+              // TailwindCSS
+              tw: {
+                xs: 0,
+                sm: 640,
+                md: 768,
+                lg: 1024,
+                xl: 1280,
+                '2xl': 1536
+              },
+              // Bootstrap
+              bs: {
+                xs: 0,
+                sm: 576,
+                md: 768,
+                lg: 992,
+                xl: 1200
+              },
+              // Bulma
+              bl: {
+                mobile: 0,
+                tablet: 769,
+                desktop: 1024,
+                widescreen: 1216,
+                fullhd: 1408
+              },
+              // Materialize
+              mt: {
+                s: 0,
+                m: 601,
+                l: 993,
+                xl: 1201
+              }
+            }; // If size provided as number, early return
+
+            if (Number.isInteger(breakpoint)) return breakpoint <= width; // Check if any unsupported frameworks or breakpoints
+
+            if (breakpoints[framework] === undefined) {
+              throw Error('Unsupported framework: ' + framework);
+            }
+
+            if (breakpoints[framework][breakpoint] === undefined) {
+              throw Error('Unsupported $screen breakpoint: ' + breakpoint);
+            }
+
+            return breakpoints[framework][breakpoint] <= width;
+          };
+        });
+      }
+    };
+
+    var alpine$4 = window.deferLoadingAlpine || function (alpine) {
+      return alpine();
+    };
+
+    window.deferLoadingAlpine = function (callback) {
+      AlpineScreenMagicMethod.start();
+      alpine$4(callback);
+    };
+
     function createCommonjsModule(fn, basedir, module) {
     	return module = {
     		path: basedir,
@@ -2252,13 +2335,13 @@
       }
     };
 
-    var alpine$4 = window.deferLoadingAlpine || function (alpine) {
+    var alpine$5 = window.deferLoadingAlpine || function (alpine) {
       return alpine();
     };
 
     window.deferLoadingAlpine = function (callback) {
       AlpineScrollMagicMethod.start();
-      alpine$4(callback);
+      alpine$5(callback);
     };
 
     var AlpineTruncateMagicMethod = {
@@ -2303,16 +2386,16 @@
       }
     };
 
-    var alpine$5 = window.deferLoadingAlpine || function (alpine) {
+    var alpine$6 = window.deferLoadingAlpine || function (alpine) {
       return alpine();
     };
 
     window.deferLoadingAlpine = function (callback) {
       AlpineTruncateMagicMethod.start();
-      alpine$5(callback);
+      alpine$6(callback);
     };
 
-    var alpine$6 = window.deferLoadingAlpine || function (alpine) {
+    var alpine$7 = window.deferLoadingAlpine || function (alpine) {
       return alpine();
     };
 
@@ -2321,9 +2404,10 @@
       AlpineFetchMagicMethod.start();
       AlpineIntervalMagicMethod.start();
       AlpineRangeMagicMethod.start();
+      AlpineScreenMagicMethod.start();
       AlpineScrollMagicMethod.start();
       AlpineTruncateMagicMethod.start();
-      alpine$6(callback);
+      alpine$7(callback);
     };
 
     var index = {
@@ -2331,6 +2415,7 @@
       AlpineFetchMagicMethod: AlpineFetchMagicMethod,
       AlpineIntervalMagicMethod: AlpineIntervalMagicMethod,
       AlpineRangeMagicMethod: AlpineRangeMagicMethod,
+      AlpineScreenMagicMethod: AlpineScreenMagicMethod,
       AlpineScrollMagicMethod: AlpineScrollMagicMethod,
       AlpineTruncateMagicMethod: AlpineTruncateMagicMethod
     };

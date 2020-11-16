@@ -14,6 +14,7 @@ Adds the following magic helpers to use with Alpine JS. ***More to come!***
 | [`$interval`](#interval) | Run a function every n milliseconds. Optionally start and stop the timer. |
 | [`$range`](#range) | Iterate over a range of values. |
 | [`$scroll`](#scroll) | Scroll the page vertically to a specific position. |
+| [`$screen`](#screen) | Reactive screen breakpoints |
 | [`$truncate`](#truncate) |  Limit a text string to a specific number of characters or words. |
 
 🚀 If you have ideas for more magic helpers, please open a [discussion](https://github.com/alpine-collective/alpine-magic-helpers/discussions) or join us on the [AlpineJS Discord](https://discord.gg/snmCYk3)
@@ -166,6 +167,53 @@ The `$range` helper mostly mimics implementations found in other languages `$ran
 [Demo](https://codepen.io/KevinBatdorf/pen/vYKbPBd)
 
 > N.B: You may use `$range(10)` which will compute to `[1...10]`
+
+---
+
+### `$screen`
+**Example:**
+
+The `$screen` helper provides reactive breakpoints. It can be configured with any custom or pre-defined grid breakpoints as:`
+
+## Frameworks
+ - Tailwind => 'tw',
+ - Bootstrap => 'bs',
+ - Bulma => 'bl',
+ - Materialize => 'mt'
+
+You can define which framework to use by providing framework slug as second parameter.
+
+### Usage
+ - Tailwind `$screen('lg','tw')`
+ - Bootstrap `$screen('lg','bs')`
+ - Bulma `$screen('lg','bl')`
+ - Materialize `$screen('lg','mt')`
+ - Custom `$screen(1024)`
+
+By default it set to use Tailwind breakpoints. if you want to use Tailwind, you don't need to provide the second parameter and you can use as:
+
+`$screen('lg')`
+
+```html
+<div x-data>
+    <span x-show="$screen('lg')">This will be visible if screen size is higher or equal to Tailwind lg (1024px) breakpoint.</span>
+</div>
+
+```
+or for Bootstrap
+```html
+<div x-data>
+    <span x-show="$screen('lg','bs)">This will be visible if screen size is higher or equal to Bootstrap lg (992px) breakpoint.</span>
+</div>
+```
+or for custom breakpoint
+```html
+<div x-data>
+    <span x-show="$screen(1024)">This will be visible if screen size is higher or equal to 1024px breakpoint.</span>
+</div>
+```
+
+[Demo](https://codepen.io/muzafferdede/pen/oNLVjdd)
 
 ---
 
