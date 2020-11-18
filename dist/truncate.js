@@ -27,18 +27,6 @@
       return true;
     }
 
-    var AlpineMagicHelpers = {
-      Config: {
-        breakpoints: {
-          xs: 0,
-          sm: 640,
-          md: 768,
-          lg: 1024,
-          xl: 1280
-        }
-      }
-    };
-
     var AlpineTruncateMagicMethod = {
       start: function start() {
         var _this = this;
@@ -87,7 +75,6 @@
         return string + ellipsis;
       }
     };
-    window.AlpineMagicHelpers = AlpineMagicHelpers;
 
     var alpine = window.deferLoadingAlpine || function (alpine) {
       return alpine();

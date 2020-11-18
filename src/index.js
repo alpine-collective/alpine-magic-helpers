@@ -4,6 +4,7 @@ import AlpineIntervalMagicMethod from './interval'
 import AlpineRangeMagicMethod from './range'
 import AlpineScrollMagicMethod from './scroll'
 import AlpineTruncateMagicMethod from './truncate'
+import './instance'
 
 const alpine = window.deferLoadingAlpine || ((alpine) => alpine())
 

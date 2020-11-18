@@ -1,14 +1,12 @@
-import { AlpineMagicHelpers } from '../src/instance'
+import { Config } from '../src/instance'
 
 beforeAll(() => {
-    window.AlpineMagicHelpers = AlpineMagicHelpers
+    window.Config = Config
 })
 
 test('instance has breakpoints on config', async () => {
-    const HelperObject = {
-        Config: {
-            breakpoints: {},
-        },
+    const Config = {
+        breakpoints: {},
     }
-    expect(window.AlpineMagicHelpers).toMatchObject(HelperObject)
+    expect(window.Config).toMatchObject(Config)
 })
