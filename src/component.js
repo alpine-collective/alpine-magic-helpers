@@ -5,7 +5,6 @@ import {
     syncWithObservedComponent,
     updateOnMutation,
 } from './utils'
-import { AlpineMagicHelpers } from './instance'
 
 const AlpineComponentMagicMethod = {
     start() {
@@ -43,7 +42,6 @@ const AlpineComponentMagicMethod = {
     },
 }
 
-window.AlpineMagicHelpers = AlpineMagicHelpers
 const alpine = window.deferLoadingAlpine || ((alpine) => alpine())
 
 window.deferLoadingAlpine = function (callback) {

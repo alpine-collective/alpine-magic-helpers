@@ -1,6 +1,5 @@
 import axios from 'axios'
 import { checkForAlpine } from './utils'
-import { AlpineMagicHelpers } from './instance'
 
 const AlpineFetchMagicMethod = {
     start() {
@@ -22,7 +21,6 @@ const AlpineFetchMagicMethod = {
     },
 }
 
-window.AlpineMagicHelpers = AlpineMagicHelpers
 const alpine = window.deferLoadingAlpine || ((alpine) => alpine())
 
 window.deferLoadingAlpine = function (callback) {
