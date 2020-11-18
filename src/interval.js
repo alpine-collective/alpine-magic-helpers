@@ -1,4 +1,5 @@
 import { checkForAlpine } from './utils'
+import { AlpineMagicHelpers } from './instance'
 
 const AlpineIntervalMagicMethod = {
     start() {
@@ -61,6 +62,7 @@ const AlpineIntervalMagicMethod = {
     },
 }
 
+window.AlpineMagicHelpers = AlpineMagicHelpers
 const alpine = window.deferLoadingAlpine || ((alpine) => alpine())
 
 window.deferLoadingAlpine = function (callback) {

@@ -27,6 +27,18 @@
       return true;
     }
 
+    var AlpineMagicHelpers = {
+      Config: {
+        breakpoints: {
+          xs: 0,
+          sm: 640,
+          md: 768,
+          lg: 1024,
+          xl: 1280
+        }
+      }
+    };
+
     var AlpineIntervalMagicMethod = {
       start: function start() {
         checkForAlpine();
@@ -84,6 +96,7 @@
         });
       }
     };
+    window.AlpineMagicHelpers = AlpineMagicHelpers;
 
     var alpine = window.deferLoadingAlpine || function (alpine) {
       return alpine();

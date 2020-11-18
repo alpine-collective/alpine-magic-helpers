@@ -1,4 +1,5 @@
 import smoothscroll from 'smoothscroll-polyfill'
+import { AlpineMagicHelpers } from './instance'
 
 smoothscroll.polyfill()
 
@@ -55,6 +56,7 @@ const AlpineScrollMagicMethod = {
     },
 }
 
+window.AlpineMagicHelpers = AlpineMagicHelpers
 const alpine = window.deferLoadingAlpine || ((alpine) => alpine())
 window.deferLoadingAlpine = function (callback) {
     AlpineScrollMagicMethod.start()

@@ -450,6 +450,18 @@
 	}());
 	});
 
+	var AlpineMagicHelpers = {
+	  Config: {
+	    breakpoints: {
+	      xs: 0,
+	      sm: 640,
+	      md: 768,
+	      lg: 1024,
+	      xl: 1280
+	    }
+	  }
+	};
+
 	smoothscroll.polyfill();
 	var AlpineScrollMagicMethod = {
 	  start: function start() {
@@ -505,6 +517,7 @@
 	    });
 	  }
 	};
+	window.AlpineMagicHelpers = AlpineMagicHelpers;
 
 	var alpine = window.deferLoadingAlpine || function (alpine) {
 	  return alpine();

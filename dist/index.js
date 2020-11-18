@@ -117,6 +117,18 @@
       return new Function(['$data'].concat(Object.keys(additionalHelperVariables)), "var __alpine_result; with($data) { __alpine_result = " + expression + " }; return __alpine_result").apply(void 0, [dataContext].concat(Object.values(additionalHelperVariables)));
     }
 
+    var AlpineMagicHelpers = {
+      Config: {
+        breakpoints: {
+          xs: 0,
+          sm: 640,
+          md: 768,
+          lg: 1024,
+          xl: 1280
+        }
+      }
+    };
+
     var AlpineComponentMagicMethod = {
       start: function start() {
         checkForAlpine();
@@ -150,6 +162,7 @@
         });
       }
     };
+    window.AlpineMagicHelpers = AlpineMagicHelpers;
 
     var alpine = window.deferLoadingAlpine || function (alpine) {
       return alpine();
@@ -1628,6 +1641,7 @@
         });
       }
     };
+    window.AlpineMagicHelpers = AlpineMagicHelpers;
 
     var alpine$1 = window.deferLoadingAlpine || function (alpine) {
       return alpine();
@@ -1695,6 +1709,7 @@
         });
       }
     };
+    window.AlpineMagicHelpers = AlpineMagicHelpers;
 
     var alpine$2 = window.deferLoadingAlpine || function (alpine) {
       return alpine();
@@ -1740,6 +1755,7 @@
         });
       }
     };
+    window.AlpineMagicHelpers = AlpineMagicHelpers;
 
     var alpine$3 = window.deferLoadingAlpine || function (alpine) {
       return alpine();
@@ -2251,6 +2267,7 @@
         });
       }
     };
+    window.AlpineMagicHelpers = AlpineMagicHelpers;
 
     var alpine$4 = window.deferLoadingAlpine || function (alpine) {
       return alpine();
@@ -2309,6 +2326,7 @@
         return string + ellipsis;
       }
     };
+    window.AlpineMagicHelpers = AlpineMagicHelpers;
 
     var alpine$5 = window.deferLoadingAlpine || function (alpine) {
       return alpine();
@@ -2318,6 +2336,8 @@
       AlpineTruncateMagicMethod.start();
       alpine$5(callback);
     };
+
+    window.AlpineMagicHelpers = AlpineMagicHelpers;
 
     var alpine$6 = window.deferLoadingAlpine || function (alpine) {
       return alpine();
