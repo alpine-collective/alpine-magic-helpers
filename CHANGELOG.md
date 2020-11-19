@@ -7,7 +7,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Added
-- Adds an instance object to be used by various components
+- Added config objets to allow user to customise some helpers
 
 ## [0.4.1] - 2020-11-16
 ### Fixed
