@@ -2319,60 +2319,7 @@
       alpine$5(callback);
     };
 
-    var Config = /*#__PURE__*/function () {
-      function Config() {
-        var _this = this;
-
-        this.default = {
-          breakpoints: {
-            xs: 0,
-            sm: 640,
-            md: 768,
-            lg: 1024,
-            xl: 1280,
-            '2xl': 1536
-          }
-        }; // After all assets are loaded but before the page is actually ready when ALpine will kick in
-
-        document.addEventListener('readystatechange', function () {
-          if (document.readyState === 'interactive' && window.AlpineMagicHelpersConfig) {
-            for (var index in window.AlpineMagicHelpersConfig) {
-              _this.default[index] = window.AlpineMagicHelpersConfig[index];
-            }
-          }
-        });
-      }
-
-      var _proto = Config.prototype;
-
-      _proto.get = function get(property) {
-        return this.default[property] ? this.default[property] : null;
-      };
-
-      return Config;
-    }();
-
-    var config = new Config();
-
-    var AlpineDeleteMeMagicMethod = {
-      start: function start() {
-        checkForAlpine();
-        Alpine.addMagicProperty('deleteme', function () {
-          return JSON.stringify(config.get('breakpoints'));
-        });
-      }
-    };
-
     var alpine$6 = window.deferLoadingAlpine || function (alpine) {
-      return alpine();
-    };
-
-    window.deferLoadingAlpine = function (callback) {
-      AlpineDeleteMeMagicMethod.start();
-      alpine$6(callback);
-    };
-
-    var alpine$7 = window.deferLoadingAlpine || function (alpine) {
       return alpine();
     };
 
@@ -2383,8 +2330,7 @@
       AlpineRangeMagicMethod.start();
       AlpineScrollMagicMethod.start();
       AlpineTruncateMagicMethod.start();
-      AlpineDeleteMeMagicMethod.start();
-      alpine$7(callback);
+      alpine$6(callback);
     };
 
     var index = {
