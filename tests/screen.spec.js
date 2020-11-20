@@ -75,10 +75,10 @@ test('$screen > can detect orientation', async () => {
 
 test('$screen > can detect touch screens', async () => {
     document.body.innerHTML = `
-        <div x-data >
-            <p x-show="$screen('touch')"></p>
-            <span x-show="!$screen('touch')"></span>
-        </div>
+      <div x-data>
+          <p x-show="$screen('touch')"></p>
+          <span x-show="!$screen('touch')"></span>
+      </div>
   `
 
     Alpine.start()
