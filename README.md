@@ -14,7 +14,7 @@ Adds the following magic helpers to use with Alpine JS. ***More to come!***
 | [`$interval`](#interval) | Run a function every n milliseconds. Optionally start and stop the timer. |
 | [`$range`](#range) | Iterate over a range of values. |
 | [`$scroll`](#scroll) | Scroll the page vertically to a specific position. |
-| [`$screen`](#screen) | Reactive screen breakpoints |
+| [`$screen`](#screen) | Reactive screen breakpoints, touch and orientations |
 | [`$truncate`](#truncate) |  Limit a text string to a specific number of characters or words. |
 
 🚀 If you have ideas for more magic helpers, please open a [discussion](https://github.com/alpine-collective/alpine-magic-helpers/discussions) or join us on the [AlpineJS Discord](https://discord.gg/snmCYk3)
@@ -171,45 +171,81 @@ The `$range` helper mostly mimics implementations found in other languages `$ran
 ---
 
 ### `$screen`
+
+The `$screen` helper provides reactive breakpoint, touch and orientation queries.`
+
+You can check screen `breakpoint` as:
+- `$screen('xs')`
+- `$screen('sm')`
+- `$screen('md')`
+- `$screen('lg')`
+- `$screen('xl')`
+- `$screen('2xl')`
+- `$screen(1024)` // custom size
+
+*`$screen` helper uses **Tailwind CSS** default media queries as default)*
+
+---
+
+You can check screen `touch` support as:
+`$screen('touch')`
+
+You check check screen `orientation` as:
+`$screen('lanscape')`
+`$screen('portrait')`
+
+---
+
 **Example:**
 
-The `$screen` helper provides reactive breakpoints. It can be configured with any custom or pre-defined grid breakpoints as:`
-
-## Frameworks
- - Tailwind => 'tw',
- - Bootstrap => 'bs',
- - Bulma => 'bl',
- - Materialize => 'mt'
-
-You can define which framework to use by providing framework slug as second parameter.
-
-### Usage
- - Tailwind `$screen('lg','tw')`
- - Bootstrap `$screen('lg','bs')`
- - Bulma `$screen('lg','bl')`
- - Materialize `$screen('lg','mt')`
- - Custom `$screen(1024)`
-
-By default it set to use Tailwind breakpoints. if you want to use Tailwind, you don't need to provide the second parameter and you can use as:
-
-`$screen('lg')`
-
+### breakpoint
 ```html
 <div x-data>
-    <span x-show="$screen('lg')">This will be visible if screen size is higher or equal to Tailwind lg (1024px) breakpoint.</span>
-</div>
-
-```
-or for Bootstrap
-```html
-<div x-data>
-    <span x-show="$screen('lg','bs)">This will be visible if screen size is higher or equal to Bootstrap lg (992px) breakpoint.</span>
+    <span x-show="$screen('lg')">This will be visible if screen width is higher or equal to Tailwind CSS 'lg' (1024px) breakpoint.</span>
 </div>
 ```
-or for custom breakpoint
+
+### custom breakpoint
 ```html
 <div x-data>
-    <span x-show="$screen(1024)">This will be visible if screen size is higher or equal to 1024px breakpoint.</span>
+    <span x-show="$screen(1024)">This will be visible if screen width is higher or equal to 1024px.</span>
+</div>
+```
+
+### touch
+```html
+<div x-data>
+    <span x-show="$screen('touch')">This will be visible if screen has touch support</span>
+</div>
+```
+
+### orientation
+```html
+<div x-data>
+    <span x-show="$screen('portrait')">This will be visible if screen orientation is portrait</span>
+</div>
+```
+
+You can also override or extend default media queries as:
+
+```html
+<script>
+    window.AlpineMagicHelpersConfig =
+        breakpoints: {
+            mobile: 0,
+            tablet: 769,
+            desktop: 1024,
+            widescreen: 1216,
+            fullhd: 1408
+        }
+</script>
+```
+in your head section (either before or after the helper).
+
+Than you can use your custom breakpoints as:
+```html
+<div x-data>
+    <span x-show="$screen('tablet')">This will be visible if screen width is higher or equal to 769px.</span>
 </div>
 ```
 

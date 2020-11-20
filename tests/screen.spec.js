@@ -7,7 +7,8 @@ beforeAll(() => {
 })
 
 beforeEach(() => {
-    window.innerWidth = 1920
+    window.innerWidth = 1366
+    window.innerHeight = 758
     AlpineScreenMagicMethod.start()
 })
 
@@ -15,26 +16,6 @@ test('$screen > breakpoints are updated on windows resize', async () => {
     document.body.innerHTML = `
       <div x-data>
           <span x-show="$screen('lg')"></span>
-      </div>
-  `
-
-    Alpine.start()
-
-    expect(document.querySelector('span').getAttribute('style')).toEqual(null)
-
-    window.innerWidth = 500
-
-    window.dispatchEvent(new Event('resize'))
-
-    await waitFor(() => {
-        expect(document.querySelector('span').getAttribute('style')).toEqual('display: none;')
-    })
-})
-
-test('$screen > framework of breakpoints are definable', async () => {
-    document.body.innerHTML = `
-      <div x-data>
-          <span x-show="$screen('widescreen','bl')"></span>
       </div>
   `
 
@@ -69,4 +50,36 @@ test('$screen > breakpoint could be provided as number', async () => {
     await waitFor(() => {
         expect(document.querySelector('span').getAttribute('style')).toEqual('display: none;')
     })
+})
+
+test('$screen > can detect orientation', async () => {
+    document.body.innerHTML = `
+      <div x-data>
+          <span x-show="$screen('landscape')"></span>
+      </div>
+  `
+
+    Alpine.start()
+
+    expect(document.querySelector('span').getAttribute('style')).toEqual(null)
+
+    window.innerHeight = 2000
+
+    window.dispatchEvent(new Event('resize'))
+
+    await waitFor(() => {
+        expect(document.querySelector('span').getAttribute('style')).toEqual('display: none;')
+    })
+})
+
+test('$screen > can detect touch screens', async () => {
+    document.body.innerHTML = `
+      <div x-data>
+          <span x-show="$screen('touch')"></span>
+      </div>
+  `
+
+    Alpine.start()
+    // TODO: find a way to check touch test on jest
+    // expect(document.querySelector('span').getAttribute('style')).toEqual(null)
 })

@@ -33,9 +33,9 @@
 
     <div class="mt-4 pt-4 border-t">
         <h2 class="text-2xl font-black">$screen:</h2>
-        <p class="mb-4">This watches window.innerWidth to determinte breakpoint status on selected css framework (default: Tailwind - 'tw').</p>
+        <p class="mb-4">This helper checks screen breakpoint, touch, orientation and returns as boolean if any matches.</p>
         <div x-data>
-          <template x-for="breakpoint in ['xs','sm','md','lg','xl','2xl']">
+          <template x-for="breakpoint in ['xs','sm','md','lg','xl','2xl','touch','landscape','portrait']">
             <div>
               <span x-text="breakpoint"></span>:
               <span x-text="$screen(breakpoint)"></span>

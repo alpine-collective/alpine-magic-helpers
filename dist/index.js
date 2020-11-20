@@ -1750,75 +1750,98 @@
       alpine$3(callback);
     };
 
+    function _extends() {
+      _extends = Object.assign || function (target) {
+        for (var i = 1; i < arguments.length; i++) {
+          var source = arguments[i];
+
+          for (var key in source) {
+            if (Object.prototype.hasOwnProperty.call(source, key)) {
+              target[key] = source[key];
+            }
+          }
+        }
+
+        return target;
+      };
+
+      return _extends.apply(this, arguments);
+    }
+
+    var Config = /*#__PURE__*/function () {
+      function Config() {
+        var _this = this;
+
+        this.default = {
+          breakpoints: {
+            xs: 0,
+            sm: 640,
+            md: 768,
+            lg: 1024,
+            xl: 1280,
+            '2xl': 1536
+          }
+        }; // After all assets are loaded but before the page is actually ready when ALpine will kick in
+
+        document.addEventListener('readystatechange', function () {
+          if (document.readyState === 'interactive' && window.AlpineMagicHelpersConfig) {
+            for (var index in window.AlpineMagicHelpersConfig) {
+              _this.default[index] = window.AlpineMagicHelpersConfig[index];
+            }
+          }
+        });
+      }
+
+      var _proto = Config.prototype;
+
+      _proto.get = function get(property) {
+        return this.default[property] ? this.default[property] : null;
+      };
+
+      return Config;
+    }();
+
+    var config = new Config();
+
     var AlpineScreenMagicMethod = {
       start: function start() {
         Alpine.addMagicProperty('screen', function ($el) {
-          return function (breakpoint, framework) {
-            if (breakpoint === void 0) {
-              breakpoint = 'xs';
-            }
+          // bind resize event to window with debounce
+          var update;
 
-            if (framework === void 0) {
-              framework = 'tw';
-            }
+          var updateScreen = function updateScreen() {
+            clearTimeout(update);
+            update = setTimeout(function () {
+              $el.__x.updateElements($el);
+            }, 150);
+          };
 
-            // Get current window innerWidth
-            var width = window.innerWidth; // bind resize event to window with debounce
+          window.addEventListener('resize', updateScreen);
+          return function (target) {
+            // Get current window dimensions
+            var width = window.innerWidth;
+            var height = window.innerHeight; // If size provided as number, early return
 
-            var update;
-            window.addEventListener('resize', function () {
-              clearTimeout(update);
-              update = setTimeout(function () {
-                $el.__x.updateElements($el);
-              }, 150);
-            }); // Frameworks and Breakpoints
+            if (Number.isInteger(target)) return target <= width; // Breakpoints and extras
 
-            var breakpoints = {
-              // TailwindCSS
-              tw: {
-                xs: 0,
-                sm: 640,
-                md: 768,
-                lg: 1024,
-                xl: 1280,
-                '2xl': 1536
-              },
-              // Bootstrap
-              bs: {
-                xs: 0,
-                sm: 576,
-                md: 768,
-                lg: 992,
-                xl: 1200
-              },
-              // Bulma
-              bl: {
-                mobile: 0,
-                tablet: 769,
-                desktop: 1024,
-                widescreen: 1216,
-                fullhd: 1408
-              },
-              // Materialize
-              mt: {
-                s: 0,
-                m: 601,
-                l: 993,
-                xl: 1201
-              }
-            }; // If size provided as number, early return
+            var screen = _extends({}, config.get('breakpoints'), {
+              touch: 'ontouchstart' in window,
+              portrait: height > width,
+              landscape: width > height
+            }); // Check if target exists
 
-            if (Number.isInteger(breakpoint)) return breakpoint <= width; // Check if any unsupported frameworks or breakpoints
 
-            if (breakpoints[framework] === undefined) {
-              throw Error('Unsupported framework: ' + framework);
-            }
+            if (screen[target] === undefined) {
+              throw Error('Undefined $screen property: ' + target);
+            } // return if target is a breakpoint
 
-            if (breakpoints[framework][breakpoint] === undefined) {
-              throw Error('Unsupported $screen breakpoint: ' + breakpoint);
-            }
 
-            return breakpoints[framework][breakpoint] <= width;
+            if (Number.isInteger(screen[target])) {
+              return screen[target] <= width;
+            } // return screen extras
+
+
+            return screen[target];
           };
         });
       }
