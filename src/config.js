@@ -1,6 +1,6 @@
 class Config {
     constructor() {
-        this.default = {
+        this.values = {
             breakpoints: {
                 xs: 0,
                 sm: 640,
@@ -15,14 +15,14 @@ class Config {
         document.addEventListener('readystatechange', () => {
             if (document.readyState === 'interactive' && window.AlpineMagicHelpersConfig) {
                 for (const index in window.AlpineMagicHelpersConfig) {
-                    this.default[index] = window.AlpineMagicHelpersConfig[index]
+                    this.values[index] = window.AlpineMagicHelpersConfig[index]
                 }
             }
         })
     }
 
     get(property) {
-        return this.default[property] ? this.default[property] : null
+        return this.values[property] ? this.values[property] : null
     }
 }
 
