@@ -10,7 +10,6 @@ beforeAll(() => {
 beforeEach(() => {
     window.innerWidth = 1366
     window.innerHeight = 758
-    window.$screenHelperInitialized = undefined
     AlpineScreenMagicMethod.start()
 })
 

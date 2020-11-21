@@ -1805,6 +1805,7 @@
 
     var AlpineScreenMagicMethod = {
       start: function start() {
+        var initialized;
         Alpine.addMagicProperty('screen', function ($el) {
           // bind resize event to window with debounce
           var update;
@@ -1813,16 +1814,16 @@
             clearTimeout(update);
             update = setTimeout(function () {
               $el.__x.updateElements($el);
-            }, 150); // set $screenHelperInitialized to prevent multiple calls
-
-            window.$screenHelperInitialized = true;
+            }, 150);
           }; // bind resize event to window if not initialized
 
 
-          if (!window.$screenHelperInitialized) {
+          if (!initialized) {
             window.addEventListener('resize', updateScreen);
-          }
+          } // set initialized to prevent multiple calls
 
+
+          initialized = true;
           return function (target) {
             // Get current window dimensions
             var width = window.innerWidth;

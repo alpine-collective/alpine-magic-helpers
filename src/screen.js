@@ -3,6 +3,8 @@ import config from './config'
 
 const AlpineScreenMagicMethod = {
     start() {
+        let initialized
+
         Alpine.addMagicProperty('screen', function ($el) {
             // bind resize event to window with debounce
             let update
@@ -11,15 +13,15 @@ const AlpineScreenMagicMethod = {
                 update = setTimeout(() => {
                     $el.__x.updateElements($el)
                 }, 150)
-
-                // set $screenHelperInitialized to prevent multiple calls
-                window.$screenHelperInitialized = true
             }
 
             // bind resize event to window if not initialized
-            if (!window.$screenHelperInitialized) {
+            if (!initialized) {
                 window.addEventListener('resize', updateScreen)
             }
+
+            // set initialized to prevent multiple calls
+            initialized = true
 
             return function (target) {
                 // Get current window dimensions
