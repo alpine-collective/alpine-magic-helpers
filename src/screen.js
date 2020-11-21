@@ -11,9 +11,15 @@ const AlpineScreenMagicMethod = {
                 update = setTimeout(() => {
                     $el.__x.updateElements($el)
                 }, 150)
+
+                // set $screenHelperInitialized to prevent multiple calls
+                window.$screenHelperInitialized = true
             }
 
-            window.addEventListener('resize', updateScreen)
+            // bind resize event to window if not initialized
+            if (!window.$screenHelperInitialized) {
+                window.addEventListener('resize', updateScreen)
+            }
 
             return function (target) {
                 // Get current window dimensions

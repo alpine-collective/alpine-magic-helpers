@@ -1772,7 +1772,7 @@
       function Config() {
         var _this = this;
 
-        this.default = {
+        this.values = {
           breakpoints: {
             xs: 0,
             sm: 640,
@@ -1786,7 +1786,7 @@
         document.addEventListener('readystatechange', function () {
           if (document.readyState === 'interactive' && window.AlpineMagicHelpersConfig) {
             for (var index in window.AlpineMagicHelpersConfig) {
-              _this.default[index] = window.AlpineMagicHelpersConfig[index];
+              _this.values[index] = window.AlpineMagicHelpersConfig[index];
             }
           }
         });
@@ -1795,7 +1795,7 @@
       var _proto = Config.prototype;
 
       _proto.get = function get(property) {
-        return this.default[property] ? this.default[property] : null;
+        return this.values[property] ? this.values[property] : null;
       };
 
       return Config;
@@ -1813,10 +1813,16 @@
             clearTimeout(update);
             update = setTimeout(function () {
               $el.__x.updateElements($el);
-            }, 150);
-          };
+            }, 150); // set $screenHelperInitialized to prevent multiple calls
 
-          window.addEventListener('resize', updateScreen);
+            window.$screenHelperInitialized = true;
+          }; // bind resize event to window if not initialized
+
+
+          if (!window.$screenHelperInitialized) {
+            window.addEventListener('resize', updateScreen);
+          }
+
           return function (target) {
             // Get current window dimensions
             var width = window.innerWidth;
