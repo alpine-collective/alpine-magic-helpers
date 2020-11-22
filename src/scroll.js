@@ -4,7 +4,7 @@ smoothscroll.polyfill()
 
 const AlpineScrollMagicMethod = {
     start() {
-        Alpine.addMagicProperty('scroll', function ($el) {
+        Alpine.addMagicProperty('scroll', () => {
             return function (target, options = {}) {
                 const originalTarget = target
 

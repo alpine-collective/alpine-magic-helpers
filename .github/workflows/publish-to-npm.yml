@@ -24,19 +24,34 @@ jobs:
         run: git config --global user.name ${GITHUB_ACTOR}@users.noreply.github.com
       - name: Install dependencies
         run: npm ci
+      - name: Disable branch protection on master
+        uses: octokit/request-action@v2.x
+        with:
+            route: PUT /repos/:repository/branches/master/protection
+            repository: ${{ github.repository }}
+            enforce_admins: |
+                null
+            required_status_checks: |
+                null
+            required_pull_request_reviews: |
+                null
+            restrictions: |
+                null
+        env:
+            GITHUB_TOKEN: ${{ secrets.GH_ADMIN_TOKEN }}
       - name: Build dist folder
         run: npm run build
       - name: Commit dist folder if needed #it fails if nothing has changed so we allow an error
         run: git commit -am 'Rebuild dist'
         continue-on-error: true
       - name: Read tag name
-        run: echo ::set-env name=RELEASE_VERSION::${GITHUB_REF:10}
+        run: echo "RELEASE_VERSION=${GITHUB_REF:10}" >> $GITHUB_ENV
       - name: Delete tag #for some reason npm version fails if the tag exists
         run: git tag -d $RELEASE_VERSION
       - name: Update version in package.json
         run: npm version $RELEASE_VERSION
       - name: Generate version for cdn links
-        run: echo ::set-env name=CDN_VERSION::$(echo $RELEASE_VERSION | sed 's/v\([0-9]\)\.\([0-9]\)\.[0-9]/\1.\2.x/g')
+        run: echo "CDN_VERSION::$(echo $RELEASE_VERSION | sed 's/v\([0-9]\)\.\([0-9]\)\.[0-9]/\1.\2.x/g')" >> $GITHUB_ENV
       - name: Update README
         run: sed -i "s/[0-9]\.[0-9]\.x/$CDN_VERSION/g" README.md
       - name: Commit README if needed #it fails if nothing has changed so we allow an error
@@ -48,6 +63,24 @@ jobs:
         run: git tag -f $RELEASE_VERSION
       - name: Update remote tag
         run: git push --tags --force
+      - name: Re-eanable branch protection on master
+        uses: octokit/request-action@v2.x
+        with:
+            route: PUT /repos/:repository/branches/master/protection
+            repository: ${{ github.repository }}
+            enforce_admins: |
+                true
+            required_status_checks: |
+                strict: true
+                contexts:
+                  - build (12.x)
+            required_pull_request_reviews: |
+                dismiss_stale_reviews: true
+                require_code_owner_reviews: true
+            restrictions: |
+                null
+        env:
+            GITHUB_TOKEN: ${{ secrets.GH_ADMIN_TOKEN }}
       - name: Publish to npm
         run: npm publish --access public
         env:

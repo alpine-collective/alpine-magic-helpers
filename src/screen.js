@@ -1,64 +1,64 @@
 
 import config from './config'
 
+// Collection of components that contains `$screen` helper usecase
+const screenComponents = []
+
+// Debounce `updateElements` method to prevent memory leak
+const debouncedScreensUpdate = () => {
+    let update
+
+    // Update component if $el is in `screenComponents`
+    const updateScreens = () => {
+        clearTimeout(update)
+        update = setTimeout(() => {
+            screenComponents.forEach(($el) =>
+                $el && $el.__x && $el.__x.updateElements($el),
+            )
+        }, 150)
+    }
+
+    return updateScreens
+}
+
 const AlpineScreenMagicMethod = {
     start() {
-        let initialized
+        // Bind `debouncedScreensUpdate` to resize event on window
+        // Note that `resize` event will be triggered on `orientationchange` event as well
+        window.addEventListener('resize', debouncedScreensUpdate())
 
-        Alpine.addMagicProperty('screen', function ($el) {
-            // bind resize event to window with debounce
-            let update
-            const updateScreen = () => {
-                clearTimeout(update)
-                update = setTimeout(() => {
-                    $el.__x.updateElements($el)
-                }, 150)
+        Alpine.addMagicProperty('screen', ($el) => {
+            // Push $el if it's not in the `screenComponents`
+            if (!screenComponents.includes($el)) {
+                screenComponents.push($el)
             }
 
-            // bind resize event to window if not initialized
-            if (!initialized) {
-                window.addEventListener('resize', updateScreen)
-            }
-
-            // set initialized to prevent multiple calls
-            initialized = true
-
-            return function (target) {
-                // Get current window dimensions
+            return (breakpoint) => {
+                // Get current window width
                 const width = window.innerWidth
-                const height = window.innerHeight
 
-                // If size provided as number, early return
-                if (Number.isInteger(target)) return target <= width
+                // Early return if breakpoint is provided as number
+                if (Number.isInteger(breakpoint)) return breakpoint <= width
 
-                // Breakpoints and extras
-                const screen = {
-                    ...config.get('breakpoints'),
-                    touch: 'ontouchstart' in window,
-                    portrait: height > width,
-                    landscape: width > height,
+                // Get breakpoints from Config
+                const configBreakpoints = config.get('breakpoints')
+
+                // Check if breakpoint exists
+                if (configBreakpoints[breakpoint] === undefined) {
+                    throw Error('Undefined $screen property: ' + breakpoint)
                 }
 
-                // Check if target exists
-                if (screen[target] === undefined) {
-                    throw Error('Undefined $screen property: ' + target)
-                }
-
-                // return if target is a breakpoint
-                if (Number.isInteger(screen[target])) {
-                    return screen[target] <= width
-                }
-
-                // return screen extras
-                return screen[target]
+                // Finally compare breakpoint with window width and return as boolean
+                return configBreakpoints[breakpoint] <= width
             }
         })
     },
 }
 
 const alpine = window.deferLoadingAlpine || ((alpine) => alpine())
-window.deferLoadingAlpine = function (callback) {
+window.deferLoadingAlpine = (callback) => {
     AlpineScreenMagicMethod.start()
+
     alpine(callback)
 }
 

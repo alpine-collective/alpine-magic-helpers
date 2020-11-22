@@ -14,7 +14,7 @@ Adds the following magic helpers to use with Alpine JS. ***More to come!***
 | [`$interval`](#interval) | Run a function every n milliseconds. Optionally start and stop the timer. |
 | [`$range`](#range) | Iterate over a range of values. |
 | [`$scroll`](#scroll) | Scroll the page vertically to a specific position. |
-| [`$screen`](#screen) | Reactive screen breakpoints, touch and orientations |
+| [`$screen`](#screen) | Reactive screen breakpoints. |
 | [`$truncate`](#truncate) |  Limit a text string to a specific number of characters or words. |
 
 🚀 If you have ideas for more magic helpers, please open a [discussion](https://github.com/alpine-collective/alpine-magic-helpers/discussions) or join us on the [AlpineJS Discord](https://discord.gg/snmCYk3)
@@ -173,9 +173,9 @@ The `$range` helper mostly mimics implementations found in other languages `$ran
 
 ### `$screen`
 
-The `$screen` helper provides reactive breakpoint, touch and orientation queries.`
+The `$screen` helper provides reactive breakpoint queries.`
 
-You can check screen `breakpoint` as:
+You may query as:
 - `$screen('xs')`
 - `$screen('sm')`
 - `$screen('md')`
@@ -184,22 +184,13 @@ You can check screen `breakpoint` as:
 - `$screen('2xl')`
 - `$screen(1024)` // custom size
 
-*`$screen` helper uses **Tailwind CSS** default media queries as default)*
-
----
-
-You can check screen `touch` support as:
-`$screen('touch')`
-
-You check check screen `orientation` as:
-`$screen('lanscape')`
-`$screen('portrait')`
+*`By default $screen` helper uses **Tailwind CSS** default media queries)*
 
 ---
 
 **Example:**
 
-### breakpoint
+### breakpoints
 ```html
 <div x-data>
     <span x-show="$screen('lg')">This will be visible if screen width is higher or equal to Tailwind CSS 'lg' (1024px) breakpoint.</span>
@@ -213,25 +204,11 @@ You check check screen `orientation` as:
 </div>
 ```
 
-### touch
-```html
-<div x-data>
-    <span x-show="$screen('touch')">This will be visible if screen has touch support</span>
-</div>
-```
-
-### orientation
-```html
-<div x-data>
-    <span x-show="$screen('portrait')">This will be visible if screen orientation is portrait</span>
-</div>
-```
-
 You can also override or extend default media queries as:
 
 ```html
 <script>
-    window.AlpineMagicHelpersConfig =
+    window.AlpineMagicHelpersConfig = {
         breakpoints: {
             mobile: 0,
             tablet: 769,
@@ -239,6 +216,7 @@ You can also override or extend default media queries as:
             widescreen: 1216,
             fullhd: 1408
         }
+    }
 </script>
 ```
 in your head section (either before or after the helper).
@@ -281,7 +259,7 @@ $scroll also supports integers to scroll to a specific point of the page.
 ```
 [Demo](https://codepen.io/KevinBatdorf/pen/PozVLPy?editors=1000) (same as above)
 
-$scroll optionally supports a second parameter where it possible to define the behavior mode `auto|smooth` (default smooth):
+$scroll optionally supports a second parameter where it's possible to define the behavior mode, `auto|smooth` (default smooth):
 ```html
 <div x-data>
     <div x-ref="foo">
