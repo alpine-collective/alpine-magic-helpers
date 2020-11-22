@@ -7,21 +7,21 @@
 	<link href="https://unpkg.com/tailwindcss@^1.0/dist/tailwind.min.css" rel="stylesheet">
 </head>
 
-<div class="mt-4 pt-4 border-t">
-    <h2 class="text-2xl font-black">$component:</h2>
-    <p class="mb-4">This watches a non-parent component. It requires adding an id attribute, or `x-id` attribute so the component can be identified</p>
-    <div
-        x-id="yellowSquare"
-        id="yellowsquare"
-        x-data="{ color: 'yellow' }"
-        class="w-64 h-64"
-        :class="`bg-${color}-400`"
-        @click="color = color === 'yellow' ? 'green' : 'yellow'">
-    </div>
-    <p x-data x-text="$component('yellowSquare').color"></p>
-</div>
-
 <body class="flex flex-col m-24">
+    <div class="mt-4 pt-4 border-t">
+        <h2 class="text-2xl font-black">$component:</h2>
+        <p class="mb-4">This watches a non-parent component. It requires adding an id attribute, or `x-id` attribute so the component can be identified</p>
+        <div
+            x-id="yellowSquare"
+            id="yellowsquare"
+            x-data="{ color: 'yellow' }"
+            class="w-64 h-64"
+            :class="`bg-${color}-400`"
+            @click="color = color === 'yellow' ? 'green' : 'yellow'">
+        </div>
+        <p x-data x-text="$component('yellowSquare').color"></p>
+    </div>
+
     <div class="mt-4 pt-4 border-t">
         <h2 class="text-2xl font-black">$fetch:</h2>
         <p class="mb-4">A title will load below</p>
