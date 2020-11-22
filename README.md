@@ -14,6 +14,7 @@ Adds the following magic helpers to use with Alpine JS. ***More to come!***
 | [`$interval`](#interval) | Run a function every n milliseconds. Optionally start and stop the timer. |
 | [`$range`](#range) | Iterate over a range of values. |
 | [`$scroll`](#scroll) | Scroll the page vertically to a specific position. |
+| [`$screen`](#screen) | Reactive screen breakpoints. |
 | [`$truncate`](#truncate) |  Limit a text string to a specific number of characters or words. |
 
 🚀 If you have ideas for more magic helpers, please open a [discussion](https://github.com/alpine-collective/alpine-magic-helpers/discussions) or join us on the [AlpineJS Discord](https://discord.gg/snmCYk3)
@@ -33,6 +34,7 @@ Or only use the specific methods you need:
 <script src="https://cdn.jsdelivr.net/gh/alpine-collective/alpine-magic-helpers@0.4.x/dist/fetch.min.js"></script>
 <script src="https://cdn.jsdelivr.net/gh/alpine-collective/alpine-magic-helpers@0.4.x/dist/interval.min.js"></script>
 <script src="https://cdn.jsdelivr.net/gh/alpine-collective/alpine-magic-helpers@0.4.x/dist/range.min.js"></script>
+<script src="https://cdn.jsdelivr.net/gh/alpine-collective/alpine-magic-helpers@0.4.x/dist/screen.min.js"></script>
 <script src="https://cdn.jsdelivr.net/gh/alpine-collective/alpine-magic-helpers@0.4.x/dist/scroll.min.js"></script>
 <script src="https://cdn.jsdelivr.net/gh/alpine-collective/alpine-magic-helpers@0.4.x/dist/truncate.min.js"></script>
 ```
@@ -166,6 +168,67 @@ The `$range` helper mostly mimics implementations found in other languages `$ran
 [Demo](https://codepen.io/KevinBatdorf/pen/vYKbPBd)
 
 > N.B: You may use `$range(10)` which will compute to `[1...10]`
+
+---
+
+### `$screen`
+
+The `$screen` helper provides reactive breakpoint queries.`
+
+You may query as:
+- `$screen('xs')`
+- `$screen('sm')`
+- `$screen('md')`
+- `$screen('lg')`
+- `$screen('xl')`
+- `$screen('2xl')`
+- `$screen(1024)` // custom size
+
+*`By default $screen` helper uses **Tailwind CSS** default media queries)*
+
+---
+
+**Example:**
+
+### breakpoints
+```html
+<div x-data>
+    <span x-show="$screen('lg')">This will be visible if screen width is higher or equal to Tailwind CSS 'lg' (1024px) breakpoint.</span>
+</div>
+```
+
+### custom breakpoint
+```html
+<div x-data>
+    <span x-show="$screen(1024)">This will be visible if screen width is higher or equal to 1024px.</span>
+</div>
+```
+
+You can also override or extend default media queries as:
+
+```html
+<script>
+    window.AlpineMagicHelpersConfig = {
+        breakpoints: {
+            mobile: 0,
+            tablet: 769,
+            desktop: 1024,
+            widescreen: 1216,
+            fullhd: 1408
+        }
+    }
+</script>
+```
+in your head section (either before or after the helper).
+
+Than you can use your custom breakpoints as:
+```html
+<div x-data>
+    <span x-show="$screen('tablet')">This will be visible if screen width is higher or equal to 769px.</span>
+</div>
+```
+
+[Demo](https://codepen.io/muzafferdede/pen/oNLVjdd)
 
 ---
 

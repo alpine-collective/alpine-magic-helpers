@@ -31,6 +31,24 @@
     </div>
 
     <div class="mt-4 pt-4 border-t">
+        <h2 class="text-2xl font-black">$screen:</h2>
+        <p class="mb-4">This helper checks screen breakpoint and returns boolean if any matches.</p>
+        <div x-data="{items: ['xs','sm','md','lg','xl','2xl']}" x-on:click="items.push('2xl')">
+          <template x-for="breakpoint in items">
+            <div>
+              <span x-text="breakpoint"></span>:
+              <span x-text="$screen(breakpoint)"></span>
+            </div>
+          </template>
+        </div>
+
+        <div x-data>
+          <span x-show="$screen('lg')">Window size is higger or equal to 1024px</span>
+          <span x-show="!$screen('lg')">Window size is lower than 1024px</span>
+        </div>
+    </div>
+
+    <div class="mt-4 pt-4 border-t">
         <h2 class="text-2xl font-black">$scroll:</h2>
         <div x-data>
             <p x-ref="myref">myref</p>

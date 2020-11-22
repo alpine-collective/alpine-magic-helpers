@@ -8,6 +8,7 @@
         "src/fetch.js",
         "src/interval.js",
         "src/range.js",
+        "src/screen.js",
         "src/scroll.js",
         "src/truncate.js"
     ],
