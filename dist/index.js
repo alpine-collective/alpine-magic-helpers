@@ -2319,20 +2319,6 @@
       alpine$5(callback);
     };
 
-    var alpine$6 = window.deferLoadingAlpine || function (alpine) {
-      return alpine();
-    };
-
-    window.deferLoadingAlpine = function (callback) {
-      AlpineComponentMagicMethod.start();
-      AlpineFetchMagicMethod.start();
-      AlpineIntervalMagicMethod.start();
-      AlpineRangeMagicMethod.start();
-      AlpineScrollMagicMethod.start();
-      AlpineTruncateMagicMethod.start();
-      alpine$6(callback);
-    };
-
     var index = {
       AlpineComponentMagicMethod: AlpineComponentMagicMethod,
       AlpineFetchMagicMethod: AlpineFetchMagicMethod,
