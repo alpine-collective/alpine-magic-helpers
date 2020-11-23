@@ -11,8 +11,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - [internal]: Helpers were registered twice by mistake resulting in unnecessary function calls.
 
 ### Added
-- [internal]: Added a config objet to allow users to customise some helpers
-- [$screen]: Added the $screen helper to detect the current screensize
+- [internal]: Added a config object to allow users to customise some helpers
+- [$screen]: Added the $screen helper to detect the current screen size
 
 ## [0.4.1] - 2020-11-16
 ### Fixed

@@ -9,7 +9,7 @@
 
 <body class="flex flex-col items-center justify-center m-24">
 
-    <dix x-data>
+    <div x-data>
         <p x-show="$screen('xs')" class="mb-4 font-bold">
             This paragraph will show if the window is equal or larger than 0px.
         </p>
@@ -18,6 +18,9 @@
         </p>
         <p x-show="$screen('md')" class="mb-4 font-bold">
             This paragraph will show if the window is equal or larger than 768px.
+        </p>
+        <p x-show="$screen(999)" class="mb-4 font-bold">
+            This paragraph will show if the window is equal or larger than 999px.
         </p>
         <p x-show="$screen('lg')" class="mb-4 font-bold">
             This paragraph will show if the window is equal or larger than 1024px.
@@ -28,9 +31,6 @@
         <p x-show="$screen('2xl')" class="mb-4 font-bold">
             This paragraph will show if the window is equal or larger than 1536px.
         </p>
-        <p x-show="$screen(999)" class="mb-4 font-bold">
-            This paragraph will show if the window is equal or larger than 999px.
-        </p>
-    </dix>
+    </div>
 
 </body>
