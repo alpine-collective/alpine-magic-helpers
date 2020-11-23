@@ -230,7 +230,7 @@ And using those breakpoints in your page.
 </div>
 ```
 
-[Demo]()
+[Demo](https://codepen.io/KevinBatdorf/pen/OJXKRXE?editors=1000)
 
 ---
 
