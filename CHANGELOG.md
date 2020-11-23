@@ -5,20 +5,23 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
+
+## [0.5.0] - 2020-11-23
 ### Fixed
-- Helpers were registered twice by mistake resulting in unecessary function calls.
+- Helpers were registered twice by mistake resulting in unnecessary function calls.
 
 ### Added
-- Added config objets to allow users to customise some helpers
+- Added a config object to allow users to customise some helpers
+- [$screen]: Added the $screen helper to detect the current screen size ([@muzafferdede](https://github.com/muzafferdede))
 
 ## [0.4.1] - 2020-11-16
 ### Fixed
-- [$truncate]: Fixes an issue where the ellipsis would show even if the source length was shorter.
+- [$truncate]: Fixes an issue where the ellipsis would show even if the source length was shorter. ([@pomartel](https://github.com/pomartel))
 
 ## [0.4.0] - 2020-11-15
 ### Added
 - [$range]: Added the $range helper to iterate over custom ranges
-- [$scroll]: Added the $scroll helper scroll vertically to a specific position
+- [$scroll]: Added the $scroll helper to scroll vertically to a specific position
 
 ## [0.3.6] - 2020-11-04
 ### Fixed

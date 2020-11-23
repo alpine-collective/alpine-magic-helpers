@@ -13,8 +13,8 @@ Adds the following magic helpers to use with Alpine JS. ***More to come!***
 | [`$fetch`](#fetch) | Using Axios, fetch JSON from an external source.  |
 | [`$interval`](#interval) | Run a function every n milliseconds. Optionally start and stop the timer. |
 | [`$range`](#range) | Iterate over a range of values. |
+| [`$screen`](#screen) | Detect if the current browser width is equal or greater than a given breakpoint. |
 | [`$scroll`](#scroll) | Scroll the page vertically to a specific position. |
-| [`$screen`](#screen) | Reactive screen breakpoints. |
 | [`$truncate`](#truncate) |  Limit a text string to a specific number of characters or words. |
 
 🚀 If you have ideas for more magic helpers, please open a [discussion](https://github.com/alpine-collective/alpine-magic-helpers/discussions) or join us on the [AlpineJS Discord](https://discord.gg/snmCYk3)
@@ -34,7 +34,7 @@ Or only use the specific methods you need:
 <script src="https://cdn.jsdelivr.net/gh/alpine-collective/alpine-magic-helpers@0.4.x/dist/fetch.min.js"></script>
 <script src="https://cdn.jsdelivr.net/gh/alpine-collective/alpine-magic-helpers@0.4.x/dist/interval.min.js"></script>
 <script src="https://cdn.jsdelivr.net/gh/alpine-collective/alpine-magic-helpers@0.4.x/dist/range.min.js"></script>
-<script src="https://cdn.jsdelivr.net/gh/alpine-collective/alpine-magic-helpers@0.4.x/dist/screen.min.js"></script>
+<script src="https://cdn.jsdelivr.net/gh/alpine-collective/alpine-magic-helpers@0.5.x/dist/screen.min.js"></script>
 <script src="https://cdn.jsdelivr.net/gh/alpine-collective/alpine-magic-helpers@0.4.x/dist/scroll.min.js"></script>
 <script src="https://cdn.jsdelivr.net/gh/alpine-collective/alpine-magic-helpers@0.4.x/dist/truncate.min.js"></script>
 ```
@@ -172,41 +172,45 @@ The `$range` helper mostly mimics implementations found in other languages `$ran
 ---
 
 ### `$screen`
-
-The `$screen` helper provides reactive breakpoint queries.`
-
-You may query as:
-- `$screen('xs')`
-- `$screen('sm')`
-- `$screen('md')`
-- `$screen('lg')`
-- `$screen('xl')`
-- `$screen('2xl')`
-- `$screen(1024)` // custom size
-
-*`By default $screen` helper uses **Tailwind CSS** default media queries)*
-
----
-
 **Example:**
 
-### breakpoints
+The `$screen` helper detects if the current browser width is equal or greater than a given breakpoint and returns `true` or `false` based on the result.
+
 ```html
 <div x-data>
-    <span x-show="$screen('lg')">This will be visible if screen width is higher or equal to Tailwind CSS 'lg' (1024px) breakpoint.</span>
+    <span x-show="$screen('lg')">This will be visible if the window width is equal or greater than 1024px.</span>
 </div>
 ```
 
-### custom breakpoint
+*By default the `$screen` helper uses the following endpoint borrowed by **Tailwind CSS**:*
+- `xs`: 0px
+- `sm`: 640px
+- `md`: 768px
+- `lg`: 1024px
+- `xl`: 1280px
+- `2xl`: 1536px
+
+> ⚠️ **NOTE**: A single breakpoint is only going to tell you if the browser width is equal or greater than the given breakpoint. If you want to restrict the check to a specific range, you will need to negate the next endpoint as:
+
 ```html
 <div x-data>
-    <span x-show="$screen(1024)">This will be visible if screen width is higher or equal to 1024px.</span>
+    <span x-show="$screen('md') && !$screen('lg')">This will be visible if screen width is equal or greater than 768px but smaller then 1024px.</span>
 </div>
 ```
 
-You can also override or extend default media queries as:
+**Custom breakpoints**
+
+You can pass a numeric value to use an ad-hoc breakpoint.
+```html
+<div x-data>
+    <span x-show="$screen(999)">This will be visible if screen width is equal or greater than 999px.</span>
+</div>
+```
+
+You can also override the default breakpoints including the following `<script>` tag in the `<head>` of your document
 
 ```html
+<!-- this example uses Bulma's breakpoints. -->
 <script>
     window.AlpineMagicHelpersConfig = {
         breakpoints: {
@@ -219,16 +223,14 @@ You can also override or extend default media queries as:
     }
 </script>
 ```
-in your head section (either before or after the helper).
-
-Than you can use your custom breakpoints as:
+And using those breakpoints in your page.
 ```html
 <div x-data>
-    <span x-show="$screen('tablet')">This will be visible if screen width is higher or equal to 769px.</span>
+    <span x-show="$screen('tablet')">This will be visible if screen width is equal or greater than 769px.</span>
 </div>
 ```
 
-[Demo](https://codepen.io/muzafferdede/pen/oNLVjdd)
+[Demo](https://codepen.io/KevinBatdorf/pen/OJXKRXE?editors=1000)
 
 ---
 
@@ -253,13 +255,13 @@ Alternatively, you can pass a css selector to scroll to an element at any positi
 </div>
 ```
 
-$scroll also supports integers to scroll to a specific point of the page.
+`$scroll` also supports integers to scroll to a specific point of the page.
 ```html
 <button x-data x-on:click="$scroll(0)">Scroll to top</scroll>
 ```
 [Demo](https://codepen.io/KevinBatdorf/pen/PozVLPy?editors=1000) (same as above)
 
-$scroll optionally supports a second parameter where it's possible to define the behavior mode, `auto|smooth` (default smooth):
+`$scroll` optionally supports a second parameter where it's possible to define the behavior mode, `auto|smooth` (default smooth):
 ```html
 <div x-data>
     <div x-ref="foo">
