@@ -15,6 +15,7 @@ Adds the following magic helpers to use with Alpine JS. ***More to come!***
 | [`$range`](#range) | Iterate over a range of values. |
 | [`$screen`](#screen) | Detect if the current browser width is equal or greater than a given breakpoint. |
 | [`$scroll`](#scroll) | Scroll the page vertically to a specific position. |
+| [`$teleport`](#teleport) |  Appends/Prepends a component/node element to any where in the DOM. |
 | [`$truncate`](#truncate) |  Limit a text string to a specific number of characters or words. |
 
 🚀 If you have ideas for more magic helpers, please open a [discussion](https://github.com/alpine-collective/alpine-magic-helpers/discussions) or join us on the [AlpineJS Discord](https://discord.gg/snmCYk3)
@@ -36,6 +37,7 @@ Or only use the specific methods you need:
 <script src="https://cdn.jsdelivr.net/gh/alpine-collective/alpine-magic-helpers@0.5.x/dist/range.min.js"></script>
 <script src="https://cdn.jsdelivr.net/gh/alpine-collective/alpine-magic-helpers@0.5.x/dist/screen.min.js"></script>
 <script src="https://cdn.jsdelivr.net/gh/alpine-collective/alpine-magic-helpers@0.5.x/dist/scroll.min.js"></script>
+<script src="https://cdn.jsdelivr.net/gh/alpine-collective/alpine-magic-helpers@0.5.x/dist/teleport.min.js"></script>
 <script src="https://cdn.jsdelivr.net/gh/alpine-collective/alpine-magic-helpers@0.5.x/dist/truncate.min.js"></script>
 ```
 
@@ -313,6 +315,93 @@ With both:
 <button x-data x-on:click="$scroll(0, {behavior: auto, offset: 50}">Jump to 50px before top</scroll>
 ```
 [Demo](https://codepen.io/KevinBatdorf/pen/PozVLPy?editors=1000) (same as above)
+
+---
+
+### `$teleport`
+Teleports (`appends/prepends`) a component/node element to any where in the DOM
+
+*Defaults*
+**$teleport(from = $el, to = document.body, options = { prepend: false })**
+
+`destination` may defined as CSS selector or node.
+```html
+//tag
+<div x-init="() => $teleport('<div>Text<div>', 'div')">
+
+//id
+<div x-init="() => $teleport('<div>Text<div>', '#destination')">
+
+//class
+<div x-init="() => $teleport('<div>Text<div>', '.destination')">
+
+//atribute
+<div x-init="() => $teleport('<div>Text<div>', '[destination]')">
+
+//reference
+<div x-init="() => $teleport('<div>Text<div>', $refs.destination)">
+```
+
+*Note: Make sure to call it as arrow function if you use in `x-init`:*
+```html
+// if on x-init use arrow function
+x-init="() => $teleport(...)
+
+// if on events use it plain
+x-on:click="$teleport(...)"
+x-on:custom-event="$teleport(...)"
+```
+
+**Example:**
+
+```html
+<div x-data x-init="() => $teleport($el, '#destination')">
+  Teleporter
+</div>
+<div id="destination">
+  <h2>Element down below is teleported</h2>
+</div>
+
+```
+
+You may also pass teleporter element as `x-ref` reference or even as string to second argument:
+
+```html
+<div x-data x-init="() =>  { $teleport($refs.teleporter, '#destination-1'), $teleport('Teleporter 2', '#destination-2') }">
+  <h3 x-ref="teleporter">Teleporter 1</h3>
+</div>
+
+<div id="destination-1">
+  <h2>Element down below is teleported</h2>
+</div>
+<div x-portal="destination-2">
+  <h2>Text down below is teleported</h2>
+</div>
+```
+
+If you want to prepend to target destination, you may pass the options argument as `true`:
+
+```html
+<div x-data x-init="() => $teleport($refs.teleporter, '#destination', { prepend: true })">
+  <h3 x-ref="teleporter">Teleporter</h3>
+</div>
+<div id="destination">
+  <h2>Element above is teleported</h2>
+</div>
+```
+
+All events / props / computed values are carried with teleport:
+
+```html
+<div x-data="{show: true}" x-init="() => $teleport($refs.teleporter, '#destination')">
+  <button x-ref="teleporter" x-on:click="alert('teleported')" x-show="show">Alert</button>
+</div>
+<div id="destination">
+  <h2>Element below is teleported and it carried its events</h2>
+</div>
+```
+
+[Demo](https://codepen.io/muzafferdede/pen/eYzwmwE)
 
 ---
 

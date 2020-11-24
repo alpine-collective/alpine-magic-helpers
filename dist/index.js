@@ -2352,6 +2352,61 @@
       alpine$5(callback);
     };
 
+    var AlpineTeleportMagicMethod = {
+      start: function start() {
+        checkForAlpine();
+        Alpine.addMagicProperty('teleport', function ($el) {
+          return function (from, to, options) {
+            if (from === void 0) {
+              from = $el;
+            }
+
+            if (to === void 0) {
+              to = document.body;
+            }
+
+            if (options === void 0) {
+              options = {
+                prepend: false
+              };
+            }
+
+            // Figure out element that needs to be teleported
+            var element = typeof from === 'string' ? document.createRange().createContextualFragment(from) : from; // Figure out destination
+
+            var target = typeof to === 'string' ? document.querySelector(to) : to; // Check if destination is exists
+
+            if (!target) {
+              throw Error("Destination \"" + to + "\" not found. Does your element have proper attribute?");
+            } // Set mutation to sync initial component data if element is not a component
+
+
+            if (!element.__x) {
+              updateOnMutation($el, function () {
+                syncWithObservedComponent($el.__x.getUnobservedData(), $el, objectSetDeep);
+
+                $el.__x.updateElements(element);
+              });
+            } // Prepend element to destination if 'prepend' option is set to true
+
+
+            if (options.prepend) return target.prepend(element); // Append element to destination
+
+            target.append(element);
+          };
+        });
+      }
+    };
+
+    var alpine$6 = window.deferLoadingAlpine || function (alpine) {
+      return alpine();
+    };
+
+    window.deferLoadingAlpine = function (callback) {
+      AlpineTeleportMagicMethod.start();
+      alpine$6(callback);
+    };
+
     var AlpineTruncateMagicMethod = {
       start: function start() {
         var _this = this;
@@ -2401,13 +2456,13 @@
       }
     };
 
-    var alpine$6 = window.deferLoadingAlpine || function (alpine) {
+    var alpine$7 = window.deferLoadingAlpine || function (alpine) {
       return alpine();
     };
 
     window.deferLoadingAlpine = function (callback) {
       AlpineTruncateMagicMethod.start();
-      alpine$6(callback);
+      alpine$7(callback);
     };
 
     var index = {
@@ -2417,6 +2472,7 @@
       AlpineRangeMagicMethod: AlpineRangeMagicMethod,
       AlpineScreenMagicMethod: AlpineScreenMagicMethod,
       AlpineScrollMagicMethod: AlpineScrollMagicMethod,
+      AlpineTeleportMagicMethod: AlpineTeleportMagicMethod,
       AlpineTruncateMagicMethod: AlpineTruncateMagicMethod
     };
 

@@ -10,6 +10,7 @@
         "src/range.js",
         "src/screen.js",
         "src/scroll.js",
+        "src/teleport.js",
         "src/truncate.js"
     ],
     "main": "dist/index.js",

@@ -44,5 +44,6 @@ export default [
     'range',
     'screen',
     'scroll',
+    'teleport',
     'truncate',
 ].map(createConfig)

@@ -98,6 +98,16 @@
     </div>
 
     <div class="mt-4 pt-4 border-t">
+        <h2 class="text-2xl font-black">$teleport:</h2>
+        <p class="mb-4">Teleports an element to any were in the DOM even if target is not an alpine component</p>
+        <div x-data="{count: 0}" x-init="() => $teleport($refs.teleporter, '#teleportDestination')">
+            <button x-text="count" x-on:click="count++"></button>
+            <button x-ref="teleporter" x-on:click="count++" x-text="count">test</div>
+        </div>
+        <div id="teleportDestination"></div>
+    </div>
+
+    <div class="mt-4 pt-4 border-t">
         <h2 class="text-2xl font-black">$truncate:</h2>
         <p class="mb-4">Truncate to specific characters (click the truncated text to update from 50 characters to unlimited)</p>
         <div
