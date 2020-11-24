@@ -10,23 +10,22 @@ beforeEach(() => {
     AlpineTeleportMagicMethod.start()
 })
 
-test('$teleport > can teleport elements to target destination on the DOM', async () => {
+test('$teleport > by default teleports element to body', async () => {
     document.body.innerHTML = `
-        <span x-data x-init="() => $teleport($el,'#destination')">Teleporter</span>
-        <div id="destination"></div>
+        <span x-data x-init="() => $teleport()">foo</span>
     `
 
     Alpine.start()
 
     await waitFor(() => {
-        expect(document.querySelector('#destination').firstChild.textContent).toEqual('Teleporter')
+        expect(document.querySelector('body > span').textContent).toEqual('foo')
     })
 })
 
-test('$teleport > can teleport x-ref elements to target destination on the DOM', async () => {
+test('$teleport > can teleport node elements to target destination', async () => {
     document.body.innerHTML = `
       <span x-data x-init="() => $teleport($refs.teleporter,'#destination')">
-        <span x-ref="teleporter">Teleporter</span>
+        <span x-ref="teleporter">foo</span>
       </span>
       <div id="destination"></div>
   `
@@ -34,27 +33,27 @@ test('$teleport > can teleport x-ref elements to target destination on the DOM',
     Alpine.start()
 
     await waitFor(() => {
-        expect(document.querySelector('#destination').firstChild.textContent).toEqual('Teleporter')
+        expect(document.querySelector('#destination').firstChild.textContent).toEqual('foo')
     })
 })
 
-test('$teleport > can teleport strings to target destination on the DOM', async () => {
+test('$teleport > converts a template string into HTML DOM node and teleports it to destination', async () => {
     document.body.innerHTML = `
-      <span x-data x-init="() => $teleport('Teleporter','#destination')"></span>
+      <span x-data x-init="() => $teleport('<span>foo<span>','#destination')"></span>
       <div id="destination"></div>
   `
 
     Alpine.start()
 
     await waitFor(() => {
-        expect(document.querySelector('#destination').textContent).toEqual('Teleporter')
+        expect(document.querySelector('#destination span').textContent).toEqual('foo')
     })
 })
 
 test('$teleport > can can prepend elements', async () => {
     document.body.innerHTML = `
       <span x-data x-init="() => $teleport($refs.teleporter,'#destination',{prepend: true})">
-        <span x-ref="teleporter">Teleporter</span>
+        <span x-ref="teleporter">foo</span>
       </span>
       <div id="destination"><span>First Child</span></div>
   `
@@ -62,15 +61,15 @@ test('$teleport > can can prepend elements', async () => {
     Alpine.start()
 
     await waitFor(() => {
-        expect(document.querySelector('#destination').firstChild.textContent).toEqual('Teleporter')
+        expect(document.querySelector('#destination').firstChild.textContent).toEqual('foo')
     })
 })
 
-test('$teleport > carries events with the teleported element', async () => {
+test('$teleport > carries reactivity with the teleported element even it is not a component', async () => {
     document.body.innerHTML = `
-      <span x-data="{text: ''}" x-init="() => $teleport($refs.teleporter, '#destination')">
-        <button x-ref="teleporter" x-on:click="text = 'Content'">Teleporter</button>
-        <p x-text="text"></p>
+      <span x-data="{foo: 'bar'}" x-init="() => $teleport($refs.teleporter, '#destination')">
+        <button x-ref="teleporter" x-on:click="foo='baz'" x-text="foo"></button>
+        <p x-text="foo"></p>
       </span>
       <div id="destination"></div>
   `
@@ -78,12 +77,14 @@ test('$teleport > carries events with the teleported element', async () => {
     Alpine.start()
 
     await waitFor(() => {
-        expect(document.querySelector('#destination').firstChild.textContent).toEqual('Teleporter')
+        expect(document.querySelector('button').textContent).toEqual('bar')
+        expect(document.querySelector('p').textContent).toEqual('bar')
     })
 
     document.querySelector('button').click()
 
     await waitFor(() => {
-        expect(document.querySelector('p').textContent).toEqual('Content')
+        expect(document.querySelector('button').textContent).toEqual('baz')
+        expect(document.querySelector('p').textContent).toEqual('baz')
     })
 })

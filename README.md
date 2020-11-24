@@ -364,10 +364,10 @@ x-on:custom-event="$teleport(...)"
 
 ```
 
-You may also pass teleporter element as `x-ref` reference or even as string to second argument:
+You may also pass teleporter element as node reference or even as string template:
 
 ```html
-<div x-data x-init="() =>  { $teleport($refs.teleporter, '#destination-1'), $teleport('Teleporter 2', '#destination-2') }">
+<div x-data x-init="() =>  { $teleport($refs.teleporter, '#destination-1'), $teleport('<div>Teleporter</div>', '#destination-2') }">
   <h3 x-ref="teleporter">Teleporter 1</h3>
 </div>
 
