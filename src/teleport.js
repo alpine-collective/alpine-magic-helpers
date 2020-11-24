@@ -29,6 +29,7 @@ const AlpineTeleportMagicMethod = {
                 if (!element.__x) {
                     updateOnMutation($el, () => {
                         syncWithObservedComponent($el.__x.getUnobservedData(), $el, objectSetDeep)
+
                         $el.__x.updateElements(element)
                     })
                 }
