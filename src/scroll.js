@@ -27,7 +27,7 @@ const AlpineScrollMagicMethod = {
                 // This could happens if we trasform a selector or if we pass an Element in,
                 // for example using $ref['something']
                 if (target instanceof Element) {
-                    target = target.getBoundingClientRect().top + window.pageYOffset
+                    target = Math.floor(target.getBoundingClientRect().top + window.pageYOffset)
                 }
 
                 // If target has been converted to the y coordinate or was an object to begin with
