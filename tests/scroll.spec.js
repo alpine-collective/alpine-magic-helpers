@@ -162,3 +162,29 @@ test('$scroll > can disable the smooth scrolling AND apply an offset', async () 
     // function is called correctly
     expect(window.scroll).toHaveBeenCalledWith({ behavior: 'auto', top: 60 })
 })
+
+test('$scroll > can scroll when getBoundingClientRect returns a floating number', async () => {
+    document.body.innerHTML = `
+        <div x-data>
+            <button @click="$scroll($refs.foo)"></button>
+            <p x-ref="foo" x-text="'loaded'"></p>
+        </div>
+    `
+
+    // We need to mock getBoundingClientRect since jest doesn't have a viewport
+    document.querySelector('p').getBoundingClientRect = jest.fn(() => ({
+        top: 20.756,
+    }))
+
+    Alpine.start()
+
+    await waitFor(() => {
+        expect(document.querySelector('p').textContent).toEqual('loaded')
+    })
+
+    document.querySelector('button').click()
+
+    // Again, jest doesn't have a viewport so we can only check that the native
+    // function is called correctly
+    expect(window.scroll).toHaveBeenCalledWith({ behavior: 'smooth', top: 120 })
+})
