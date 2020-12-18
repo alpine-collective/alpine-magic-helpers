@@ -5,7 +5,7 @@ const AlpineFetchMagicMethod = {
     start() {
         checkForAlpine()
 
-        Alpine.addMagicProperty('fetch', function () {
+        Alpine.addMagicProperty('fetch', () => {
             return (...parameters) => {
                 if (typeof parameters[0] === 'string' && parameters[0].length) {
                     return axios.get(parameters[0]).then(response => Object.prototype.hasOwnProperty.call(response, 'data') ? response.data : response)

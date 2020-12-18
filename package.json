@@ -1,6 +1,6 @@
 {
     "name": "alpine-magic-helpers",
-    "version": "0.3.6",
+    "version": "0.5.1",
     "description": "A collection of magic properties and helper functions for use with Alpine.",
     "source": [
         "src/index.js",
@@ -8,6 +8,9 @@
         "src/fetch.js",
         "src/interval.js",
         "src/truncate.js",
+        "src/range.js",
+        "src/screen.js",
+        "src/scroll.js",
         "src/undo.js"
     ],
     "main": "dist/index.js",
@@ -80,7 +83,8 @@
         "jsdom-simulant": "^1.1.2",
         "lint-staged": "^10.5.1",
         "rollup": "^2.33.1",
-        "rollup-plugin-filesize": "^9.0.2"
+        "rollup-plugin-filesize": "^9.0.2",
+        "smoothscroll-polyfill": "^0.4.4"
     },
     "publishConfig": {
         "access": "public"

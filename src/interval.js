@@ -4,7 +4,7 @@ const AlpineIntervalMagicMethod = {
     start() {
         checkForAlpine()
 
-        Alpine.addMagicProperty('interval', function () {
+        Alpine.addMagicProperty('interval', () => {
             return function (...parameters) {
                 if (typeof parameters[0] !== 'function') return parameters[0]
 

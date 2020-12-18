@@ -8,6 +8,26 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 - [`$undo/$track/$history`]: Adds a set of helpers to track component state and revert changes on demand
+## [0.5.1] - 2020-11-30
+### Fixed
+- [$scroll]: When using css selectors or Alpine reference, element position to scroll to was some times a decimal number (e.g. rem values could resolve to a decimal number) and $scroll was triggering an error.
+
+## [0.5.0] - 2020-11-23
+### Fixed
+- Helpers were registered twice by mistake resulting in unnecessary function calls.
+
+### Added
+- Added a config object to allow users to customise some helpers
+- [$screen]: Added the $screen helper to detect the current screen size ([@muzafferdede](https://github.com/muzafferdede))
+
+## [0.4.1] - 2020-11-16
+### Fixed
+- [$truncate]: Fixes an issue where the ellipsis would show even if the source length was shorter. ([@pomartel](https://github.com/pomartel))
+
+## [0.4.0] - 2020-11-15
+### Added
+- [$range]: Added the $range helper to iterate over custom ranges
+- [$scroll]: Added the $scroll helper to scroll vertically to a specific position
 
 ## [0.3.6] - 2020-11-04
 ### Fixed

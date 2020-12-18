@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+
+<head>
+    <script type="module" src="https://cdn.jsdelivr.net/gh/alpinejs/alpine@v2.x.x/dist/alpine.min.js"></script>
+    <script nomodule src="https://cdn.jsdelivr.net/gh/alpinejs/alpine@v2.x.x/dist/alpine-ie11.min.js" defer></script>
+    <script src="../dist/scroll.js"></script>
+    <link href="https://unpkg.com/tailwindcss@^1.0/dist/tailwind.min.css" rel="stylesheet">
+</head>
+
+<body class="flex flex-col items-center justify-center m-24">
+    <div class="w-64">
+        <p class="font-bold">You can scroll to a specific position using a CSS selector</p>
+        <button class="mb-4 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" x-data x-on:click="$scroll('#second')">Scroll to second paragraph</button>
+
+        <p id="first" class="mb-4">
+            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+        </p>
+
+        <p id="second" x-data>
+            Lorem ipsum dolor sit amet, <span x-ref="myref" class="font-bold">consectetur</span> adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+            <span class="block mt-4 font-bold">You can scroll to a specific position inside your component using an Alpine reference</span>
+            <button class="block w-full bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" x-on:click="$scroll($refs.myref)">Scroll to reference (consectetur)</button>
+            <span class="block mt-4 font-bold">You can also specify an offset when scrolling</span>
+            <button class="block w-full bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" x-on:click="$scroll($refs.myref, {offset: 50})">Scroll to reference with offset</button>
+        </p>
+
+        <p class="mt-4 font-bold">You can scroll to a specific coordinate</p>
+        <button x-data class="block w-full bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" x-data x-on:click="$scroll(0)">Scroll to top</button>
+
+        <p class="mt-4 font-bold">You can disable to smooth scrolling</p>
+        <button x-data class="block w-full bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" x-data x-on:click="$scroll(0, {behavior: 'auto'})">Scroll to top (snap)</button>
+</div>
+</body>

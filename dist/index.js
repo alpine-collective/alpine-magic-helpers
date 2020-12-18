@@ -1,7 +1,7 @@
 (function (global, factory) {
     typeof exports === 'object' && typeof module !== 'undefined' ? module.exports = factory() :
     typeof define === 'function' && define.amd ? define(factory) :
-    (global = typeof globalThis !== 'undefined' ? globalThis : global || self, global.index = factory());
+    (global = typeof globalThis !== 'undefined' ? globalThis : global || self, (global.AlpineMagicHelpers = global.AlpineMagicHelpers || {}, global.AlpineMagicHelpers.index = factory()));
 }(this, (function () { 'use strict';
 
     var checkForAlpine = function checkForAlpine() {
@@ -1711,43 +1711,37 @@
       alpine$2(callback);
     };
 
-    var AlpineTruncateMagicMethod = {
+    var AlpineRangeMagicMethod = {
       start: function start() {
         checkForAlpine();
-        Alpine.addMagicProperty('truncate', function () {
-          return function () {
-            for (var _len = arguments.length, parameters = new Array(_len), _key = 0; _key < _len; _key++) {
-              parameters[_key] = arguments[_key];
+        Alpine.addMagicProperty('range', function () {
+          return function (start, stop, step) {
+            if (step === void 0) {
+              step = 1;
             }
 
-            if (typeof parameters[0] !== 'string') return parameters[0];
-            var ellipsis = '…'; // If the second parameter isn't truthy, return the full string
-
-            if (!parameters[1]) return parameters[0]; // if only a number or string is passed in, keep it simple
-
-            if (typeof parameters[1] !== 'object') {
-              if (typeof parameters[2] !== 'undefined') {
-                ellipsis = parameters[2];
-              }
-
-              return parameters[0].slice(0, parameters[1]) + ellipsis;
-            } // Customize the …
+            // Accept $range(10) and expect 1...10
+            if (typeof stop === 'undefined') {
+              stop = start;
+              start = start ? 1 : 0;
+            } // Accept $range(20, 10) and expect 20...10
 
 
-            if (Object.prototype.hasOwnProperty.call(parameters[1], 'ellipsis')) {
-              ellipsis = parameters[1].ellipsis;
-            } // If words or characters is set, also check that they are truthy. Setting to 0, for example, shoudld show all
+            var reverse = start > stop;
+
+            if (reverse) {
+              var _ref = [stop, start];
+              start = _ref[0];
+              stop = _ref[1];
+            } // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/from#Sequence_generator_range
 
 
-            if (Object.prototype.hasOwnProperty.call(parameters[1], 'words') && parameters[1].words) {
-              return parameters[0].split(' ').splice(0, parameters[1].words).join(' ') + ellipsis;
-            }
-
-            if (Object.prototype.hasOwnProperty.call(parameters[1], 'characters') && parameters[1].characters) {
-              return parameters[0].slice(0, parameters[1].characters) + ellipsis;
-            }
-
-            return parameters[0];
+            var range = Array.from({
+              length: (stop - start) / step + 1
+            }, function (_, i) {
+              return start + i * step;
+            });
+            return reverse ? range.reverse() : range;
           };
         });
       }
@@ -1758,11 +1752,100 @@
     };
 
     window.deferLoadingAlpine = function (callback) {
-      AlpineTruncateMagicMethod.start();
+      AlpineRangeMagicMethod.start();
       alpine$3(callback);
     };
 
-    var commonjsGlobal = typeof globalThis !== 'undefined' ? globalThis : typeof window !== 'undefined' ? window : typeof global !== 'undefined' ? global : typeof self !== 'undefined' ? self : {};
+    var Config = /*#__PURE__*/function () {
+      function Config() {
+        var _this = this;
+
+        this.values = {
+          breakpoints: {
+            xs: 0,
+            sm: 640,
+            md: 768,
+            lg: 1024,
+            xl: 1280,
+            '2xl': 1536
+          }
+        }; // After all assets are loaded but before the page is actually ready when ALpine will kick in
+
+        document.addEventListener('readystatechange', function () {
+          if (document.readyState === 'interactive' && window.AlpineMagicHelpersConfig) {
+            for (var index in window.AlpineMagicHelpersConfig) {
+              _this.values[index] = window.AlpineMagicHelpersConfig[index];
+            }
+          }
+        });
+      }
+
+      var _proto = Config.prototype;
+
+      _proto.get = function get(property) {
+        return this.values[property] ? this.values[property] : null;
+      };
+
+      return Config;
+    }();
+
+    var config = new Config();
+
+    var screenComponents = []; // Debounce `updateElements` method to prevent memory leak
+
+    var debouncedScreensUpdate = function debouncedScreensUpdate() {
+      var update; // Update component if $el is in `screenComponents`
+
+      var updateScreens = function updateScreens() {
+        clearTimeout(update);
+        update = setTimeout(function () {
+          screenComponents.forEach(function ($el) {
+            return $el && $el.__x && $el.__x.updateElements($el);
+          });
+        }, 150);
+      };
+
+      return updateScreens;
+    };
+
+    var AlpineScreenMagicMethod = {
+      start: function start() {
+        // Bind `debouncedScreensUpdate` to resize event on window
+        // Note that `resize` event will be triggered on `orientationchange` event as well
+        window.addEventListener('resize', debouncedScreensUpdate());
+        Alpine.addMagicProperty('screen', function ($el) {
+          // Push $el if it's not in the `screenComponents`
+          if (!screenComponents.includes($el)) {
+            screenComponents.push($el);
+          }
+
+          return function (breakpoint) {
+            // Get current window width
+            var width = window.innerWidth; // Early return if breakpoint is provided as number
+
+            if (Number.isInteger(breakpoint)) return breakpoint <= width; // Get breakpoints from Config
+
+            var configBreakpoints = config.get('breakpoints'); // Check if breakpoint exists
+
+            if (configBreakpoints[breakpoint] === undefined) {
+              throw Error('Undefined $screen property: ' + breakpoint);
+            } // Finally compare breakpoint with window width and return as boolean
+
+
+            return configBreakpoints[breakpoint] <= width;
+          };
+        });
+      }
+    };
+
+    var alpine$4 = window.deferLoadingAlpine || function (alpine) {
+      return alpine();
+    };
+
+    window.deferLoadingAlpine = function (callback) {
+      AlpineScreenMagicMethod.start();
+      alpine$4(callback);
+    };
 
     function createCommonjsModule(fn, basedir, module) {
     	return module = {
@@ -1778,615 +1861,558 @@
     	throw new Error('Dynamic requires are not currently supported by @rollup/plugin-commonjs');
     }
 
-    var deepDiff = createCommonjsModule(function (module, exports) {
-    (function(root, factory) { // eslint-disable-line no-extra-semi
-      var deepDiff = factory(root);
-      // eslint-disable-next-line no-undef
+    var smoothscroll = createCommonjsModule(function (module, exports) {
+    /* smoothscroll v0.4.4 - 2019 - Dustan Kasten, Jeremias Menichelli - MIT License */
+    (function () {
+
+      // polyfill
+      function polyfill() {
+        // aliases
+        var w = window;
+        var d = document;
+
+        // return if scroll behavior is supported and polyfill is not forced
+        if (
+          'scrollBehavior' in d.documentElement.style &&
+          w.__forceSmoothScrollPolyfill__ !== true
+        ) {
+          return;
+        }
+
+        // globals
+        var Element = w.HTMLElement || w.Element;
+        var SCROLL_TIME = 468;
+
+        // object gathering original scroll methods
+        var original = {
+          scroll: w.scroll || w.scrollTo,
+          scrollBy: w.scrollBy,
+          elementScroll: Element.prototype.scroll || scrollElement,
+          scrollIntoView: Element.prototype.scrollIntoView
+        };
+
+        // define timing method
+        var now =
+          w.performance && w.performance.now
+            ? w.performance.now.bind(w.performance)
+            : Date.now;
+
+        /**
+         * indicates if a the current browser is made by Microsoft
+         * @method isMicrosoftBrowser
+         * @param {String} userAgent
+         * @returns {Boolean}
+         */
+        function isMicrosoftBrowser(userAgent) {
+          var userAgentPatterns = ['MSIE ', 'Trident/', 'Edge/'];
+
+          return new RegExp(userAgentPatterns.join('|')).test(userAgent);
+        }
+
+        /*
+         * IE has rounding bug rounding down clientHeight and clientWidth and
+         * rounding up scrollHeight and scrollWidth causing false positives
+         * on hasScrollableSpace
+         */
+        var ROUNDING_TOLERANCE = isMicrosoftBrowser(w.navigator.userAgent) ? 1 : 0;
+
+        /**
+         * changes scroll position inside an element
+         * @method scrollElement
+         * @param {Number} x
+         * @param {Number} y
+         * @returns {undefined}
+         */
+        function scrollElement(x, y) {
+          this.scrollLeft = x;
+          this.scrollTop = y;
+        }
+
+        /**
+         * returns result of applying ease math function to a number
+         * @method ease
+         * @param {Number} k
+         * @returns {Number}
+         */
+        function ease(k) {
+          return 0.5 * (1 - Math.cos(Math.PI * k));
+        }
+
+        /**
+         * indicates if a smooth behavior should be applied
+         * @method shouldBailOut
+         * @param {Number|Object} firstArg
+         * @returns {Boolean}
+         */
+        function shouldBailOut(firstArg) {
+          if (
+            firstArg === null ||
+            typeof firstArg !== 'object' ||
+            firstArg.behavior === undefined ||
+            firstArg.behavior === 'auto' ||
+            firstArg.behavior === 'instant'
+          ) {
+            // first argument is not an object/null
+            // or behavior is auto, instant or undefined
+            return true;
+          }
+
+          if (typeof firstArg === 'object' && firstArg.behavior === 'smooth') {
+            // first argument is an object and behavior is smooth
+            return false;
+          }
+
+          // throw error when behavior is not supported
+          throw new TypeError(
+            'behavior member of ScrollOptions ' +
+              firstArg.behavior +
+              ' is not a valid value for enumeration ScrollBehavior.'
+          );
+        }
+
+        /**
+         * indicates if an element has scrollable space in the provided axis
+         * @method hasScrollableSpace
+         * @param {Node} el
+         * @param {String} axis
+         * @returns {Boolean}
+         */
+        function hasScrollableSpace(el, axis) {
+          if (axis === 'Y') {
+            return el.clientHeight + ROUNDING_TOLERANCE < el.scrollHeight;
+          }
+
+          if (axis === 'X') {
+            return el.clientWidth + ROUNDING_TOLERANCE < el.scrollWidth;
+          }
+        }
+
+        /**
+         * indicates if an element has a scrollable overflow property in the axis
+         * @method canOverflow
+         * @param {Node} el
+         * @param {String} axis
+         * @returns {Boolean}
+         */
+        function canOverflow(el, axis) {
+          var overflowValue = w.getComputedStyle(el, null)['overflow' + axis];
+
+          return overflowValue === 'auto' || overflowValue === 'scroll';
+        }
+
+        /**
+         * indicates if an element can be scrolled in either axis
+         * @method isScrollable
+         * @param {Node} el
+         * @param {String} axis
+         * @returns {Boolean}
+         */
+        function isScrollable(el) {
+          var isScrollableY = hasScrollableSpace(el, 'Y') && canOverflow(el, 'Y');
+          var isScrollableX = hasScrollableSpace(el, 'X') && canOverflow(el, 'X');
+
+          return isScrollableY || isScrollableX;
+        }
+
+        /**
+         * finds scrollable parent of an element
+         * @method findScrollableParent
+         * @param {Node} el
+         * @returns {Node} el
+         */
+        function findScrollableParent(el) {
+          while (el !== d.body && isScrollable(el) === false) {
+            el = el.parentNode || el.host;
+          }
+
+          return el;
+        }
+
+        /**
+         * self invoked function that, given a context, steps through scrolling
+         * @method step
+         * @param {Object} context
+         * @returns {undefined}
+         */
+        function step(context) {
+          var time = now();
+          var value;
+          var currentX;
+          var currentY;
+          var elapsed = (time - context.startTime) / SCROLL_TIME;
+
+          // avoid elapsed times higher than one
+          elapsed = elapsed > 1 ? 1 : elapsed;
+
+          // apply easing to elapsed time
+          value = ease(elapsed);
+
+          currentX = context.startX + (context.x - context.startX) * value;
+          currentY = context.startY + (context.y - context.startY) * value;
+
+          context.method.call(context.scrollable, currentX, currentY);
+
+          // scroll more if we have not reached our destination
+          if (currentX !== context.x || currentY !== context.y) {
+            w.requestAnimationFrame(step.bind(w, context));
+          }
+        }
+
+        /**
+         * scrolls window or element with a smooth behavior
+         * @method smoothScroll
+         * @param {Object|Node} el
+         * @param {Number} x
+         * @param {Number} y
+         * @returns {undefined}
+         */
+        function smoothScroll(el, x, y) {
+          var scrollable;
+          var startX;
+          var startY;
+          var method;
+          var startTime = now();
+
+          // define scroll context
+          if (el === d.body) {
+            scrollable = w;
+            startX = w.scrollX || w.pageXOffset;
+            startY = w.scrollY || w.pageYOffset;
+            method = original.scroll;
+          } else {
+            scrollable = el;
+            startX = el.scrollLeft;
+            startY = el.scrollTop;
+            method = scrollElement;
+          }
+
+          // scroll looping over a frame
+          step({
+            scrollable: scrollable,
+            method: method,
+            startTime: startTime,
+            startX: startX,
+            startY: startY,
+            x: x,
+            y: y
+          });
+        }
+
+        // ORIGINAL METHODS OVERRIDES
+        // w.scroll and w.scrollTo
+        w.scroll = w.scrollTo = function() {
+          // avoid action when no arguments are passed
+          if (arguments[0] === undefined) {
+            return;
+          }
+
+          // avoid smooth behavior if not required
+          if (shouldBailOut(arguments[0]) === true) {
+            original.scroll.call(
+              w,
+              arguments[0].left !== undefined
+                ? arguments[0].left
+                : typeof arguments[0] !== 'object'
+                  ? arguments[0]
+                  : w.scrollX || w.pageXOffset,
+              // use top prop, second argument if present or fallback to scrollY
+              arguments[0].top !== undefined
+                ? arguments[0].top
+                : arguments[1] !== undefined
+                  ? arguments[1]
+                  : w.scrollY || w.pageYOffset
+            );
+
+            return;
+          }
+
+          // LET THE SMOOTHNESS BEGIN!
+          smoothScroll.call(
+            w,
+            d.body,
+            arguments[0].left !== undefined
+              ? ~~arguments[0].left
+              : w.scrollX || w.pageXOffset,
+            arguments[0].top !== undefined
+              ? ~~arguments[0].top
+              : w.scrollY || w.pageYOffset
+          );
+        };
+
+        // w.scrollBy
+        w.scrollBy = function() {
+          // avoid action when no arguments are passed
+          if (arguments[0] === undefined) {
+            return;
+          }
+
+          // avoid smooth behavior if not required
+          if (shouldBailOut(arguments[0])) {
+            original.scrollBy.call(
+              w,
+              arguments[0].left !== undefined
+                ? arguments[0].left
+                : typeof arguments[0] !== 'object' ? arguments[0] : 0,
+              arguments[0].top !== undefined
+                ? arguments[0].top
+                : arguments[1] !== undefined ? arguments[1] : 0
+            );
+
+            return;
+          }
+
+          // LET THE SMOOTHNESS BEGIN!
+          smoothScroll.call(
+            w,
+            d.body,
+            ~~arguments[0].left + (w.scrollX || w.pageXOffset),
+            ~~arguments[0].top + (w.scrollY || w.pageYOffset)
+          );
+        };
+
+        // Element.prototype.scroll and Element.prototype.scrollTo
+        Element.prototype.scroll = Element.prototype.scrollTo = function() {
+          // avoid action when no arguments are passed
+          if (arguments[0] === undefined) {
+            return;
+          }
+
+          // avoid smooth behavior if not required
+          if (shouldBailOut(arguments[0]) === true) {
+            // if one number is passed, throw error to match Firefox implementation
+            if (typeof arguments[0] === 'number' && arguments[1] === undefined) {
+              throw new SyntaxError('Value could not be converted');
+            }
+
+            original.elementScroll.call(
+              this,
+              // use left prop, first number argument or fallback to scrollLeft
+              arguments[0].left !== undefined
+                ? ~~arguments[0].left
+                : typeof arguments[0] !== 'object' ? ~~arguments[0] : this.scrollLeft,
+              // use top prop, second argument or fallback to scrollTop
+              arguments[0].top !== undefined
+                ? ~~arguments[0].top
+                : arguments[1] !== undefined ? ~~arguments[1] : this.scrollTop
+            );
+
+            return;
+          }
+
+          var left = arguments[0].left;
+          var top = arguments[0].top;
+
+          // LET THE SMOOTHNESS BEGIN!
+          smoothScroll.call(
+            this,
+            this,
+            typeof left === 'undefined' ? this.scrollLeft : ~~left,
+            typeof top === 'undefined' ? this.scrollTop : ~~top
+          );
+        };
+
+        // Element.prototype.scrollBy
+        Element.prototype.scrollBy = function() {
+          // avoid action when no arguments are passed
+          if (arguments[0] === undefined) {
+            return;
+          }
+
+          // avoid smooth behavior if not required
+          if (shouldBailOut(arguments[0]) === true) {
+            original.elementScroll.call(
+              this,
+              arguments[0].left !== undefined
+                ? ~~arguments[0].left + this.scrollLeft
+                : ~~arguments[0] + this.scrollLeft,
+              arguments[0].top !== undefined
+                ? ~~arguments[0].top + this.scrollTop
+                : ~~arguments[1] + this.scrollTop
+            );
+
+            return;
+          }
+
+          this.scroll({
+            left: ~~arguments[0].left + this.scrollLeft,
+            top: ~~arguments[0].top + this.scrollTop,
+            behavior: arguments[0].behavior
+          });
+        };
+
+        // Element.prototype.scrollIntoView
+        Element.prototype.scrollIntoView = function() {
+          // avoid smooth behavior if not required
+          if (shouldBailOut(arguments[0]) === true) {
+            original.scrollIntoView.call(
+              this,
+              arguments[0] === undefined ? true : arguments[0]
+            );
+
+            return;
+          }
+
+          // LET THE SMOOTHNESS BEGIN!
+          var scrollableParent = findScrollableParent(this);
+          var parentRects = scrollableParent.getBoundingClientRect();
+          var clientRects = this.getBoundingClientRect();
+
+          if (scrollableParent !== d.body) {
+            // reveal element inside parent
+            smoothScroll.call(
+              this,
+              scrollableParent,
+              scrollableParent.scrollLeft + clientRects.left - parentRects.left,
+              scrollableParent.scrollTop + clientRects.top - parentRects.top
+            );
+
+            // reveal parent in viewport unless is fixed
+            if (w.getComputedStyle(scrollableParent).position !== 'fixed') {
+              w.scrollBy({
+                left: parentRects.left,
+                top: parentRects.top,
+                behavior: 'smooth'
+              });
+            }
+          } else {
+            // reveal element in viewport
+            w.scrollBy({
+              left: clientRects.left,
+              top: clientRects.top,
+              behavior: 'smooth'
+            });
+          }
+        };
+      }
+
       {
-          // Node.js or ReactNative
-          module.exports = deepDiff;
-      }
-    }(commonjsGlobal, function(root) {
-      var validKinds = ['N', 'E', 'A', 'D'];
-
-      // nodejs compatible on server side and in the browser.
-      function inherits(ctor, superCtor) {
-        ctor.super_ = superCtor;
-        ctor.prototype = Object.create(superCtor.prototype, {
-          constructor: {
-            value: ctor,
-            enumerable: false,
-            writable: true,
-            configurable: true
-          }
-        });
+        // commonjs
+        module.exports = { polyfill: polyfill };
       }
 
-      function Diff(kind, path) {
-        Object.defineProperty(this, 'kind', {
-          value: kind,
-          enumerable: true
-        });
-        if (path && path.length) {
-          Object.defineProperty(this, 'path', {
-            value: path,
-            enumerable: true
-          });
-        }
-      }
-
-      function DiffEdit(path, origin, value) {
-        DiffEdit.super_.call(this, 'E', path);
-        Object.defineProperty(this, 'lhs', {
-          value: origin,
-          enumerable: true
-        });
-        Object.defineProperty(this, 'rhs', {
-          value: value,
-          enumerable: true
-        });
-      }
-      inherits(DiffEdit, Diff);
-
-      function DiffNew(path, value) {
-        DiffNew.super_.call(this, 'N', path);
-        Object.defineProperty(this, 'rhs', {
-          value: value,
-          enumerable: true
-        });
-      }
-      inherits(DiffNew, Diff);
-
-      function DiffDeleted(path, value) {
-        DiffDeleted.super_.call(this, 'D', path);
-        Object.defineProperty(this, 'lhs', {
-          value: value,
-          enumerable: true
-        });
-      }
-      inherits(DiffDeleted, Diff);
-
-      function DiffArray(path, index, item) {
-        DiffArray.super_.call(this, 'A', path);
-        Object.defineProperty(this, 'index', {
-          value: index,
-          enumerable: true
-        });
-        Object.defineProperty(this, 'item', {
-          value: item,
-          enumerable: true
-        });
-      }
-      inherits(DiffArray, Diff);
-
-      function arrayRemove(arr, from, to) {
-        var rest = arr.slice((to || from) + 1 || arr.length);
-        arr.length = from < 0 ? arr.length + from : from;
-        arr.push.apply(arr, rest);
-        return arr;
-      }
-
-      function realTypeOf(subject) {
-        var type = typeof subject;
-        if (type !== 'object') {
-          return type;
-        }
-
-        if (subject === Math) {
-          return 'math';
-        } else if (subject === null) {
-          return 'null';
-        } else if (Array.isArray(subject)) {
-          return 'array';
-        } else if (Object.prototype.toString.call(subject) === '[object Date]') {
-          return 'date';
-        } else if (typeof subject.toString === 'function' && /^\/.*\//.test(subject.toString())) {
-          return 'regexp';
-        }
-        return 'object';
-      }
-
-      // http://werxltd.com/wp/2010/05/13/javascript-implementation-of-javas-string-hashcode-method/
-      function hashThisString(string) {
-        var hash = 0;
-        if (string.length === 0) { return hash; }
-        for (var i = 0; i < string.length; i++) {
-          var char = string.charCodeAt(i);
-          hash = ((hash << 5) - hash) + char;
-          hash = hash & hash; // Convert to 32bit integer
-        }
-        return hash;
-      }
-
-      // Gets a hash of the given object in an array order-independent fashion
-      // also object key order independent (easier since they can be alphabetized)
-      function getOrderIndependentHash(object) {
-        var accum = 0;
-        var type = realTypeOf(object);
-
-        if (type === 'array') {
-          object.forEach(function (item) {
-            // Addition is commutative so this is order indep
-            accum += getOrderIndependentHash(item);
-          });
-
-          var arrayString = '[type: array, hash: ' + accum + ']';
-          return accum + hashThisString(arrayString);
-        }
-
-        if (type === 'object') {
-          for (var key in object) {
-            if (object.hasOwnProperty(key)) {
-              var keyValueString = '[ type: object, key: ' + key + ', value hash: ' + getOrderIndependentHash(object[key]) + ']';
-              accum += hashThisString(keyValueString);
-            }
-          }
-
-          return accum;
-        }
-
-        // Non object, non array...should be good?
-        var stringToHash = '[ type: ' + type + ' ; value: ' + object + ']';
-        return accum + hashThisString(stringToHash);
-      }
-
-      function deepDiff(lhs, rhs, changes, prefilter, path, key, stack, orderIndependent) {
-        changes = changes || [];
-        path = path || [];
-        stack = stack || [];
-        var currentPath = path.slice(0);
-        if (typeof key !== 'undefined' && key !== null) {
-          if (prefilter) {
-            if (typeof (prefilter) === 'function' && prefilter(currentPath, key)) {
-              return;
-            } else if (typeof (prefilter) === 'object') {
-              if (prefilter.prefilter && prefilter.prefilter(currentPath, key)) {
-                return;
-              }
-              if (prefilter.normalize) {
-                var alt = prefilter.normalize(currentPath, key, lhs, rhs);
-                if (alt) {
-                  lhs = alt[0];
-                  rhs = alt[1];
-                }
-              }
-            }
-          }
-          currentPath.push(key);
-        }
-
-        // Use string comparison for regexes
-        if (realTypeOf(lhs) === 'regexp' && realTypeOf(rhs) === 'regexp') {
-          lhs = lhs.toString();
-          rhs = rhs.toString();
-        }
-
-        var ltype = typeof lhs;
-        var rtype = typeof rhs;
-        var i, j, k, other;
-
-        var ldefined = ltype !== 'undefined' ||
-          (stack && (stack.length > 0) && stack[stack.length - 1].lhs &&
-            Object.getOwnPropertyDescriptor(stack[stack.length - 1].lhs, key));
-        var rdefined = rtype !== 'undefined' ||
-          (stack && (stack.length > 0) && stack[stack.length - 1].rhs &&
-            Object.getOwnPropertyDescriptor(stack[stack.length - 1].rhs, key));
-
-        if (!ldefined && rdefined) {
-          changes.push(new DiffNew(currentPath, rhs));
-        } else if (!rdefined && ldefined) {
-          changes.push(new DiffDeleted(currentPath, lhs));
-        } else if (realTypeOf(lhs) !== realTypeOf(rhs)) {
-          changes.push(new DiffEdit(currentPath, lhs, rhs));
-        } else if (realTypeOf(lhs) === 'date' && (lhs - rhs) !== 0) {
-          changes.push(new DiffEdit(currentPath, lhs, rhs));
-        } else if (ltype === 'object' && lhs !== null && rhs !== null) {
-          for (i = stack.length - 1; i > -1; --i) {
-            if (stack[i].lhs === lhs) {
-              other = true;
-              break;
-            }
-          }
-          if (!other) {
-            stack.push({ lhs: lhs, rhs: rhs });
-            if (Array.isArray(lhs)) {
-              // If order doesn't matter, we need to sort our arrays
-              if (orderIndependent) {
-                lhs.sort(function (a, b) {
-                  return getOrderIndependentHash(a) - getOrderIndependentHash(b);
-                });
-
-                rhs.sort(function (a, b) {
-                  return getOrderIndependentHash(a) - getOrderIndependentHash(b);
-                });
-              }
-              i = rhs.length - 1;
-              j = lhs.length - 1;
-              while (i > j) {
-                changes.push(new DiffArray(currentPath, i, new DiffNew(undefined, rhs[i--])));
-              }
-              while (j > i) {
-                changes.push(new DiffArray(currentPath, j, new DiffDeleted(undefined, lhs[j--])));
-              }
-              for (; i >= 0; --i) {
-                deepDiff(lhs[i], rhs[i], changes, prefilter, currentPath, i, stack, orderIndependent);
-              }
-            } else {
-              var akeys = Object.keys(lhs);
-              var pkeys = Object.keys(rhs);
-              for (i = 0; i < akeys.length; ++i) {
-                k = akeys[i];
-                other = pkeys.indexOf(k);
-                if (other >= 0) {
-                  deepDiff(lhs[k], rhs[k], changes, prefilter, currentPath, k, stack, orderIndependent);
-                  pkeys[other] = null;
-                } else {
-                  deepDiff(lhs[k], undefined, changes, prefilter, currentPath, k, stack, orderIndependent);
-                }
-              }
-              for (i = 0; i < pkeys.length; ++i) {
-                k = pkeys[i];
-                if (k) {
-                  deepDiff(undefined, rhs[k], changes, prefilter, currentPath, k, stack, orderIndependent);
-                }
-              }
-            }
-            stack.length = stack.length - 1;
-          } else if (lhs !== rhs) {
-            // lhs is contains a cycle at this element and it differs from rhs
-            changes.push(new DiffEdit(currentPath, lhs, rhs));
-          }
-        } else if (lhs !== rhs) {
-          if (!(ltype === 'number' && isNaN(lhs) && isNaN(rhs))) {
-            changes.push(new DiffEdit(currentPath, lhs, rhs));
-          }
-        }
-      }
-
-      function observableDiff(lhs, rhs, observer, prefilter, orderIndependent) {
-        var changes = [];
-        deepDiff(lhs, rhs, changes, prefilter, null, null, null, orderIndependent);
-        if (observer) {
-          for (var i = 0; i < changes.length; ++i) {
-            observer(changes[i]);
-          }
-        }
-        return changes;
-      }
-
-      function orderIndependentDeepDiff(lhs, rhs, changes, prefilter, path, key, stack) {
-        return deepDiff(lhs, rhs, changes, prefilter, path, key, stack, true);
-      }
-
-      function accumulateDiff(lhs, rhs, prefilter, accum) {
-        var observer = (accum) ?
-          function (difference) {
-            if (difference) {
-              accum.push(difference);
-            }
-          } : undefined;
-        var changes = observableDiff(lhs, rhs, observer, prefilter);
-        return (accum) ? accum : (changes.length) ? changes : undefined;
-      }
-
-      function accumulateOrderIndependentDiff(lhs, rhs, prefilter, accum) {
-        var observer = (accum) ?
-          function (difference) {
-            if (difference) {
-              accum.push(difference);
-            }
-          } : undefined;
-        var changes = observableDiff(lhs, rhs, observer, prefilter, true);
-        return (accum) ? accum : (changes.length) ? changes : undefined;
-      }
-
-      function applyArrayChange(arr, index, change) {
-        if (change.path && change.path.length) {
-          var it = arr[index],
-            i, u = change.path.length - 1;
-          for (i = 0; i < u; i++) {
-            it = it[change.path[i]];
-          }
-          switch (change.kind) {
-            case 'A':
-              applyArrayChange(it[change.path[i]], change.index, change.item);
-              break;
-            case 'D':
-              delete it[change.path[i]];
-              break;
-            case 'E':
-            case 'N':
-              it[change.path[i]] = change.rhs;
-              break;
-          }
-        } else {
-          switch (change.kind) {
-            case 'A':
-              applyArrayChange(arr[index], change.index, change.item);
-              break;
-            case 'D':
-              arr = arrayRemove(arr, index);
-              break;
-            case 'E':
-            case 'N':
-              arr[index] = change.rhs;
-              break;
-          }
-        }
-        return arr;
-      }
-
-      function applyChange(target, source, change) {
-        if (typeof change === 'undefined' && source && ~validKinds.indexOf(source.kind)) {
-          change = source;
-        }
-        if (target && change && change.kind) {
-          var it = target,
-            i = -1,
-            last = change.path ? change.path.length - 1 : 0;
-          while (++i < last) {
-            if (typeof it[change.path[i]] === 'undefined') {
-              it[change.path[i]] = (typeof change.path[i + 1] !== 'undefined' && typeof change.path[i + 1] === 'number') ? [] : {};
-            }
-            it = it[change.path[i]];
-          }
-          switch (change.kind) {
-            case 'A':
-              if (change.path && typeof it[change.path[i]] === 'undefined') {
-                it[change.path[i]] = [];
-              }
-              applyArrayChange(change.path ? it[change.path[i]] : it, change.index, change.item);
-              break;
-            case 'D':
-              delete it[change.path[i]];
-              break;
-            case 'E':
-            case 'N':
-              it[change.path[i]] = change.rhs;
-              break;
-          }
-        }
-      }
-
-      function revertArrayChange(arr, index, change) {
-        if (change.path && change.path.length) {
-          // the structure of the object at the index has changed...
-          var it = arr[index],
-            i, u = change.path.length - 1;
-          for (i = 0; i < u; i++) {
-            it = it[change.path[i]];
-          }
-          switch (change.kind) {
-            case 'A':
-              revertArrayChange(it[change.path[i]], change.index, change.item);
-              break;
-            case 'D':
-              it[change.path[i]] = change.lhs;
-              break;
-            case 'E':
-              it[change.path[i]] = change.lhs;
-              break;
-            case 'N':
-              delete it[change.path[i]];
-              break;
-          }
-        } else {
-          // the array item is different...
-          switch (change.kind) {
-            case 'A':
-              revertArrayChange(arr[index], change.index, change.item);
-              break;
-            case 'D':
-              arr[index] = change.lhs;
-              break;
-            case 'E':
-              arr[index] = change.lhs;
-              break;
-            case 'N':
-              arr = arrayRemove(arr, index);
-              break;
-          }
-        }
-        return arr;
-      }
-
-      function revertChange(target, source, change) {
-        if (target && source && change && change.kind) {
-          var it = target,
-            i, u;
-          u = change.path.length - 1;
-          for (i = 0; i < u; i++) {
-            if (typeof it[change.path[i]] === 'undefined') {
-              it[change.path[i]] = {};
-            }
-            it = it[change.path[i]];
-          }
-          switch (change.kind) {
-            case 'A':
-              // Array was modified...
-              // it will be an array...
-              revertArrayChange(it[change.path[i]], change.index, change.item);
-              break;
-            case 'D':
-              // Item was deleted...
-              it[change.path[i]] = change.lhs;
-              break;
-            case 'E':
-              // Item was edited...
-              it[change.path[i]] = change.lhs;
-              break;
-            case 'N':
-              // Item is new...
-              delete it[change.path[i]];
-              break;
-          }
-        }
-      }
-
-      function applyDiff(target, source, filter) {
-        if (target && source) {
-          var onChange = function (change) {
-            if (!filter || filter(target, source, change)) {
-              applyChange(target, source, change);
-            }
-          };
-          observableDiff(target, source, onChange);
-        }
-      }
-
-      Object.defineProperties(accumulateDiff, {
-
-        diff: {
-          value: accumulateDiff,
-          enumerable: true
-        },
-        orderIndependentDiff: {
-          value: accumulateOrderIndependentDiff,
-          enumerable: true
-        },
-        observableDiff: {
-          value: observableDiff,
-          enumerable: true
-        },
-        orderIndependentObservableDiff: {
-          value: orderIndependentDeepDiff,
-          enumerable: true
-        },
-        orderIndepHash: {
-          value: getOrderIndependentHash,
-          enumerable: true
-        },
-        applyDiff: {
-          value: applyDiff,
-          enumerable: true
-        },
-        applyChange: {
-          value: applyChange,
-          enumerable: true
-        },
-        revertChange: {
-          value: revertChange,
-          enumerable: true
-        },
-        isConflict: {
-          value: function () {
-            return typeof $conflict !== 'undefined';
-          },
-          enumerable: true
-        }
-      });
-
-      // hackish...
-      accumulateDiff.DeepDiff = accumulateDiff;
-      // ...but works with:
-      // import DeepDiff from 'deep-diff'
-      // import { DeepDiff } from 'deep-diff'
-      // const DeepDiff = require('deep-diff');
-      // const { DeepDiff } = require('deep-diff');
-
-      if (root) {
-        root.DeepDiff = accumulateDiff;
-      }
-
-      return accumulateDiff;
-    }));
+    }());
     });
 
-    var history = new WeakMap();
-    var AlpineUndoMagicMethod = {
+    smoothscroll.polyfill();
+    var AlpineScrollMagicMethod = {
       start: function start() {
-        var _this = this;
-
-        checkForAlpine();
-        Alpine.addMagicProperty('track', function ($el) {
-          return function (propertiesToWatch) {
-            var _propertiesToWatch;
-
-            propertiesToWatch = (_propertiesToWatch = propertiesToWatch) != null ? _propertiesToWatch : Object.keys(componentData($el));
-            propertiesToWatch = Array.isArray(propertiesToWatch) ? propertiesToWatch : [propertiesToWatch];
-            var initialState = JSON.stringify(componentData($el, propertiesToWatch));
-            updateOnMutation($el, function () {
-              history.has($el.__x) || _this.store($el.__x, {
-                props: propertiesToWatch,
-                previous: initialState
-              });
-              var fresh = componentData($el, history.get($el.__x).props);
-              var previous = JSON.parse(history.get($el.__x).previous);
-              var changes = deepDiff.DeepDiff.diff(previous, fresh, true);
-
-              if (changes && changes.length) {
-                changes = changes.filter(function (change) {
-                  return history.get($el.__x).props.some(function (prop) {
-                    return change.path.join('.').startsWith(prop);
-                  });
-                });
-                history.get($el.__x).previous = JSON.stringify(fresh);
-                history.get($el.__x).changes.push(changes);
-
-                $el.__x.updateElements($el);
-              }
-            });
-          };
-        });
-        Alpine.addMagicProperty('undo', function ($el, $clone) {
-          return function () {
-            if ($el !== $clone) {
-              $el = _this.syncClone($el, $clone);
+        Alpine.addMagicProperty('scroll', function () {
+          return function (target, options) {
+            if (options === void 0) {
+              options = {};
             }
 
-            var changes = history.get($el.__x).changes.pop();
-            var previous = JSON.parse(history.get($el.__x).previous);
-            changes && changes.forEach(function (change) {
-              deepDiff.DeepDiff.revertChange(previous, componentData($el, history.get($el.__x).props), change);
-            }); // This could probably be extracted to a utility method like updateComponentProperties()
+            var originalTarget = target; // Check if we specified an offset
 
-            if (Object.keys(previous).length) {
-              var newData = {};
-              Object.entries(previous).forEach(function (item) {
-                newData[item[0]] = item[1];
-              });
-              $el.__x.$data = Object.assign($el.__x.$data, newData);
-            }
+            var offset = options.offset ? parseInt(options.offset, 10) : 0;
+            delete options.offset; // Support integers specified as strings
+            // We do a strict check first because we don't whant to support things like "100foo"
 
-            history.get($el.__x).previous = JSON.stringify(componentData($el, history.get($el.__x).props));
+            if (typeof target === 'string' && /^[0-9]+?/g.test(target)) {
+              target = parseInt(target, 10);
+            } // Support for CSS query selector
+
+
+            if (typeof target === 'string') {
+              target = document.querySelector(target);
+            } // If we got an element, get the y coordinate relative to the document
+            // This could happens if we trasform a selector or if we pass an Element in,
+            // for example using $ref['something']
+
+
+            if (target instanceof Element) {
+              target = Math.floor(target.getBoundingClientRect().top + window.pageYOffset);
+            } // If target has been converted to the y coordinate or was an object to begin with
+            // we transform it to a ScrollToOptions dictionary
+
+
+            if (Number.isInteger(target)) {
+              target = {
+                top: target - offset,
+                behavior: 'smooth' // default to smooth
+
+              };
+            } // At this point target should be either be converted to a ScrollToOptions dictionary
+            // or should have been an object to begin with. If it isn't, it's time to give up.
+
+
+            if (typeof target !== 'object') {
+              throw Error('Unsupported $scroll target: ', originalTarget);
+            } // Override the dictionary with the options passed as second params
+
+
+            Object.assign(target, options); // Let's scroll eventually
+
+            window.scroll(target);
           };
         });
-        Alpine.addMagicProperty('history', function ($el, $clone) {
-          if (!$clone.__x) return [];
-
-          if ($el !== $clone) {
-            $el = _this.syncClone($el, $clone);
-          }
-
-          return history.has($el.__x) ? history.get($el.__x) : [];
-        });
-      },
-      store: function store(key, state) {
-        history.set(key, Object.assign({
-          changes: [],
-
-          get length() {
-            return this.changes.length;
-          }
-
-        }, state));
-        return history.get(key);
-      },
-      syncClone: function syncClone($el, $clone) {
-        this.store($clone.__x, {
-          props: history.get($el.__x).props,
-          previous: history.get($el.__x).previous,
-          changes: history.get($el.__x).changes
-        });
-        return $clone;
       }
     };
 
-    var alpine$4 = window.deferLoadingAlpine || function (alpine) {
+    var alpine$5 = window.deferLoadingAlpine || function (alpine) {
       return alpine();
     };
 
     window.deferLoadingAlpine = function (callback) {
+      AlpineScrollMagicMethod.start();
+      alpine$5(callback);
+    };
+
+    var AlpineTruncateMagicMethod = {
+      start: function start() {
+        var _this = this;
+
+        checkForAlpine();
+        Alpine.addMagicProperty('truncate', function () {
+          return function () {
+            for (var _len = arguments.length, parameters = new Array(_len), _key = 0; _key < _len; _key++) {
+              parameters[_key] = arguments[_key];
+            }
+
+            if (typeof parameters[0] !== 'string') return parameters[0]; // If the second parameter isn't truthy, return the full string
+
+            if (!parameters[1]) return parameters[0]; // if only a number or string is passed in, keep it simple
+
+            if (typeof parameters[1] !== 'object') {
+              return _this.appendEllipsis(parameters[0].slice(0, parameters[1]), parameters);
+            } // If words or characters is set, also check that they are truthy. Setting to 0, for example, shoudld show all
+
+
+            if (Object.prototype.hasOwnProperty.call(parameters[1], 'words') && parameters[1].words) {
+              return _this.appendEllipsis(parameters[0].split(' ').splice(0, parameters[1].words).join(' '), parameters);
+            }
+
+            if (Object.prototype.hasOwnProperty.call(parameters[1], 'characters') && parameters[1].characters) {
+              return _this.appendEllipsis(parameters[0].slice(0, parameters[1].characters), parameters);
+            }
+
+            return parameters[0];
+          };
+        });
+      },
+      appendEllipsis: function appendEllipsis(string, parameters) {
+        if (parameters[0].length <= string.length) return string;
+        var ellipsis = '…'; // 3rd parameter is an optional '…' override (soon to be deprecated)
+
+        if (typeof parameters[2] !== 'undefined') {
+          ellipsis = parameters[2];
+        } // If the second parameter is an object
+
+
+        if (Object.prototype.hasOwnProperty.call(parameters[1], 'ellipsis')) {
+          ellipsis = parameters[1].ellipsis;
+        }
+
+        return string + ellipsis;
+      }
+    };
+
+    var alpine$6 = window.deferLoadingAlpine || function (alpine) {
+      return alpine();
+    };
+
+    window.deferLoadingAlpine = function (callback) {
+<<<<<<< HEAD
       alpine$4(callback);
       AlpineUndoMagicMethod.start();
     };
@@ -2402,14 +2428,20 @@
       AlpineTruncateMagicMethod.start();
       AlpineUndoMagicMethod.start();
       alpine$5(callback);
+=======
+      AlpineTruncateMagicMethod.start();
+      alpine$6(callback);
+>>>>>>> master
     };
 
     var index = {
       AlpineComponentMagicMethod: AlpineComponentMagicMethod,
       AlpineFetchMagicMethod: AlpineFetchMagicMethod,
       AlpineIntervalMagicMethod: AlpineIntervalMagicMethod,
-      AlpineTruncateMagicMethod: AlpineTruncateMagicMethod,
-      AlpineUndoMagicMethod: AlpineUndoMagicMethod
+      AlpineRangeMagicMethod: AlpineRangeMagicMethod,
+      AlpineScreenMagicMethod: AlpineScreenMagicMethod,
+      AlpineScrollMagicMethod: AlpineScrollMagicMethod,
+      AlpineTruncateMagicMethod: AlpineTruncateMagicMethod
     };
 
     return index;

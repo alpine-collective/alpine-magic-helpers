@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+
+<head>
+	<script type="module" src="https://cdn.jsdelivr.net/gh/alpinejs/alpine@v2.x.x/dist/alpine.min.js"></script>
+	<script nomodule src="https://cdn.jsdelivr.net/gh/alpinejs/alpine@v2.x.x/dist/alpine-ie11.min.js" defer></script>
+	<script src="../dist/screen.js"></script>
+	<link href="https://unpkg.com/tailwindcss@^1.0/dist/tailwind.min.css" rel="stylesheet">
+</head>
+
+<body class="flex flex-col items-center justify-center m-24">
+
+    <div x-data>
+        <p x-show="$screen('xs')" class="mb-4 font-bold">
+            This paragraph will show if the window is equal or larger than 0px.
+        </p>
+        <p x-show="$screen('sm')" class="mb-4 font-bold">
+            This paragraph will show if the window is equal or larger than 640px.
+        </p>
+        <p x-show="$screen('md')" class="mb-4 font-bold">
+            This paragraph will show if the window is equal or larger than 768px.
+        </p>
+        <p x-show="$screen(999)" class="mb-4 font-bold">
+            This paragraph will show if the window is equal or larger than 999px.
+        </p>
+        <p x-show="$screen('lg')" class="mb-4 font-bold">
+            This paragraph will show if the window is equal or larger than 1024px.
+        </p>
+        <p x-show="$screen('xl')" class="mb-4 font-bold">
+            This paragraph will show if the window is equal or larger than 1280px.
+        </p>
+        <p x-show="$screen('2xl')" class="mb-4 font-bold">
+            This paragraph will show if the window is equal or larger than 1536px.
+        </p>
+    </div>
+
+</body>

@@ -46,6 +46,18 @@ test('$truncate > can shorten text with custom suffix', () => {
     expect(document.querySelector('p').textContent).toEqual('Lorem (read more)')
 })
 
+test('$truncate > will append the ellipsis only if text was truncated', () => {
+    document.body.innerHTML = `
+        <div x-data="{ characters: 11, string: 'Lorem ipsum'}">
+            <p x-text="$truncate(string, characters)"></p>
+        </div>
+    `
+
+    Alpine.start()
+
+    expect(document.querySelector('p').textContent).toEqual('Lorem ipsum')
+})
+
 test('$truncate > will react to changes in arguments', async () => {
     document.body.innerHTML = `
         <div x-data="{ characters: 5, string: 'Lorem ipsum'}">

@@ -6,12 +6,15 @@ A collection of magic properties and helper functions for use with Alpine.
 
 ## About
 
-This adds three magic helpers to use with Alpine JS. ***More to come!***
+Adds the following magic helpers to use with Alpine JS. ***More to come!***
 | Magic Helpers | Description |
 | --- | --- |
 | [`$component/$parent`](#component) | Natively access and update data from other components or the parent component. |
 | [`$fetch`](#fetch) | Using Axios, fetch JSON from an external source.  |
 | [`$interval`](#interval) | Run a function every n milliseconds. Optionally start and stop the timer. |
+| [`$range`](#range) | Iterate over a range of values. |
+| [`$screen`](#screen) | Detect if the current browser width is equal or greater than a given breakpoint. |
+| [`$scroll`](#scroll) | Scroll the page vertically to a specific position. |
 | [`$truncate`](#truncate) |  Limit a text string to a specific number of characters or words. |
 | [`$undo`](#undo) |  Track and undo state changes inside your component. |
 
@@ -22,17 +25,19 @@ This adds three magic helpers to use with Alpine JS. ***More to come!***
 Include the following `<script>` tag in the `<head>` of your document (before Alpine):
 
 ```html
-<script src="https://cdn.jsdelivr.net/gh/alpine-collective/alpine-magic-helpers@0.4.x/dist/index.min.js"></script>
+<script src="https://cdn.jsdelivr.net/gh/alpine-collective/alpine-magic-helpers@0.5.x/dist/index.min.js"></script>
 ```
 
 Or only use the specific methods you need:
 
 ```html
-<script src="https://cdn.jsdelivr.net/gh/alpine-collective/alpine-magic-helpers@0.4.x/dist/fetch.min.js"></script>
-<script src="https://cdn.jsdelivr.net/gh/alpine-collective/alpine-magic-helpers@0.4.x/dist/interval.min.js"></script>
-<script src="https://cdn.jsdelivr.net/gh/alpine-collective/alpine-magic-helpers@0.4.x/dist/component.min.js"></script>
-<script src="https://cdn.jsdelivr.net/gh/alpine-collective/alpine-magic-helpers@0.4.x/dist/truncate.min.js"></script>
-<script src="https://cdn.jsdelivr.net/gh/alpine-collective/alpine-magic-helpers@0.4.x/dist/undo.min.js"></script>
+<script src="https://cdn.jsdelivr.net/gh/alpine-collective/alpine-magic-helpers@0.5.x/dist/component.min.js"></script>
+<script src="https://cdn.jsdelivr.net/gh/alpine-collective/alpine-magic-helpers@0.5.x/dist/fetch.min.js"></script>
+<script src="https://cdn.jsdelivr.net/gh/alpine-collective/alpine-magic-helpers@0.5.x/dist/interval.min.js"></script>
+<script src="https://cdn.jsdelivr.net/gh/alpine-collective/alpine-magic-helpers@0.5.x/dist/range.min.js"></script>
+<script src="https://cdn.jsdelivr.net/gh/alpine-collective/alpine-magic-helpers@0.5.x/dist/screen.min.js"></script>
+<script src="https://cdn.jsdelivr.net/gh/alpine-collective/alpine-magic-helpers@0.5.x/dist/scroll.min.js"></script>
+<script src="https://cdn.jsdelivr.net/gh/alpine-collective/alpine-magic-helpers@0.5.x/dist/truncate.min.js"></script>
 ```
 
 ---
@@ -146,6 +151,169 @@ By default, `$interval ` will run your function every `nth` millisecond when bro
 </div>
 ```
 [Demo](https://codepen.io/KevinBatdorf/pen/poyyXQy?editors=1010)
+
+---
+
+### `$range`
+**Example:**
+
+The `$range` helper mostly mimics implementations found in other languages `$range(start, stop, step = 1)`
+```html
+<div x-data>
+    <template x-for="item in $range(1, 5)">
+        ...
+    </template>
+</div>
+<!-- This will output 5 iterations [1, 2, 3, 4, 5], modelled after PHP's implimentation of range() -->
+```
+[Demo](https://codepen.io/KevinBatdorf/pen/vYKbPBd)
+
+> N.B: You may use `$range(10)` which will compute to `[1...10]`
+
+---
+
+### `$screen`
+**Example:**
+
+The `$screen` helper detects if the current browser width is equal or greater than a given breakpoint and returns `true` or `false` based on the result.
+
+```html
+<div x-data>
+    <span x-show="$screen('lg')">This will be visible if the window width is equal or greater than 1024px.</span>
+</div>
+```
+
+*By default the `$screen` helper uses the following endpoint borrowed by **Tailwind CSS**:*
+- `xs`: 0px
+- `sm`: 640px
+- `md`: 768px
+- `lg`: 1024px
+- `xl`: 1280px
+- `2xl`: 1536px
+
+> ⚠️ **NOTE**: A single breakpoint is only going to tell you if the browser width is equal or greater than the given breakpoint. If you want to restrict the check to a specific range, you will need to negate the next endpoint as:
+
+```html
+<div x-data>
+    <span x-show="$screen('md') && !$screen('lg')">This will be visible if screen width is equal or greater than 768px but smaller then 1024px.</span>
+</div>
+```
+
+**Custom breakpoints**
+
+You can pass a numeric value to use an ad-hoc breakpoint.
+```html
+<div x-data>
+    <span x-show="$screen(999)">This will be visible if screen width is equal or greater than 999px.</span>
+</div>
+```
+
+You can also override the default breakpoints including the following `<script>` tag in the `<head>` of your document
+
+```html
+<!-- this example uses Bulma's breakpoints. -->
+<script>
+    window.AlpineMagicHelpersConfig = {
+        breakpoints: {
+            mobile: 0,
+            tablet: 769,
+            desktop: 1024,
+            widescreen: 1216,
+            fullhd: 1408
+        }
+    }
+</script>
+```
+And using those breakpoints in your page.
+```html
+<div x-data>
+    <span x-show="$screen('tablet')">This will be visible if screen width is equal or greater than 769px.</span>
+</div>
+```
+
+[Demo](https://codepen.io/KevinBatdorf/pen/OJXKRXE?editors=1000)
+
+---
+
+### `$scroll`
+**Example:**
+```html
+<div x-data>
+    <div x-ref="foo">
+        ...
+    </div>
+    <button x-on:click="$scroll($refs.foo)">Scroll to foo</scroll>
+</div>
+```
+[Demo](https://codepen.io/KevinBatdorf/pen/PozVLPy?editors=1000)
+
+Alternatively, you can pass a css selector to scroll to an element at any position.
+```html
+<div id="foo">
+</div>
+<div x-data>
+    <button x-on:click="$scroll('#foo')">Scroll to #foo</scroll>
+</div>
+```
+
+`$scroll` also supports integers to scroll to a specific point of the page.
+```html
+<button x-data x-on:click="$scroll(0)">Scroll to top</scroll>
+```
+[Demo](https://codepen.io/KevinBatdorf/pen/PozVLPy?editors=1000) (same as above)
+
+`$scroll` optionally supports a second parameter where it's possible to define the behavior mode, `auto|smooth` (default smooth):
+```html
+<div x-data>
+    <div x-ref="foo">
+        ...
+    </div>
+    <button x-on:click="$scroll($refs.foo, {behavior: auto})">Jump to foo</scroll>
+</div>
+...
+<div id="foo">
+</div>
+<div x-data>
+    <button x-on:click="$scroll('#foo, {behavior: auto}')">Jump to #foo</scroll>
+</div>
+...
+<button x-data x-on:click="$scroll(0, {behavior: auto}">Jump to top</scroll>
+```
+With offset:
+```html
+<div x-data>
+    <div x-ref="foo">
+        ...
+    </div>
+    <button x-on:click="$scroll($refs.foo, {offset: 50})">Scroll to 50px before foo</scroll>
+</div>
+...
+<div id="foo">
+</div>
+<div x-data>
+    <button x-on:click="$scroll('#foo, {offset: 50}')">Scroll to 50px before #foo</scroll>
+</div>
+...
+<button x-data x-on:click="$scroll(0, {offset: 50}">Jump to 50px before top (a bit daft but supported)</scroll>
+```
+With both:
+```html
+<div x-data>
+    <div x-ref="foo">
+        ...
+    </div>
+    <button x-on:click="$scroll($refs.foo, {behavior: auto, offset: 50})">Jump to 50px before foo</scroll>
+</div>
+...
+<div id="foo">
+</div>
+<div x-data>
+    <button x-on:click="$scroll('#foo, {behavior: auto, offset: 50}')">Jump to 50px before #foo</scroll>
+</div>
+...
+<button x-data x-on:click="$scroll(0, {behavior: auto, offset: 50}">Jump to 50px before top</scroll>
+```
+[Demo](https://codepen.io/KevinBatdorf/pen/PozVLPy?editors=1000) (same as above)
 
 ---
 
