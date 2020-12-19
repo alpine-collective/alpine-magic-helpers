@@ -32,7 +32,7 @@ test('$interval > is called every x seconds', async () => {
 
     await waitFor(() => {
         expect(document.querySelector('p').textContent).toEqual('4')
-    }, { timeout: 100 })
+    }, { timeout: 200 })
 })
 
 test('$interval > can be delayed', async () => {
