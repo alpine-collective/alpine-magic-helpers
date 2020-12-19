@@ -26,7 +26,7 @@ test('$interval > is called every x seconds', async () => {
 
     await waitFor(() => {
         expect(document.querySelector('p').textContent).toEqual('1')
-    }, { timeout: 100 })
+    }, { timeout: 200 })
 
     jest.advanceTimersByTime(3000)
 
