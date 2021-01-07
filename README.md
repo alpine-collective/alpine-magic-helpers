@@ -114,11 +114,11 @@ By default, `$fetch` will return the JSON data object. However, because we are u
 <div
     x-data="{
         timer: 500,
-        funtionToRun: function() {
+        functionToRun: function() {
             console.log('Hello console')
         }
     }"
-    x-init="$interval(funtionToRun, timer)">
+    x-init="$interval(functionToRun, timer)">
 </div>
 ```
 [Demo](https://codepen.io/KevinBatdorf/pen/xxVVoaX?editors=1010)
