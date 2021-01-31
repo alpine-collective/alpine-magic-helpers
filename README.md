@@ -140,7 +140,7 @@ By default, `$interval ` will run your function every `nth` millisecond when bro
 | `delay` | Delay the first run. N.B. The first run is also delayed by the timer time. |
 | `forceInterval` |  Ignore the browser animation request mechanism. Default is false |
 
-> ⚠️ We also add a hidden property `autoIntervalTest` that will play/pause the timer depending on it's "truthiness"
+> ⚠️ We also add a hidden property `autoIntervalTest` that will clear/stop the timer if set to false, and start the timer if then set to true.
 
 **Example:**
 
@@ -153,8 +153,10 @@ By default, `$interval ` will run your function every `nth` millisecond when bro
             console.log('Hi again!')
         }
     }"
-    x-init="$interval(funtionToRun, { timer: 1000, delay: 5000, forceInterval: true })"
-    @click="autoIntervalTest = !autoIntervalTest">
+    x-init="$interval(funtionToRun, { timer: 1000, delay: 5000, forceInterval: true })">
+    <button
+        @click="autoIntervalTest = !autoIntervalTest"
+        x-text="autoIntervalTest ? 'pause' : 'play'"></button>
 </div>
 ```
 [Demo](https://codepen.io/KevinBatdorf/pen/poyyXQy?editors=1010)
