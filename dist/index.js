@@ -2423,7 +2423,9 @@
             return;
           }
 
-          $el.__x.updateElements($el);
+          return function () {
+            return $el.__x.updateElements($el);
+          };
         });
       }
     };
