@@ -1556,6 +1556,16 @@
     };
 
     /**
+     * Determines whether the payload is an error thrown by Axios
+     *
+     * @param {*} payload The value to test
+     * @returns {boolean} True if the payload is an error thrown by Axios, otherwise false
+     */
+    var isAxiosError = function isAxiosError(payload) {
+      return (typeof payload === 'object') && (payload.isAxiosError === true);
+    };
+
+    /**
      * Create an instance of Axios
      *
      * @param {Object} defaultConfig The default config for the instance
@@ -1595,6 +1605,9 @@
       return Promise.all(promises);
     };
     axios.spread = spread;
+
+    // Expose isAxiosError
+    axios.isAxiosError = isAxiosError;
 
     var axios_1 = axios;
 
@@ -1841,22 +1854,14 @@
       alpine$4(callback);
     };
 
-    function createCommonjsModule(fn, basedir, module) {
-    	return module = {
-    		path: basedir,
-    		exports: {},
-    		require: function (path, base) {
-    			return commonjsRequire();
-    		}
-    	}, fn(module, module.exports), module.exports;
+    function createCommonjsModule(fn) {
+      var module = { exports: {} };
+    	return fn(module, module.exports), module.exports;
     }
 
-    function commonjsRequire () {
-    	throw new Error('Dynamic requires are not currently supported by @rollup/plugin-commonjs');
-    }
+    /* smoothscroll v0.4.4 - 2019 - Dustan Kasten, Jeremias Menichelli - MIT License */
 
     var smoothscroll = createCommonjsModule(function (module, exports) {
-    /* smoothscroll v0.4.4 - 2019 - Dustan Kasten, Jeremias Menichelli - MIT License */
     (function () {
 
       // polyfill
@@ -2410,6 +2415,28 @@
       alpine$6(callback);
     };
 
+    var AlpineRefreshMagicMethod = {
+      start: function start() {
+        checkForAlpine();
+        Alpine.addMagicProperty('refresh', function ($el) {
+          if (!$el.__x) {
+            return;
+          }
+
+          $el.__x.updateElements($el);
+        });
+      }
+    };
+
+    var alpine$7 = window.deferLoadingAlpine || function (alpine) {
+      return alpine();
+    };
+
+    window.deferLoadingAlpine = function (callback) {
+      AlpineRefreshMagicMethod.start();
+      alpine$7(callback);
+    };
+
     var index = {
       AlpineComponentMagicMethod: AlpineComponentMagicMethod,
       AlpineFetchMagicMethod: AlpineFetchMagicMethod,
@@ -2417,7 +2444,8 @@
       AlpineRangeMagicMethod: AlpineRangeMagicMethod,
       AlpineScreenMagicMethod: AlpineScreenMagicMethod,
       AlpineScrollMagicMethod: AlpineScrollMagicMethod,
-      AlpineTruncateMagicMethod: AlpineTruncateMagicMethod
+      AlpineTruncateMagicMethod: AlpineTruncateMagicMethod,
+      AlpineRefreshMagicMethod: AlpineRefreshMagicMethod
     };
 
     return index;
