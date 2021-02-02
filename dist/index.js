@@ -2420,7 +2420,7 @@
         checkForAlpine();
         Alpine.addMagicProperty('refresh', function ($el) {
           if (!$el.__x) {
-            return;
+            return function () {};
           }
 
           return function () {

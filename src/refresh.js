@@ -6,7 +6,7 @@ const AlpineRefreshMagicMethod = {
 
         Alpine.addMagicProperty('refresh', ($el) => {
             if (!$el.__x) {
-                return
+                return () => {}
             }
 
             return () => $el.__x.updateElements($el)
