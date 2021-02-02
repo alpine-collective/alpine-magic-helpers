@@ -114,4 +114,17 @@
             >
         </div>
     </div>
+
+    <div class="mt-4 pt-4 border-t">
+        <h2 class="text-2xl font-black">$refresh:</h2>
+        <p class="mb-4">Manually refresh a component</p>
+
+        <p class="mb-4 font-bold">Pressing the button on the left will manually refresh the component.</p>
+        <div x-data class="inline-flex space-x-2">
+            <button @click="$refresh()" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+                Refresh
+            </button>
+            <span x-text="Date.now()" class="w-10 h-10 block"></span>
+        </div>
+    </div>
 </body>
