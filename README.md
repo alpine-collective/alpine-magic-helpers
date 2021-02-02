@@ -16,6 +16,7 @@ Adds the following magic helpers to use with Alpine JS. ***More to come!***
 | [`$screen`](#screen) | Detect if the current browser width is equal or greater than a given breakpoint. |
 | [`$scroll`](#scroll) | Scroll the page vertically to a specific position. |
 | [`$truncate`](#truncate) |  Limit a text string to a specific number of characters or words. |
+| [`$refresh`](#refresh) | Manually refresh a component. |
 
 🚀 If you have ideas for more magic helpers, please open a [discussion](https://github.com/alpine-collective/alpine-magic-helpers/discussions) or join us on the [AlpineJS Discord](https://discord.gg/snmCYk3)
 
@@ -37,6 +38,7 @@ Or you can use the specific magic helpers you need:
 <script src="https://cdn.jsdelivr.net/gh/alpine-collective/alpine-magic-helpers@0.5.x/dist/screen.min.js"></script>
 <script src="https://cdn.jsdelivr.net/gh/alpine-collective/alpine-magic-helpers@0.5.x/dist/scroll.min.js"></script>
 <script src="https://cdn.jsdelivr.net/gh/alpine-collective/alpine-magic-helpers@0.5.x/dist/truncate.min.js"></script>
+<script src="https://cdn.jsdelivr.net/gh/alpine-collective/alpine-magic-helpers@0.5.x/dist/refresh.min.js"></script>
 ```
 
 ---
@@ -362,6 +364,15 @@ By default, `$truncate` will return take characters as a parameter. Instead you 
 ```
 [Demo](https://codepen.io/KevinBatdorf/pen/BaKKgGg?editors=1000) (same as above)
 > Behind the scenes, for words, this uses `sentence.split(" ").splice(0, words).join(" ")` which does not define a word in all languages.
+
+### `$refresh`
+**Example:**
+```html
+<div x-data>
+    <button @click="$refresh()">Refresh <code>Date.now()</code></button>
+    <span x-text="Date.now()"></span>
+</div>
+```
 
 ---
 
