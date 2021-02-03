@@ -28,7 +28,7 @@ Include the following `<script>` tag in the `<head>` of your document (before Al
 <script src="https://cdn.jsdelivr.net/gh/alpine-collective/alpine-magic-helpers@0.5.x/dist/index.min.js"></script>
 ```
 
-Or only use the specific methods you need:
+Or you can use the specific magic helpers you need:
 
 ```html
 <script src="https://cdn.jsdelivr.net/gh/alpine-collective/alpine-magic-helpers@0.5.x/dist/component.min.js"></script>
@@ -54,6 +54,14 @@ Then add the following to your script:
 
 ```javascript
 import 'alpine-magic-helpers'
+import 'alpinejs'
+```
+
+Or you can import the specific magic helpers you need like so:
+
+```javascript
+import 'alpine-magic-helpers/dist/component'
+import 'alpine-magic-helpers/dist/fetch'
 import 'alpinejs'
 ```
 
@@ -115,11 +123,11 @@ By default, `$fetch` will return the JSON data object. However, because we are u
 <div
     x-data="{
         timer: 500,
-        funtionToRun: function() {
+        functionToRun: function() {
             console.log('Hello console')
         }
     }"
-    x-init="$interval(funtionToRun, timer)">
+    x-init="$interval(functionToRun, timer)">
 </div>
 ```
 [Demo](https://codepen.io/KevinBatdorf/pen/xxVVoaX?editors=1010)
@@ -133,7 +141,7 @@ By default, `$interval ` will run your function every `nth` millisecond when bro
 | `delay` | Delay the first run. N.B. The first run is also delayed by the timer time. |
 | `forceInterval` |  Ignore the browser animation request mechanism. Default is false |
 
-> ⚠️ We also add a hidden property `autoIntervalTest` that will play/pause the timer depending on it's "truthiness"
+> ⚠️ We also add a hidden property `autoIntervalTest` that will clear/stop the timer if set to false, and start the timer if then set to true.
 
 **Example:**
 
@@ -146,8 +154,10 @@ By default, `$interval ` will run your function every `nth` millisecond when bro
             console.log('Hi again!')
         }
     }"
-    x-init="$interval(funtionToRun, { timer: 1000, delay: 5000, forceInterval: true })"
-    @click="autoIntervalTest = !autoIntervalTest">
+    x-init="$interval(funtionToRun, { timer: 1000, delay: 5000, forceInterval: true })">
+    <button
+        @click="autoIntervalTest = !autoIntervalTest"
+        x-text="autoIntervalTest ? 'pause' : 'play'"></button>
 </div>
 ```
 [Demo](https://codepen.io/KevinBatdorf/pen/poyyXQy?editors=1010)
