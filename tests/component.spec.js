@@ -188,3 +188,25 @@ test('$component > this context is set correctly when functions are invoked thro
         expect(document.querySelector('p').textContent).toEqual('qux')
     })
 })
+
+test('$component > can access magic properties', async () => {
+    document.body.innerHTML = `
+        <div x-data="{foo: 'bar'}">
+            <p x-text="foo"></p>
+            <button @click="foo = $component('ext').$el.textContent"></button>
+        </div>
+        <span x-id="ext" x-data>baz</span>
+    `
+
+    Alpine.start()
+
+    await waitFor(() => {
+        expect(document.querySelector('p').textContent).toEqual('bar')
+    })
+
+    document.querySelector('button').click()
+
+    await waitFor(() => {
+        expect(document.querySelector('p').textContent).toEqual('baz')
+    })
+})
