@@ -18,6 +18,12 @@ export const syncWithObservedComponent = function (data, observedComponent, call
                     const path = scope ? `${scope}.${key}` : key
                     return new Proxy(target[key], handler(path))
                 }
+                if (target[key] !== null && typeof target[key] === 'function') {
+                    if (!observedComponent.__x) {
+                        throw new Error('Error communicating with observed component')
+                    }
+                    return target[key].bind(observedComponent.__x.$data)
+                }
                 return target[key]
             },
             set(_target, key, value) {
