@@ -210,3 +210,30 @@ test('$component > can access magic properties', async () => {
         expect(document.querySelector('p').textContent).toEqual('baz')
     })
 })
+
+// Note, this will not work: <p x-text="$parent.$parent.foo"></p>
+// because Alpine needs to be fully initialized before the data is available
+test('$parent > can control grandparent component', async () => {
+    document.body.innerHTML = `
+    <div x-data="{foo: 'bar'}">
+        <p x-text="foo"></p>
+        <div x-data>
+            <div x-data>
+                <button @click="$parent.$parent.foo = 'baz'"></button>
+            </div>
+        </div>
+    </div>
+    `
+
+    Alpine.start()
+
+    await waitFor(() => {
+        expect(document.querySelector('p').textContent).toEqual('bar')
+    })
+
+    document.querySelector('button').click()
+
+    await waitFor(() => {
+        expect(document.querySelector('p').textContent).toEqual('baz')
+    })
+})
