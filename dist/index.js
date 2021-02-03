@@ -30,12 +30,24 @@
               return new Proxy(target[key], handler(path));
             }
 
-            if (target[key] !== null && typeof target[key] === 'function') {
+            if (typeof target[key] === 'function') {
               if (!observedComponent.__x) {
                 throw new Error('Error communicating with observed component');
               }
 
               return target[key].bind(observedComponent.__x.$data);
+            } // If scope is null, target is the unpacked version of observedComponent.__x.$data
+            // If target[key] is not defined, we can try to access observedComponent.__x.$data[key]
+            // to access magic properties. Note, if the receiving component is not initialised,
+            // this will errors. This kind of interaction should only be used in event handlers and
+
+
+            if (scope === null && !target[key] && observedComponent.__x.$data[key]) {
+              if (!observedComponent.__x) {
+                throw new Error('Error communicating with observed component.');
+              }
+
+              return observedComponent.__x.$data[key];
             }
 
             return target[key];
