@@ -164,3 +164,27 @@ test('$component > component can update and watch deep object properties', async
         expect(document.querySelector('p').textContent).toEqual('bob')
     })
 })
+
+test('$component > this context is set correctly when functions are invoked through the helper', async () => {
+    document.body.innerHTML = `
+        <div x-id="ext" x-data="{foo: 'bar', baz() {return this.foo = this.$refs.bob.textContent}}">
+            <span x-ref="bob">qux</button>
+        </div>
+        <div x-data>
+            <p x-text="$component('ext').foo"></p>
+            <button @click="$component('ext').baz()"></button>
+        </div>
+    `
+
+    Alpine.start()
+
+    await waitFor(() => {
+        expect(document.querySelector('p').textContent).toEqual('bar')
+    })
+
+    document.querySelector('button').click()
+
+    await waitFor(() => {
+        expect(document.querySelector('p').textContent).toEqual('qux')
+    })
+})
