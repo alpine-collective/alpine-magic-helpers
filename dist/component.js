@@ -30,13 +30,11 @@
             if (target[key] !== null && typeof target[key] === 'object') {
               var path = scope ? scope + "." + key : key;
               return new Proxy(target[key], handler(path));
-            }
+            } // We bind the scope only if the observed component is ready.
+            // Most of the time, the unwrapped data is enough
 
-            if (typeof target[key] === 'function') {
-              if (!observedComponent.__x) {
-                throw new Error('Error communicating with observed component');
-              }
 
+            if (typeof target[key] === 'function' && observedComponent.__x) {
               return target[key].bind(observedComponent.__x.$data);
             } // If scope is null, target is the unpacked version of observedComponent.__x.$data
             // If target[key] is not defined, we can try to access observedComponent.__x.$data[key]

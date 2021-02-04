@@ -18,10 +18,9 @@ export const syncWithObservedComponent = function (data, observedComponent, call
                     const path = scope ? `${scope}.${key}` : key
                     return new Proxy(target[key], handler(path))
                 }
-                if (typeof target[key] === 'function') {
-                    if (!observedComponent.__x) {
-                        throw new Error('Error communicating with observed component')
-                    }
+                // We bind the scope only if the observed component is ready.
+                // Most of the time, the unwrapped data is enough
+                if (typeof target[key] === 'function' && observedComponent.__x) {
                     return target[key].bind(observedComponent.__x.$data)
                 }
                 // If scope is null, target is the unpacked version of observedComponent.__x.$data
