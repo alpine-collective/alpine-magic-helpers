@@ -25,8 +25,6 @@
 
         return {
           get: function get(target, key) {
-            var _observedComponent$__;
-
             if (target[key] !== null && typeof target[key] === 'object') {
               var path = scope ? scope + "." + key : key;
               return new Proxy(target[key], handler(path));
@@ -36,16 +34,6 @@
 
             if (typeof target[key] === 'function' && observedComponent.__x) {
               return target[key].bind(observedComponent.__x.$data);
-            } // If scope is null, target is the unpacked version of observedComponent.__x.$data
-            // If target[key] is not defined, we can try to access observedComponent.__x.$data[key]
-            // to access magic properties. Note, if the receiving component is not initialised,
-            // this will error. This kind of interaction should only be used in event handlers, etc
-            // Works: <button @click="$parent.$parent.foo = 'baz'"></button>
-            // Does not work: <p x-text="$parent.$parent.foo"></p>
-
-
-            if (scope === null && !target[key] && observedComponent != null && (_observedComponent$__ = observedComponent.__x) != null && _observedComponent$__.$data[key]) {
-              return observedComponent.__x.$data[key];
             }
 
             return target[key];
