@@ -18,6 +18,11 @@ export const syncWithObservedComponent = function (data, observedComponent, call
                     const path = scope ? `${scope}.${key}` : key
                     return new Proxy(target[key], handler(path))
                 }
+                // We bind the scope only if the observed component is ready.
+                // Most of the time, the unwrapped data is enough
+                if (typeof target[key] === 'function' && observedComponent.__x) {
+                    return target[key].bind(observedComponent.__x.$data)
+                }
                 return target[key]
             },
             set(_target, key, value) {

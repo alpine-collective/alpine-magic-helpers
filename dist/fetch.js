@@ -1400,6 +1400,16 @@
   };
 
   /**
+   * Determines whether the payload is an error thrown by Axios
+   *
+   * @param {*} payload The value to test
+   * @returns {boolean} True if the payload is an error thrown by Axios, otherwise false
+   */
+  var isAxiosError = function isAxiosError(payload) {
+    return (typeof payload === 'object') && (payload.isAxiosError === true);
+  };
+
+  /**
    * Create an instance of Axios
    *
    * @param {Object} defaultConfig The default config for the instance
@@ -1439,6 +1449,9 @@
     return Promise.all(promises);
   };
   axios.spread = spread;
+
+  // Expose isAxiosError
+  axios.isAxiosError = isAxiosError;
 
   var axios_1 = axios;
 

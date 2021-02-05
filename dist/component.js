@@ -28,6 +28,12 @@
             if (target[key] !== null && typeof target[key] === 'object') {
               var path = scope ? scope + "." + key : key;
               return new Proxy(target[key], handler(path));
+            } // We bind the scope only if the observed component is ready.
+            // Most of the time, the unwrapped data is enough
+
+
+            if (typeof target[key] === 'function' && observedComponent.__x) {
+              return target[key].bind(observedComponent.__x.$data);
             }
 
             return target[key];
