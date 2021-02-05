@@ -13,10 +13,11 @@ Adds the following magic helpers to use with Alpine JS. ***More to come!***
 | [`$fetch`](#fetch) | Using Axios, fetch JSON from an external source.  |
 | [`$interval`](#interval) | Run a function every n milliseconds. Optionally start and stop the timer. |
 | [`$range`](#range) | Iterate over a range of values. |
+| [`$refresh`](#refresh) | Manually refresh a component. |
 | [`$screen`](#screen) | Detect if the current browser width is equal or greater than a given breakpoint. |
 | [`$scroll`](#scroll) | Scroll the page vertically to a specific position. |
 | [`$truncate`](#truncate) |  Limit a text string to a specific number of characters or words. |
-| [`$refresh`](#refresh) | Manually refresh a component. |
+| [`$undo`](#undo) |  Track and undo state changes inside your component. |
 
 🚀 If you have ideas for more magic helpers, please open a [discussion](https://github.com/alpine-collective/alpine-magic-helpers/discussions) or join us on the [AlpineJS Discord](https://discord.gg/snmCYk3)
 
@@ -35,10 +36,10 @@ Or you can use the specific magic helpers you need:
 <script src="https://cdn.jsdelivr.net/gh/alpine-collective/alpine-magic-helpers@0.5.x/dist/fetch.min.js"></script>
 <script src="https://cdn.jsdelivr.net/gh/alpine-collective/alpine-magic-helpers@0.5.x/dist/interval.min.js"></script>
 <script src="https://cdn.jsdelivr.net/gh/alpine-collective/alpine-magic-helpers@0.5.x/dist/range.min.js"></script>
+<script src="https://cdn.jsdelivr.net/gh/alpine-collective/alpine-magic-helpers@0.5.x/dist/refresh.min.js"></script>
 <script src="https://cdn.jsdelivr.net/gh/alpine-collective/alpine-magic-helpers@0.5.x/dist/screen.min.js"></script>
 <script src="https://cdn.jsdelivr.net/gh/alpine-collective/alpine-magic-helpers@0.5.x/dist/scroll.min.js"></script>
 <script src="https://cdn.jsdelivr.net/gh/alpine-collective/alpine-magic-helpers@0.5.x/dist/truncate.min.js"></script>
-<script src="https://cdn.jsdelivr.net/gh/alpine-collective/alpine-magic-helpers@0.5.x/dist/refresh.min.js"></script>
 ```
 
 ---
@@ -183,6 +184,18 @@ The `$range` helper mostly mimics implementations found in other languages `$ran
 
 ---
 
+
+### `$refresh`
+**Example:**
+```html
+<div x-data>
+    <button @click="$refresh()">Refresh <code>Date.now()</code></button>
+    <span x-text="Date.now()"></span>
+</div>
+```
+[Demo]([Demo](https://codepen.io/KevinBatdorf/pen/OJXKRXE?editors=1000))
+
+---
 ### `$screen`
 **Example:**
 
@@ -365,14 +378,35 @@ By default, `$truncate` will return take characters as a parameter. Instead you 
 [Demo](https://codepen.io/KevinBatdorf/pen/BaKKgGg?editors=1000) (same as above)
 > Behind the scenes, for words, this uses `sentence.split(" ").splice(0, words).join(" ")` which does not define a word in all languages.
 
-### `$refresh`
+---
+### `$undo`
 **Example:**
 ```html
-<div x-data>
-    <button @click="$refresh()">Refresh <code>Date.now()</code></button>
-    <span x-text="Date.now()"></span>
+<div x-data="{ number: 0 }" x-init="$track()">
+    <button @click="number = Math.floor(Math.random() * 10)" x-text="number"></button>
+    <button x-show="$history.length" @click="$undo()">undo</button>
 </div>
 ```
+[Demo](https://codepen.io/KevinBatdorf/pen/jOrVzOg?editors=1000)
+
+The `$undo` helper actually involves three helpers in one. First, add the `$track()` helper to the `x-init` directive to start tracking the component state. Next, add a button to `$undo()` changes as needed. And finally, you can access whether changes have occurred by using `$history.length`.
+
+**Optionally pass in options**
+
+By default, `$undo` will track all properties. Optionally you may limit the properties by passing in a string with the property name, or an array of property names.
+
+**Example:**
+
+```html
+<div x-data="{ number: 0; another: 0 }" x-init="$track('number')">
+    <button @click="number = number + 1" x-text="number"></button>
+    <button @click="another = another + 1" x-text="another"></button>
+    <button x-show="$history.length" @click="$undo()">undo number only</button>
+</div>
+```
+> Use `$track(['prop1', 'prop2'])` to track multiple properties
+
+[Demo](https://codepen.io/KevinBatdorf/pen/VwjmXLy?editors=1000)
 
 ---
 

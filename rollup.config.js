@@ -42,8 +42,9 @@ export default [
     'fetch',
     'interval',
     'range',
+    'refresh',
     'screen',
     'scroll',
     'truncate',
-    'refresh',
+    'undo',
 ].map(createConfig)

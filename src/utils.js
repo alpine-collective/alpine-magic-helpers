@@ -18,6 +18,11 @@ export const syncWithObservedComponent = function (data, observedComponent, call
                     const path = scope ? `${scope}.${key}` : key
                     return new Proxy(target[key], handler(path))
                 }
+                // We bind the scope only if the observed component is ready.
+                // Most of the time, the unwrapped data is enough
+                if (typeof target[key] === 'function' && observedComponent.__x) {
+                    return target[key].bind(observedComponent.__x.$data)
+                }
                 return target[key]
             },
             set(_target, key, value) {
@@ -70,11 +75,16 @@ export const objectSetDeep = function (object, path, value) {
 }
 
 // Returns component data if Alpine has made it available, otherwise computes it with saferEval()
-export const componentData = function (component) {
-    if (component.__x) {
-        return component.__x.getUnobservedData()
+export const componentData = function (component, properties) {
+    const data = component.__x ? component.__x.getUnobservedData() : saferEval(component.getAttribute('x-data'), component)
+    if (properties) {
+        properties = Array.isArray(properties) ? properties : [properties]
+        return properties.reduce((object, key) => {
+            object[key] = data[key]
+            return object
+        }, {})
     }
-    return saferEval(component.getAttribute('x-data'), component)
+    return data
 }
 
 function isValidVersion(required, current) {

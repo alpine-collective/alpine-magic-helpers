@@ -9,7 +9,7 @@ const AlpineRefreshMagicMethod = {
                 return () => {}
             }
 
-            return () => $el.__x.updateElements($el)
+            return (component = $el) => component.__x.updateElements(component)
         })
     },
 }

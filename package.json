@@ -7,15 +7,16 @@
         "src/component.js",
         "src/fetch.js",
         "src/interval.js",
+        "src/truncate.js",
         "src/range.js",
         "src/screen.js",
         "src/scroll.js",
-        "src/truncate.js"
+        "src/undo.js"
     ],
     "main": "dist/index.js",
     "scripts": {
         "build": "rollup -c",
-        "watch": "concurrently \"rollup -c -w\" \"browser-sync examples --ss . -f examples dist/index.js\"",
+        "watch": "concurrently \"rollup -c -w\" \"browser-sync examples --no-open --ss . -f examples dist/index.js\"",
         "test": "jest",
         "test-watch": "jest --watch",
         "lint": "eslint .",
@@ -53,12 +54,14 @@
         "url": "https://github.com/alpine-collective/magic-helpers/issues"
     },
     "homepage": "https://github.com/alpine-collective/magic-helpers#readme",
-    "dependencies": {},
+    "dependencies": {
+        "deep-diff": "^1.0.2"
+    },
     "peerDependencies": {
         "alpinejs": "^2.8"
     },
     "devDependencies": {
-        "@babel/preset-env": "^7.12.11",
+        "@babel/preset-env": "^7.12.13",
         "@rollup/plugin-babel": "^5.2.3",
         "@rollup/plugin-commonjs": "^17.1.0",
         "@rollup/plugin-json": "^4.1.0",
@@ -79,7 +82,7 @@
         "jest": "^26.6.3",
         "jsdom-simulant": "^1.1.2",
         "lint-staged": "^10.5.3",
-        "rollup": "^2.38.1",
+        "rollup": "^2.38.4",
         "rollup-plugin-filesize": "^9.1.0",
         "smoothscroll-polyfill": "^0.4.4"
     },

@@ -88,3 +88,17 @@ test('componentData > can extract data AFTER Alpine is initialized', async () =>
         expect(componentData(component)).toMatchObject({ foo: 'bar' })
     })
 })
+
+test('componentData > can accept top level properties to scope to', async () => {
+    document.body.innerHTML = `
+        <div x-data="{foo: 'bar', baz: 'qux'}"></div>
+    `
+    Alpine.start()
+
+    const component = document.querySelector('[x-data]')
+
+    await waitFor(() => {
+        expect(component.__x.getUnobservedData()).toMatchObject({ foo: 'bar', baz: 'qux' })
+        expect(componentData(component, 'foo')).toMatchObject({ foo: 'bar' })
+    })
+})

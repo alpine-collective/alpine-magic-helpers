@@ -28,6 +28,12 @@
             if (target[key] !== null && typeof target[key] === 'object') {
               var path = scope ? scope + "." + key : key;
               return new Proxy(target[key], handler(path));
+            } // We bind the scope only if the observed component is ready.
+            // Most of the time, the unwrapped data is enough
+
+
+            if (typeof target[key] === 'function' && observedComponent.__x) {
+              return target[key].bind(observedComponent.__x.$data);
             }
 
             return target[key];
@@ -83,12 +89,18 @@
       return object;
     }; // Returns component data if Alpine has made it available, otherwise computes it with saferEval()
 
-    var componentData = function componentData(component) {
-      if (component.__x) {
-        return component.__x.getUnobservedData();
+    var componentData = function componentData(component, properties) {
+      var data = component.__x ? component.__x.getUnobservedData() : saferEval(component.getAttribute('x-data'), component);
+
+      if (properties) {
+        properties = Array.isArray(properties) ? properties : [properties];
+        return properties.reduce(function (object, key) {
+          object[key] = data[key];
+          return object;
+        }, {});
       }
 
-      return saferEval(component.getAttribute('x-data'), component);
+      return data;
     };
 
     function isValidVersion(required, current) {

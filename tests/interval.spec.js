@@ -26,13 +26,13 @@ test('$interval > is called every x seconds', async () => {
 
     await waitFor(() => {
         expect(document.querySelector('p').textContent).toEqual('1')
-    }, { timeout: 100 })
+    }, { timeout: 200 })
 
     jest.advanceTimersByTime(3000)
 
     await waitFor(() => {
         expect(document.querySelector('p').textContent).toEqual('4')
-    }, { timeout: 100 })
+    }, { timeout: 200 })
 })
 
 test('$interval > can be delayed', async () => {
@@ -50,17 +50,17 @@ test('$interval > can be delayed', async () => {
 
     await waitFor(() => {
         expect(document.querySelector('p').textContent).toEqual('0')
-    }, { timeout: 100 })
+    }, { timeout: 200 })
 
     jest.advanceTimersByTime(1000)
 
     await waitFor(() => {
         expect(document.querySelector('p').textContent).toEqual('1')
-    }, { timeout: 100 })
+    }, { timeout: 200 })
 
     jest.advanceTimersByTime(3000)
 
     await waitFor(() => {
         expect(document.querySelector('p').textContent).toEqual('4')
-    }, { timeout: 100 })
+    }, { timeout: 200 })
 })
