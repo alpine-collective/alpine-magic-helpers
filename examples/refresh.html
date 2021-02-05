@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+
+<head>
+	<script type="module" src="https://cdn.jsdelivr.net/gh/alpinejs/alpine@v2.x.x/dist/alpine.min.js"></script>
+	<script nomodule src="https://cdn.jsdelivr.net/gh/alpinejs/alpine@v2.x.x/dist/alpine-ie11.min.js" defer></script>
+	<script src="../dist/refresh.js"></script>
+	<link href="https://unpkg.com/tailwindcss@^1.0/dist/tailwind.min.css" rel="stylesheet">
+
+</head>
+
+<body class="flex flex-col items-center justify-center m-24">
+    <p class="mb-4 font-bold">Pressing the button on the left will manually refresh the component.</p>
+    <div x-data class="inline-flex space-x-2">
+        <button @click="$refresh()" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+            Refresh
+        </button>
+        <span x-text="Date.now()" class="w-10 h-10 block"></span>
+    </div>
+</body>

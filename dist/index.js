@@ -1775,6 +1775,34 @@
       alpine$3(callback);
     };
 
+    var AlpineRefreshMagicMethod = {
+      start: function start() {
+        checkForAlpine();
+        Alpine.addMagicProperty('refresh', function ($el) {
+          if (!$el.__x) {
+            return function () {};
+          }
+
+          return function (component) {
+            if (component === void 0) {
+              component = $el;
+            }
+
+            return component.__x.updateElements(component);
+          };
+        });
+      }
+    };
+
+    var alpine$4 = window.deferLoadingAlpine || function (alpine) {
+      return alpine();
+    };
+
+    window.deferLoadingAlpine = function (callback) {
+      AlpineRefreshMagicMethod.start();
+      alpine$4(callback);
+    };
+
     var Config = /*#__PURE__*/function () {
       function Config() {
         var _this = this;
@@ -1857,13 +1885,13 @@
       }
     };
 
-    var alpine$4 = window.deferLoadingAlpine || function (alpine) {
+    var alpine$5 = window.deferLoadingAlpine || function (alpine) {
       return alpine();
     };
 
     window.deferLoadingAlpine = function (callback) {
       AlpineScreenMagicMethod.start();
-      alpine$4(callback);
+      alpine$5(callback);
     };
 
     var commonjsGlobal = typeof globalThis !== 'undefined' ? globalThis : typeof window !== 'undefined' ? window : typeof global !== 'undefined' ? global : typeof self !== 'undefined' ? self : {};
@@ -2362,13 +2390,13 @@
       }
     };
 
-    var alpine$5 = window.deferLoadingAlpine || function (alpine) {
+    var alpine$6 = window.deferLoadingAlpine || function (alpine) {
       return alpine();
     };
 
     window.deferLoadingAlpine = function (callback) {
       AlpineScrollMagicMethod.start();
-      alpine$5(callback);
+      alpine$6(callback);
     };
 
     var AlpineTruncateMagicMethod = {
@@ -2420,13 +2448,13 @@
       }
     };
 
-    var alpine$6 = window.deferLoadingAlpine || function (alpine) {
+    var alpine$7 = window.deferLoadingAlpine || function (alpine) {
       return alpine();
     };
 
     window.deferLoadingAlpine = function (callback) {
       AlpineTruncateMagicMethod.start();
-      alpine$6(callback);
+      alpine$7(callback);
     };
 
     var deepDiff = createCommonjsModule(function (module, exports) {
@@ -3033,12 +3061,12 @@
       }
     };
 
-    var alpine$7 = window.deferLoadingAlpine || function (alpine) {
+    var alpine$8 = window.deferLoadingAlpine || function (alpine) {
       return alpine();
     };
 
     window.deferLoadingAlpine = function (callback) {
-      alpine$7(callback);
+      alpine$8(callback);
       AlpineUndoMagicMethod.start();
     };
 
@@ -3047,6 +3075,7 @@
       AlpineFetchMagicMethod: AlpineFetchMagicMethod,
       AlpineIntervalMagicMethod: AlpineIntervalMagicMethod,
       AlpineRangeMagicMethod: AlpineRangeMagicMethod,
+      AlpineRefreshMagicMethod: AlpineRefreshMagicMethod,
       AlpineScreenMagicMethod: AlpineScreenMagicMethod,
       AlpineScrollMagicMethod: AlpineScrollMagicMethod,
       AlpineTruncateMagicMethod: AlpineTruncateMagicMethod,

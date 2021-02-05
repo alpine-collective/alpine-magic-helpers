@@ -13,6 +13,7 @@ Adds the following magic helpers to use with Alpine JS. ***More to come!***
 | [`$fetch`](#fetch) | Using Axios, fetch JSON from an external source.  |
 | [`$interval`](#interval) | Run a function every n milliseconds. Optionally start and stop the timer. |
 | [`$range`](#range) | Iterate over a range of values. |
+| [`$refresh`](#refresh) | Manually refresh a component. |
 | [`$screen`](#screen) | Detect if the current browser width is equal or greater than a given breakpoint. |
 | [`$scroll`](#scroll) | Scroll the page vertically to a specific position. |
 | [`$truncate`](#truncate) |  Limit a text string to a specific number of characters or words. |
@@ -35,6 +36,7 @@ Or you can use the specific magic helpers you need:
 <script src="https://cdn.jsdelivr.net/gh/alpine-collective/alpine-magic-helpers@0.5.x/dist/fetch.min.js"></script>
 <script src="https://cdn.jsdelivr.net/gh/alpine-collective/alpine-magic-helpers@0.5.x/dist/interval.min.js"></script>
 <script src="https://cdn.jsdelivr.net/gh/alpine-collective/alpine-magic-helpers@0.5.x/dist/range.min.js"></script>
+<script src="https://cdn.jsdelivr.net/gh/alpine-collective/alpine-magic-helpers@0.5.x/dist/refresh.min.js"></script>
 <script src="https://cdn.jsdelivr.net/gh/alpine-collective/alpine-magic-helpers@0.5.x/dist/screen.min.js"></script>
 <script src="https://cdn.jsdelivr.net/gh/alpine-collective/alpine-magic-helpers@0.5.x/dist/scroll.min.js"></script>
 <script src="https://cdn.jsdelivr.net/gh/alpine-collective/alpine-magic-helpers@0.5.x/dist/truncate.min.js"></script>
@@ -182,6 +184,18 @@ The `$range` helper mostly mimics implementations found in other languages `$ran
 
 ---
 
+
+### `$refresh`
+**Example:**
+```html
+<div x-data>
+    <button @click="$refresh()">Refresh <code>Date.now()</code></button>
+    <span x-text="Date.now()"></span>
+</div>
+```
+[Demo]([Demo](https://codepen.io/KevinBatdorf/pen/OJXKRXE?editors=1000))
+
+---
 ### `$screen`
 **Example:**
 
@@ -365,7 +379,6 @@ By default, `$truncate` will return take characters as a parameter. Instead you 
 > Behind the scenes, for words, this uses `sentence.split(" ").splice(0, words).join(" ")` which does not define a word in all languages.
 
 ---
-
 ### `$undo`
 **Example:**
 ```html
