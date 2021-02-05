@@ -5,15 +5,17 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
+
+## [0.6.0] - 2021-02-05
 ### Fixed
-- [$component]: When accessing functions which use $refs or other magic properties, `this` was not bound correctly.
+- [`$component`]: When accessing functions which use $refs or other magic properties, `this` was not bound correctly.
 
 ### Added
-- [`$undo/$track/$history`]: Adds a set of helpers to track component state and revert changes on demand
+- [`$undo`/`$track`/`$history`]: Adds a set of helpers to track component state and revert changes on demand
 - [`$refresh`]: Adds a helper to refresh components
 ## [0.5.1] - 2020-11-30
 ### Fixed
-- [$scroll]: When using css selectors or Alpine reference, element position to scroll to was some times a decimal number (e.g. rem values could resolve to a decimal number) and $scroll was triggering an error.
+- [`$scroll`]: When using css selectors or Alpine reference, element position to scroll to was some times a decimal number (e.g. rem values could resolve to a decimal number) and $scroll was triggering an error.
 
 ## [0.5.0] - 2020-11-23
 ### Fixed
@@ -21,16 +23,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 - Added a config object to allow users to customise some helpers
-- [$screen]: Added the $screen helper to detect the current screen size ([@muzafferdede](https://github.com/muzafferdede))
+- [`$screen`]: Added the $screen helper to detect the current screen size ([@muzafferdede](https://github.com/muzafferdede))
 
 ## [0.4.1] - 2020-11-16
 ### Fixed
-- [$truncate]: Fixes an issue where the ellipsis would show even if the source length was shorter. ([@pomartel](https://github.com/pomartel))
+- [`$truncate`]: Fixes an issue where the ellipsis would show even if the source length was shorter. ([@pomartel](https://github.com/pomartel))
 
 ## [0.4.0] - 2020-11-15
 ### Added
-- [$range]: Added the $range helper to iterate over custom ranges
-- [$scroll]: Added the $scroll helper to scroll vertically to a specific position
+- [`$range`]: Added the $range helper to iterate over custom ranges
+- [`$scroll`]: Added the $scroll helper to scroll vertically to a specific position
 
 ## [0.3.6] - 2020-11-04
 ### Fixed
@@ -49,7 +51,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [0.3.5] - 2020-09-28
 ### Fixed:
-- [$parent/$component]: Updated an incorrect null check on the proxy get trap
+- [`$parent`/`$component`]: Updated an incorrect null check on the proxy get trap
 
 ## [0.3.4] - 2020-09-27
 ### Fixed
