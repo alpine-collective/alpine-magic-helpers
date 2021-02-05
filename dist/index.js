@@ -28,6 +28,12 @@
             if (target[key] !== null && typeof target[key] === 'object') {
               var path = scope ? scope + "." + key : key;
               return new Proxy(target[key], handler(path));
+            } // We bind the scope only if the observed component is ready.
+            // Most of the time, the unwrapped data is enough
+
+
+            if (typeof target[key] === 'function' && observedComponent.__x) {
+              return target[key].bind(observedComponent.__x.$data);
             }
 
             return target[key];
@@ -1556,6 +1562,16 @@
     };
 
     /**
+     * Determines whether the payload is an error thrown by Axios
+     *
+     * @param {*} payload The value to test
+     * @returns {boolean} True if the payload is an error thrown by Axios, otherwise false
+     */
+    var isAxiosError = function isAxiosError(payload) {
+      return (typeof payload === 'object') && (payload.isAxiosError === true);
+    };
+
+    /**
      * Create an instance of Axios
      *
      * @param {Object} defaultConfig The default config for the instance
@@ -1595,6 +1611,9 @@
       return Promise.all(promises);
     };
     axios.spread = spread;
+
+    // Expose isAxiosError
+    axios.isAxiosError = isAxiosError;
 
     var axios_1 = axios;
 
@@ -1841,22 +1860,14 @@
       alpine$4(callback);
     };
 
-    function createCommonjsModule(fn, basedir, module) {
-    	return module = {
-    		path: basedir,
-    		exports: {},
-    		require: function (path, base) {
-    			return commonjsRequire();
-    		}
-    	}, fn(module, module.exports), module.exports;
+    function createCommonjsModule(fn) {
+      var module = { exports: {} };
+    	return fn(module, module.exports), module.exports;
     }
 
-    function commonjsRequire () {
-    	throw new Error('Dynamic requires are not currently supported by @rollup/plugin-commonjs');
-    }
+    /* smoothscroll v0.4.4 - 2019 - Dustan Kasten, Jeremias Menichelli - MIT License */
 
     var smoothscroll = createCommonjsModule(function (module, exports) {
-    /* smoothscroll v0.4.4 - 2019 - Dustan Kasten, Jeremias Menichelli - MIT License */
     (function () {
 
       // polyfill
