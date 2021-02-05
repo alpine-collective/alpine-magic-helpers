@@ -35,8 +35,12 @@
             return function () {};
           }
 
-          return function () {
-            return $el.__x.updateElements($el);
+          return function (component) {
+            if (component === void 0) {
+              component = $el;
+            }
+
+            return component.__x.updateElements(component);
           };
         });
       }
