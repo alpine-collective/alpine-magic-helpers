@@ -8,6 +8,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 - [$component]: When accessing functions which use $refs or other magic properties, `this` was not bound correctly.
 
+### Added
+- [`$undo/$track/$history`]: Adds a set of helpers to track component state and revert changes on demand
 ## [0.5.1] - 2020-11-30
 ### Fixed
 - [$scroll]: When using css selectors or Alpine reference, element position to scroll to was some times a decimal number (e.g. rem values could resolve to a decimal number) and $scroll was triggering an error.

@@ -5,6 +5,7 @@ import AlpineRangeMagicMethod from './range'
 import AlpineScreenMagicMethod from './screen'
 import AlpineScrollMagicMethod from './scroll'
 import AlpineTruncateMagicMethod from './truncate'
+import AlpineUndoMagicMethod from './undo'
 
 export default {
     AlpineComponentMagicMethod,
@@ -14,4 +15,5 @@ export default {
     AlpineScreenMagicMethod,
     AlpineScrollMagicMethod,
     AlpineTruncateMagicMethod,
+    AlpineUndoMagicMethod,
 }
