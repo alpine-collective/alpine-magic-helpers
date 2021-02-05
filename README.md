@@ -193,7 +193,7 @@ The `$range` helper mostly mimics implementations found in other languages `$ran
     <span x-text="Date.now()"></span>
 </div>
 ```
-[Demo](https://codepen.io/KevinBatdorf/pen/OJXKRXE?editors=1000)
+[Demo](https://codepen.io/KevinBatdorf/pen/PobZjrz?editors=1000)
 
 ---
 ### `$screen`
