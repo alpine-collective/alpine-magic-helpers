@@ -16,6 +16,21 @@ const AlpineComponentMagicMethod = {
             const parentComponent = $el.parentNode.closest('[x-data]')
             if (!parentComponent) throw new Error('Parent component not found')
 
+            // If the parent component is not ready, we return a dummy proxy
+            // that always return an empty string and we check again on the next frame
+            // We are de facto deferring the value for a few ms but final users
+            // shouldn't notice the delay
+            if (!parentComponent.__x) {
+                window.requestAnimationFrame(() => $el.__x.updateElements($el))
+                const handler = {
+                    get(target, key) {
+                        if (typeof key === 'symbol') return () => ''
+                        return new Proxy({}, handler)
+                    },
+                }
+                return new Proxy({}, handler)
+            }
+
             $el.$parent = syncWithObservedComponent(componentData(parentComponent), parentComponent, objectSetDeep)
             updateOnMutation(parentComponent, () => {
                 $el.$parent = syncWithObservedComponent(parentComponent.__x.getUnobservedData(), parentComponent, objectSetDeep)
@@ -30,6 +45,21 @@ const AlpineComponentMagicMethod = {
 
                 const componentBeingObserved = document.querySelector(`[x-data][x-id="${componentName}"], [x-data]#${componentName}`)
                 if (!componentBeingObserved) throw new Error('Component not found')
+
+                // If the onserved component is not ready, we return a dummy proxy
+                // that always return an empty string and we check again on the next frame
+                // We are de facto deferring the value for a few ms but final users
+                // shouldn't notice the delay
+                if (!componentBeingObserved.__x) {
+                    window.requestAnimationFrame(() => $el.__x.updateElements($el))
+                    const handler = {
+                        get(target, key) {
+                            if (typeof key === 'symbol') return () => ''
+                            return new Proxy({}, handler)
+                        },
+                    }
+                    return new Proxy({}, handler)
+                }
 
                 this[componentName] = syncWithObservedComponent(componentData(componentBeingObserved), componentBeingObserved, objectSetDeep)
                 updateOnMutation(componentBeingObserved, () => {

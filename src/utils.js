@@ -23,6 +23,12 @@ export const syncWithObservedComponent = function (data, observedComponent, call
                 if (typeof target[key] === 'function' && observedComponent.__x) {
                     return target[key].bind(observedComponent.__x.$data)
                 }
+                // If scope is null, we are at root level so when target[key] is not defined
+                // we try to look for observedComponent.__x.$data[key] to check if a magic
+                // helper/property exists
+                if (scope === null && !target[key] && observedComponent?.__x?.$data[key]) {
+                    return observedComponent.__x.$data[key]
+                }
                 return target[key]
             },
             set(_target, key, value) {
