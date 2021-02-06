@@ -25,6 +25,8 @@
 
         return {
           get: function get(target, key) {
+            var _observedComponent$__;
+
             if (target[key] !== null && typeof target[key] === 'object') {
               var path = scope ? scope + "." + key : key;
               return new Proxy(target[key], handler(path));
@@ -34,6 +36,10 @@
 
             if (typeof target[key] === 'function' && observedComponent.__x) {
               return target[key].bind(observedComponent.__x.$data);
+            }
+
+            if (scope === null && !target[key] && observedComponent != null && (_observedComponent$__ = observedComponent.__x) != null && _observedComponent$__.$data[key]) {
+              return observedComponent.__x.$data[key];
             }
 
             return target[key];
@@ -89,18 +95,12 @@
       return object;
     }; // Returns component data if Alpine has made it available, otherwise computes it with saferEval()
 
-    var componentData = function componentData(component, properties) {
-      var data = component.__x ? component.__x.getUnobservedData() : saferEval(component.getAttribute('x-data'), component);
-
-      if (properties) {
-        properties = Array.isArray(properties) ? properties : [properties];
-        return properties.reduce(function (object, key) {
-          object[key] = data[key];
-          return object;
-        }, {});
+    var componentData = function componentData(component) {
+      if (component.__x) {
+        return component.__x.getUnobservedData();
       }
 
-      return data;
+      return saferEval(component.getAttribute('x-data'), component);
     };
 
     function isValidVersion(required, current) {
@@ -135,10 +135,29 @@
         Alpine.addMagicProperty('parent', function ($el) {
           if (typeof $el.$parent !== 'undefined') return $el.$parent;
           var parentComponent = $el.parentNode.closest('[x-data]');
-          if (!parentComponent) throw new Error('Parent component not found');
+          if (!parentComponent) throw new Error('Parent component not found'); // If the parent component is not ready, we return a dummy proxy
+          // that always return an empty string and we check again on the next frame
+          // We are de facto deferring the value for a few ms but final users
+          // shouldn't notice the delay
+
+          if (!parentComponent.__x) {
+            window.requestAnimationFrame(function () {
+              return $el.__x.updateElements($el);
+            });
+            var handler = {
+              get: function get(target, key) {
+                if (typeof key === 'symbol') return function () {
+                  return '';
+                };
+                return new Proxy({}, handler);
+              }
+            };
+            return new Proxy({}, handler);
+          }
+
           $el.$parent = syncWithObservedComponent(componentData(parentComponent), parentComponent, objectSetDeep);
           updateOnMutation(parentComponent, function () {
-            $el.$parent = syncWithObservedComponent(parentComponent.__x.getUnobservedData(), parentComponent, objectSetDeep);
+            $el.$parent = syncWithObservedComponent(componentData(parentComponent), parentComponent, objectSetDeep);
 
             $el.__x.updateElements($el);
           });
@@ -150,10 +169,29 @@
 
             if (typeof this[componentName] !== 'undefined') return this[componentName];
             var componentBeingObserved = document.querySelector("[x-data][x-id=\"" + componentName + "\"], [x-data]#" + componentName);
-            if (!componentBeingObserved) throw new Error('Component not found');
+            if (!componentBeingObserved) throw new Error('Component not found'); // If the onserved component is not ready, we return a dummy proxy
+            // that always return an empty string and we check again on the next frame
+            // We are de facto deferring the value for a few ms but final users
+            // shouldn't notice the delay
+
+            if (!componentBeingObserved.__x) {
+              window.requestAnimationFrame(function () {
+                return $el.__x.updateElements($el);
+              });
+              var handler = {
+                get: function get(target, key) {
+                  if (typeof key === 'symbol') return function () {
+                    return '';
+                  };
+                  return new Proxy({}, handler);
+                }
+              };
+              return new Proxy({}, handler);
+            }
+
             this[componentName] = syncWithObservedComponent(componentData(componentBeingObserved), componentBeingObserved, objectSetDeep);
             updateOnMutation(componentBeingObserved, function () {
-              _this[componentName] = syncWithObservedComponent(componentBeingObserved.__x.getUnobservedData(), componentBeingObserved, objectSetDeep);
+              _this[componentName] = syncWithObservedComponent(componentData(componentBeingObserved), componentBeingObserved, objectSetDeep);
 
               $el.__x.updateElements($el);
             });
@@ -2983,7 +3021,7 @@
 
             propertiesToWatch = (_propertiesToWatch = propertiesToWatch) != null ? _propertiesToWatch : Object.keys(componentData($el));
             propertiesToWatch = Array.isArray(propertiesToWatch) ? propertiesToWatch : [propertiesToWatch];
-            var initialState = JSON.stringify(componentData($el, propertiesToWatch));
+            var initialState = JSON.stringify(componentData($el));
             updateOnMutation($el, function () {
               history.has($el.__x) || _this.store($el.__x, {
                 props: propertiesToWatch,
