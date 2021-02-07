@@ -25,10 +25,10 @@ const AlpineComponentMagicMethod = {
                 const handler = {
                     get(target, key) {
                         if (typeof key === 'symbol') return () => ''
-                        return new Proxy({}, handler)
+                        return new Proxy(() => '', handler)
                     },
                 }
-                return new Proxy({}, handler)
+                return new Proxy(() => '', handler)
             }
 
             $el.$parent = syncWithObservedComponent(componentData(parentComponent), parentComponent, objectSetDeep)

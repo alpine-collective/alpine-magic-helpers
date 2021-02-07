@@ -36,7 +36,10 @@
 
             if (typeof target[key] === 'function' && observedComponent.__x) {
               return target[key].bind(observedComponent.__x.$data);
-            }
+            } // If scope is null, we are at root level so when target[key] is not defined
+            // we try to look for observedComponent.__x.$data[key] to check if a magic
+            // helper/property exists
+
 
             if (scope === null && !target[key] && observedComponent != null && (_observedComponent$__ = observedComponent.__x) != null && _observedComponent$__.$data[key]) {
               return observedComponent.__x.$data[key];
@@ -95,12 +98,18 @@
       return object;
     }; // Returns component data if Alpine has made it available, otherwise computes it with saferEval()
 
-    var componentData = function componentData(component) {
-      if (component.__x) {
-        return component.__x.getUnobservedData();
+    var componentData = function componentData(component, properties) {
+      var data = component.__x ? component.__x.getUnobservedData() : saferEval(component.getAttribute('x-data'), component);
+
+      if (properties) {
+        properties = Array.isArray(properties) ? properties : [properties];
+        return properties.reduce(function (object, key) {
+          object[key] = data[key];
+          return object;
+        }, {});
       }
 
-      return saferEval(component.getAttribute('x-data'), component);
+      return data;
     };
 
     function isValidVersion(required, current) {
@@ -149,15 +158,19 @@
                 if (typeof key === 'symbol') return function () {
                   return '';
                 };
-                return new Proxy({}, handler);
+                return new Proxy(function () {
+                  return '';
+                }, handler);
               }
             };
-            return new Proxy({}, handler);
+            return new Proxy(function () {
+              return '';
+            }, handler);
           }
 
           $el.$parent = syncWithObservedComponent(componentData(parentComponent), parentComponent, objectSetDeep);
           updateOnMutation(parentComponent, function () {
-            $el.$parent = syncWithObservedComponent(componentData(parentComponent), parentComponent, objectSetDeep);
+            $el.$parent = syncWithObservedComponent(parentComponent.__x.getUnobservedData(), parentComponent, objectSetDeep);
 
             $el.__x.updateElements($el);
           });
@@ -191,7 +204,7 @@
 
             this[componentName] = syncWithObservedComponent(componentData(componentBeingObserved), componentBeingObserved, objectSetDeep);
             updateOnMutation(componentBeingObserved, function () {
-              _this[componentName] = syncWithObservedComponent(componentData(componentBeingObserved), componentBeingObserved, objectSetDeep);
+              _this[componentName] = syncWithObservedComponent(componentBeingObserved.__x.getUnobservedData(), componentBeingObserved, objectSetDeep);
 
               $el.__x.updateElements($el);
             });
