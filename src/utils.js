@@ -114,3 +114,14 @@ function saferEval(expression, dataContext, additionalHelperVariables = {}) {
         dataContext, ...Object.values(additionalHelperVariables),
     )
 }
+
+// Returns a dummy proxy that supports multipl levels of nesting and always print/return an empty string
+export function getNoopProxy() {
+    const handler = {
+        get(target, key) {
+            if (typeof key === 'symbol') return () => ''
+            return new Proxy(() => '', handler)
+        },
+    }
+    return new Proxy(() => '', handler)
+}

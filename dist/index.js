@@ -136,6 +136,23 @@
 
 
       return new Function(['$data'].concat(Object.keys(additionalHelperVariables)), "var __alpine_result; with($data) { __alpine_result = " + expression + " }; return __alpine_result").apply(void 0, [dataContext].concat(Object.values(additionalHelperVariables)));
+    } // Returns a dummy proxy that supports multipl levels of nesting and always print/return an empty string
+
+
+    function getNoopProxy() {
+      var handler = {
+        get: function get(target, key) {
+          if (typeof key === 'symbol') return function () {
+            return '';
+          };
+          return new Proxy(function () {
+            return '';
+          }, handler);
+        }
+      };
+      return new Proxy(function () {
+        return '';
+      }, handler);
     }
 
     var AlpineComponentMagicMethod = {
@@ -153,19 +170,7 @@
             window.requestAnimationFrame(function () {
               return $el.__x.updateElements($el);
             });
-            var handler = {
-              get: function get(target, key) {
-                if (typeof key === 'symbol') return function () {
-                  return '';
-                };
-                return new Proxy(function () {
-                  return '';
-                }, handler);
-              }
-            };
-            return new Proxy(function () {
-              return '';
-            }, handler);
+            return getNoopProxy();
           }
 
           $el.$parent = syncWithObservedComponent(componentData(parentComponent), parentComponent, objectSetDeep);
@@ -191,15 +196,7 @@
               window.requestAnimationFrame(function () {
                 return $el.__x.updateElements($el);
               });
-              var handler = {
-                get: function get(target, key) {
-                  if (typeof key === 'symbol') return function () {
-                    return '';
-                  };
-                  return new Proxy({}, handler);
-                }
-              };
-              return new Proxy({}, handler);
+              return getNoopProxy();
             }
 
             this[componentName] = syncWithObservedComponent(componentData(componentBeingObserved), componentBeingObserved, objectSetDeep);

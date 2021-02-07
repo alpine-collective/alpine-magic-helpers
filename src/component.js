@@ -2,6 +2,7 @@ import {
     checkForAlpine,
     objectSetDeep,
     componentData,
+    getNoopProxy,
     syncWithObservedComponent,
     updateOnMutation,
 } from './utils'
@@ -22,13 +23,7 @@ const AlpineComponentMagicMethod = {
             // shouldn't notice the delay
             if (!parentComponent.__x) {
                 window.requestAnimationFrame(() => $el.__x.updateElements($el))
-                const handler = {
-                    get(target, key) {
-                        if (typeof key === 'symbol') return () => ''
-                        return new Proxy(() => '', handler)
-                    },
-                }
-                return new Proxy(() => '', handler)
+                return getNoopProxy()
             }
 
             $el.$parent = syncWithObservedComponent(componentData(parentComponent), parentComponent, objectSetDeep)
@@ -52,13 +47,7 @@ const AlpineComponentMagicMethod = {
                 // shouldn't notice the delay
                 if (!componentBeingObserved.__x) {
                     window.requestAnimationFrame(() => $el.__x.updateElements($el))
-                    const handler = {
-                        get(target, key) {
-                            if (typeof key === 'symbol') return () => ''
-                            return new Proxy({}, handler)
-                        },
-                    }
-                    return new Proxy({}, handler)
+                    return getNoopProxy()
                 }
 
                 this[componentName] = syncWithObservedComponent(componentData(componentBeingObserved), componentBeingObserved, objectSetDeep)
