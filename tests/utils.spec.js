@@ -5,6 +5,7 @@ import {
     updateOnMutation,
     objectSetDeep,
     componentData,
+    getNoopProxy,
 } from '../src/utils'
 import { waitFor } from '@testing-library/dom'
 
@@ -101,4 +102,52 @@ test('componentData > can accept top level properties to scope to', async () => 
         expect(component.__x.getUnobservedData()).toMatchObject({ foo: 'bar', baz: 'qux' })
         expect(componentData(component, 'foo')).toMatchObject({ foo: 'bar' })
     })
+})
+
+test('getNoopProxy > return an empty string when accessing a property', async () => {
+    document.body.innerHTML = `
+        <p>bob</p>
+    `
+    expect(document.querySelector('p').textContent).toBe('bob')
+
+    const proxy = getNoopProxy()
+    document.querySelector('p').textContent = proxy.foo
+
+    expect(document.querySelector('p').textContent).toBe('')
+})
+
+test('getNoopProxy > return an empty string when accessing a nested property', async () => {
+    document.body.innerHTML = `
+        <p>bob</p>
+    `
+    expect(document.querySelector('p').textContent).toBe('bob')
+
+    const proxy = getNoopProxy()
+    document.querySelector('p').textContent = proxy.foo.bar.baz
+
+    expect(document.querySelector('p').textContent).toBe('')
+})
+
+test('getNoopProxy > return an empty string when accessing a function', async () => {
+    document.body.innerHTML = `
+        <p>bob</p>
+    `
+    expect(document.querySelector('p').textContent).toBe('bob')
+
+    const proxy = getNoopProxy()
+    document.querySelector('p').textContent = proxy.foo()
+
+    expect(document.querySelector('p').textContent).toBe('')
+})
+
+test('getNoopProxy > return an empty string when accessing a nested function', async () => {
+    document.body.innerHTML = `
+        <p>bob</p>
+    `
+    expect(document.querySelector('p').textContent).toBe('bob')
+
+    const proxy = getNoopProxy()
+    document.querySelector('p').textContent = proxy.foo.bar()
+
+    expect(document.querySelector('p').textContent).toBe('')
 })

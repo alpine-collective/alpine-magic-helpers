@@ -142,9 +142,6 @@
     function getNoopProxy() {
       var handler = {
         get: function get(target, key) {
-          if (typeof key === 'symbol') return function () {
-            return '';
-          };
           return new Proxy(function () {
             return '';
           }, handler);
