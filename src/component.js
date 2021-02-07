@@ -18,7 +18,7 @@ const AlpineComponentMagicMethod = {
             if (!parentComponent) throw new Error('Parent component not found')
 
             // If the parent component is not ready, we return a dummy proxy
-            // that always return an empty string and we check again on the next frame
+            // that always prints out an empty string and we check again on the next frame
             // We are de facto deferring the value for a few ms but final users
             // shouldn't notice the delay
             return waitUntilReady(parentComponent, $el, () => {
@@ -39,7 +39,7 @@ const AlpineComponentMagicMethod = {
                 if (!componentBeingObserved) throw new Error('Component not found')
 
                 // If the observed component is not ready, we return a dummy proxy
-                // that always return an empty string and we check again on the next frame
+                // that always prints out an empty string and we check again on the next frame
                 // We are de facto deferring the value for a few ms but final users
                 // shouldn't notice the delay
                 return waitUntilReady(componentBeingObserved, $el, () => {

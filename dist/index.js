@@ -136,7 +136,7 @@
 
 
       return new Function(['$data'].concat(Object.keys(additionalHelperVariables)), "var __alpine_result; with($data) { __alpine_result = " + expression + " }; return __alpine_result").apply(void 0, [dataContext].concat(Object.values(additionalHelperVariables)));
-    } // Returns a dummy proxy that supports multiple levels of nesting and always print/return an empty string.
+    } // Returns a dummy proxy that supports multiple levels of nesting and always prints/returns an empty string.
 
 
     function getNoopProxy() {
@@ -151,7 +151,7 @@
         return '';
       }, handler);
     } // Continuously check the observed component until it's ready.
-    // It returns an object that always spit out an empty string while waiting (See getNoopProxy).
+    // It returns an object that always spits out an empty string while waiting (See getNoopProxy).
 
     function waitUntilReady(componentBeingObserved, component, callback) {
       if (!componentBeingObserved.__x) {
@@ -171,7 +171,7 @@
           if (typeof $el.$parent !== 'undefined') return $el.$parent;
           var parentComponent = $el.parentNode.closest('[x-data]');
           if (!parentComponent) throw new Error('Parent component not found'); // If the parent component is not ready, we return a dummy proxy
-          // that always return an empty string and we check again on the next frame
+          // that always prints out an empty string and we check again on the next frame
           // We are de facto deferring the value for a few ms but final users
           // shouldn't notice the delay
 
@@ -192,7 +192,7 @@
             if (typeof this[componentName] !== 'undefined') return this[componentName];
             var componentBeingObserved = document.querySelector("[x-data][x-id=\"" + componentName + "\"], [x-data]#" + componentName);
             if (!componentBeingObserved) throw new Error('Component not found'); // If the observed component is not ready, we return a dummy proxy
-            // that always return an empty string and we check again on the next frame
+            // that always prints out an empty string and we check again on the next frame
             // We are de facto deferring the value for a few ms but final users
             // shouldn't notice the delay
 

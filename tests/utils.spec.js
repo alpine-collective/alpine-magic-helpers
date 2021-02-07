@@ -6,6 +6,7 @@ import {
     objectSetDeep,
     componentData,
     getNoopProxy,
+    waitUntilReady,
 } from '../src/utils'
 import { waitFor } from '@testing-library/dom'
 
@@ -104,7 +105,7 @@ test('componentData > can accept top level properties to scope to', async () => 
     })
 })
 
-test('getNoopProxy > return an empty string when accessing a property', async () => {
+test('getNoopProxy > returns an empty string when accessing a property', async () => {
     document.body.innerHTML = `
         <p>bob</p>
     `
@@ -116,7 +117,7 @@ test('getNoopProxy > return an empty string when accessing a property', async ()
     expect(document.querySelector('p').textContent).toBe('')
 })
 
-test('getNoopProxy > return an empty string when accessing a nested property', async () => {
+test('getNoopProxy > returns an empty string when accessing a nested property', async () => {
     document.body.innerHTML = `
         <p>bob</p>
     `
@@ -128,7 +129,7 @@ test('getNoopProxy > return an empty string when accessing a nested property', a
     expect(document.querySelector('p').textContent).toBe('')
 })
 
-test('getNoopProxy > return an empty string when accessing a function', async () => {
+test('getNoopProxy > returns an empty string when accessing a function', async () => {
     document.body.innerHTML = `
         <p>bob</p>
     `
@@ -140,7 +141,7 @@ test('getNoopProxy > return an empty string when accessing a function', async ()
     expect(document.querySelector('p').textContent).toBe('')
 })
 
-test('getNoopProxy > return an empty string when accessing a nested function', async () => {
+test('getNoopProxy > returns an empty string when accessing a nested function', async () => {
     document.body.innerHTML = `
         <p>bob</p>
     `
@@ -150,4 +151,34 @@ test('getNoopProxy > return an empty string when accessing a nested function', a
     document.querySelector('p').textContent = proxy.foo.bar()
 
     expect(document.querySelector('p').textContent).toBe('')
+})
+
+test('waitUntilReady > returns an empty string while the component is not ready', async () => {
+    window.test = () => waitUntilReady(document.querySelector('div'), document.querySelector('p'), () => {
+        return 'done'
+    })
+    document.body.innerHTML = `
+        <div></div>
+        <p x-data="{foo: 'bar', baz() {return test()}}">
+            <span x-text="foo"></span>
+            <span x-text="baz()"></span>
+        </p>
+    `
+    Alpine.start()
+
+    // Make sure Alpine kicked in
+    await waitFor(() => {
+        expect(document.querySelectorAll('span')[0].textContent).toBe('bar')
+    })
+
+    // Div doesn't have __x yet so the alpine component should wait
+    expect(document.querySelectorAll('span')[1].textContent).toBe('')
+
+    // We simulate a component being finally ready
+    document.querySelector('div').__x = true
+
+    // The callback should finally resolve and return the final value
+    await waitFor(() => {
+        expect(document.querySelectorAll('span')[1].textContent).toBe('done')
+    })
 })

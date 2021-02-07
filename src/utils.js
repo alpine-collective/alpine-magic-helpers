@@ -115,7 +115,7 @@ function saferEval(expression, dataContext, additionalHelperVariables = {}) {
     )
 }
 
-// Returns a dummy proxy that supports multiple levels of nesting and always print/return an empty string.
+// Returns a dummy proxy that supports multiple levels of nesting and always prints/returns an empty string.
 export function getNoopProxy() {
     const handler = {
         get(target, key) {
@@ -126,7 +126,7 @@ export function getNoopProxy() {
 }
 
 // Continuously check the observed component until it's ready.
-// It returns an object that always spit out an empty string while waiting (See getNoopProxy).
+// It returns an object that always spits out an empty string while waiting (See getNoopProxy).
 export function waitUntilReady(componentBeingObserved, component, callback) {
     if (!componentBeingObserved.__x) {
         window.requestAnimationFrame(() => component.__x.updateElements(component))
