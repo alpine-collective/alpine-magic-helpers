@@ -192,6 +192,7 @@ test('$component > this context is set correctly when functions are invoked thro
 test('$parent > component can access granparent scope', async () => {
     document.body.innerHTML = `
         <div x-data="{foo: 'bar'}">
+            <p x-text="foo"></p>
             <div x-data>
                 <div x-data>
                     <p x-text="$parent.$parent.foo"></p>
@@ -206,25 +207,29 @@ test('$parent > component can access granparent scope', async () => {
     Alpine.start()
 
     await waitFor(() => {
-        expect(document.querySelector('p').textContent).toEqual('bar')
+        expect(document.querySelectorAll('p')[0].textContent).toEqual('bar')
+        expect(document.querySelectorAll('p')[1].textContent).toEqual('bar')
     })
 
     document.querySelectorAll('button')[0].click()
 
     await waitFor(() => {
-        expect(document.querySelector('p').textContent).toEqual('baz')
+        expect(document.querySelectorAll('p')[0].textContent).toEqual('baz')
+        expect(document.querySelectorAll('p')[1].textContent).toEqual('baz')
     })
 
     document.querySelectorAll('button')[1].click()
 
     await waitFor(() => {
-        expect(document.querySelector('p').textContent).toEqual('bob')
+        expect(document.querySelectorAll('p')[1].textContent).toEqual('bob')
+        expect(document.querySelectorAll('p')[1].textContent).toEqual('bob')
     })
 
     document.querySelectorAll('button')[2].click()
 
     await waitFor(() => {
-        expect(document.querySelector('p').textContent).toEqual('qux')
+        expect(document.querySelectorAll('p')[1].textContent).toEqual('qux')
+        expect(document.querySelectorAll('p')[1].textContent).toEqual('qux')
     })
 })
 
