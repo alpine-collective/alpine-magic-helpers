@@ -2,9 +2,9 @@ import {
     checkForAlpine,
     objectSetDeep,
     componentData,
-    getNoopProxy,
     syncWithObservedComponent,
     updateOnMutation,
+    waitUntilReady,
 } from './utils'
 
 const AlpineComponentMagicMethod = {
@@ -21,17 +21,14 @@ const AlpineComponentMagicMethod = {
             // that always return an empty string and we check again on the next frame
             // We are de facto deferring the value for a few ms but final users
             // shouldn't notice the delay
-            if (!parentComponent.__x) {
-                window.requestAnimationFrame(() => $el.__x.updateElements($el))
-                return getNoopProxy()
-            }
-
-            $el.$parent = syncWithObservedComponent(componentData(parentComponent), parentComponent, objectSetDeep)
-            updateOnMutation(parentComponent, () => {
-                $el.$parent = syncWithObservedComponent(parentComponent.__x.getUnobservedData(), parentComponent, objectSetDeep)
-                $el.__x.updateElements($el)
+            return waitUntilReady(parentComponent, $el, () => {
+                $el.$parent = syncWithObservedComponent(componentData(parentComponent), parentComponent, objectSetDeep)
+                updateOnMutation(parentComponent, () => {
+                    $el.$parent = syncWithObservedComponent(parentComponent.__x.getUnobservedData(), parentComponent, objectSetDeep)
+                    $el.__x.updateElements($el)
+                })
+                return $el.$parent
             })
-            return $el.$parent
         })
 
         Alpine.addMagicProperty('component', ($el) => {
@@ -41,21 +38,18 @@ const AlpineComponentMagicMethod = {
                 const componentBeingObserved = document.querySelector(`[x-data][x-id="${componentName}"], [x-data]#${componentName}`)
                 if (!componentBeingObserved) throw new Error('Component not found')
 
-                // If the onserved component is not ready, we return a dummy proxy
+                // If the observed component is not ready, we return a dummy proxy
                 // that always return an empty string and we check again on the next frame
                 // We are de facto deferring the value for a few ms but final users
                 // shouldn't notice the delay
-                if (!componentBeingObserved.__x) {
-                    window.requestAnimationFrame(() => $el.__x.updateElements($el))
-                    return getNoopProxy()
-                }
-
-                this[componentName] = syncWithObservedComponent(componentData(componentBeingObserved), componentBeingObserved, objectSetDeep)
-                updateOnMutation(componentBeingObserved, () => {
-                    this[componentName] = syncWithObservedComponent(componentBeingObserved.__x.getUnobservedData(), componentBeingObserved, objectSetDeep)
-                    $el.__x.updateElements($el)
+                return waitUntilReady(componentBeingObserved, $el, () => {
+                    this[componentName] = syncWithObservedComponent(componentData(componentBeingObserved), componentBeingObserved, objectSetDeep)
+                    updateOnMutation(componentBeingObserved, () => {
+                        this[componentName] = syncWithObservedComponent(componentBeingObserved.__x.getUnobservedData(), componentBeingObserved, objectSetDeep)
+                        $el.__x.updateElements($el)
+                    })
+                    return this[componentName]
                 })
-                return this[componentName]
             }
         })
     },
