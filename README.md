@@ -3,6 +3,7 @@
 A collection of magic properties and helper functions for use with Alpine.
 
 ![GitHub tag (latest by date)](https://img.shields.io/github/v/tag/alpine-collective/alpine-magic-helpers?label=version&style=flat-square)
+[![](https://data.jsdelivr.com/v1/package/gh/alpine-collective/alpine-magic-helpers/badge)](https://www.jsdelivr.com/package/gh/alpine-collective/alpine-magic-helpers)
 
 ## About
 
