@@ -25,6 +25,8 @@
 
         return {
           get: function get(target, key) {
+            var _observedComponent$__;
+
             if (target[key] !== null && typeof target[key] === 'object') {
               var path = scope ? scope + "." + key : key;
               return new Proxy(target[key], handler(path));
@@ -34,6 +36,13 @@
 
             if (typeof target[key] === 'function' && observedComponent.__x) {
               return target[key].bind(observedComponent.__x.$data);
+            } // If scope is null, we are at root level so when target[key] is not defined
+            // we try to look for observedComponent.__x.$data[key] to check if a magic
+            // helper/property exists
+
+
+            if (scope === null && !target[key] && observedComponent != null && (_observedComponent$__ = observedComponent.__x) != null && _observedComponent$__.$data[key]) {
+              return observedComponent.__x.$data[key];
             }
 
             return target[key];
@@ -127,6 +136,32 @@
 
 
       return new Function(['$data'].concat(Object.keys(additionalHelperVariables)), "var __alpine_result; with($data) { __alpine_result = " + expression + " }; return __alpine_result").apply(void 0, [dataContext].concat(Object.values(additionalHelperVariables)));
+    } // Returns a dummy proxy that supports multiple levels of nesting and always prints/returns an empty string.
+
+
+    function getNoopProxy() {
+      var handler = {
+        get: function get(target, key) {
+          return new Proxy(function () {
+            return '';
+          }, handler);
+        }
+      };
+      return new Proxy(function () {
+        return '';
+      }, handler);
+    } // Continuously check the observed component until it's ready.
+    // It returns an object that always spits out an empty string while waiting (See getNoopProxy).
+
+    function waitUntilReady(componentBeingObserved, component, callback) {
+      if (!componentBeingObserved.__x) {
+        window.requestAnimationFrame(function () {
+          return component.__x.updateElements(component);
+        });
+        return getNoopProxy();
+      }
+
+      return callback();
     }
 
     var AlpineComponentMagicMethod = {
@@ -135,14 +170,20 @@
         Alpine.addMagicProperty('parent', function ($el) {
           if (typeof $el.$parent !== 'undefined') return $el.$parent;
           var parentComponent = $el.parentNode.closest('[x-data]');
-          if (!parentComponent) throw new Error('Parent component not found');
-          $el.$parent = syncWithObservedComponent(componentData(parentComponent), parentComponent, objectSetDeep);
-          updateOnMutation(parentComponent, function () {
-            $el.$parent = syncWithObservedComponent(parentComponent.__x.getUnobservedData(), parentComponent, objectSetDeep);
+          if (!parentComponent) throw new Error('Parent component not found'); // If the parent component is not ready, we return a dummy proxy
+          // that always prints out an empty string and we check again on the next frame
+          // We are de facto deferring the value for a few ms but final users
+          // shouldn't notice the delay
 
-            $el.__x.updateElements($el);
+          return waitUntilReady(parentComponent, $el, function () {
+            $el.$parent = syncWithObservedComponent(componentData(parentComponent), parentComponent, objectSetDeep);
+            updateOnMutation(parentComponent, function () {
+              $el.$parent = syncWithObservedComponent(parentComponent.__x.getUnobservedData(), parentComponent, objectSetDeep);
+
+              $el.__x.updateElements($el);
+            });
+            return $el.$parent;
           });
-          return $el.$parent;
         });
         Alpine.addMagicProperty('component', function ($el) {
           return function (componentName) {
@@ -150,14 +191,20 @@
 
             if (typeof this[componentName] !== 'undefined') return this[componentName];
             var componentBeingObserved = document.querySelector("[x-data][x-id=\"" + componentName + "\"], [x-data]#" + componentName);
-            if (!componentBeingObserved) throw new Error('Component not found');
-            this[componentName] = syncWithObservedComponent(componentData(componentBeingObserved), componentBeingObserved, objectSetDeep);
-            updateOnMutation(componentBeingObserved, function () {
-              _this[componentName] = syncWithObservedComponent(componentBeingObserved.__x.getUnobservedData(), componentBeingObserved, objectSetDeep);
+            if (!componentBeingObserved) throw new Error('Component not found'); // If the observed component is not ready, we return a dummy proxy
+            // that always prints out an empty string and we check again on the next frame
+            // We are de facto deferring the value for a few ms but final users
+            // shouldn't notice the delay
 
-              $el.__x.updateElements($el);
+            return waitUntilReady(componentBeingObserved, $el, function () {
+              _this[componentName] = syncWithObservedComponent(componentData(componentBeingObserved), componentBeingObserved, objectSetDeep);
+              updateOnMutation(componentBeingObserved, function () {
+                _this[componentName] = syncWithObservedComponent(componentBeingObserved.__x.getUnobservedData(), componentBeingObserved, objectSetDeep);
+
+                $el.__x.updateElements($el);
+              });
+              return _this[componentName];
             });
-            return this[componentName];
           };
         });
       }

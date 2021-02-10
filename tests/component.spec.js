@@ -188,3 +188,69 @@ test('$component > this context is set correctly when functions are invoked thro
         expect(document.querySelector('p').textContent).toEqual('qux')
     })
 })
+
+test('$parent > component can access granparent scope', async () => {
+    document.body.innerHTML = `
+        <div x-data="{foo: 'bar', getFoo() {return this.foo}}">
+            <p x-text="foo"></p>
+            <div x-data>
+                <div x-data>
+                    <p x-text="$parent.$parent.foo"></p>
+                    <p x-text="$parent.$parent.getFoo()"></p>
+                    <button @click="$parent.$parent.foo = 'baz'"></button>
+                </div>
+                <button @click="$parent.foo = 'bob'"></button>
+            </div>
+            <button @click="foo = 'qux'"></button>
+        </div>
+    `
+
+    Alpine.start()
+
+    await waitFor(() => {
+        expect(document.querySelectorAll('p')[0].textContent).toEqual('bar')
+        expect(document.querySelectorAll('p')[1].textContent).toEqual('bar')
+        expect(document.querySelectorAll('p')[2].textContent).toEqual('bar')
+    })
+
+    document.querySelectorAll('button')[0].click()
+
+    await waitFor(() => {
+        expect(document.querySelectorAll('p')[0].textContent).toEqual('baz')
+        expect(document.querySelectorAll('p')[1].textContent).toEqual('baz')
+        expect(document.querySelectorAll('p')[2].textContent).toEqual('baz')
+    })
+
+    document.querySelectorAll('button')[1].click()
+
+    await waitFor(() => {
+        expect(document.querySelectorAll('p')[0].textContent).toEqual('bob')
+        expect(document.querySelectorAll('p')[1].textContent).toEqual('bob')
+        expect(document.querySelectorAll('p')[2].textContent).toEqual('bob')
+    })
+
+    document.querySelectorAll('button')[2].click()
+
+    await waitFor(() => {
+        expect(document.querySelectorAll('p')[0].textContent).toEqual('qux')
+        expect(document.querySelectorAll('p')[1].textContent).toEqual('qux')
+        expect(document.querySelectorAll('p')[2].textContent).toEqual('qux')
+    })
+})
+
+test('$component > component can access magic properties', async () => {
+    document.body.innerHTML = `
+        <div x-data>
+            <p x-text="$component('ext').$refs.bob.textContent"></p>
+        </div>
+        <div x-id="ext" x-data="{foo: 'bar'}">
+            <span x-ref="bob" x-text="foo"></span>
+        </div>
+    `
+
+    Alpine.start()
+
+    await waitFor(() => {
+        expect(document.querySelector('p').textContent).toEqual('bar')
+    })
+})

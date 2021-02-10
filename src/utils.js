@@ -23,6 +23,12 @@ export const syncWithObservedComponent = function (data, observedComponent, call
                 if (typeof target[key] === 'function' && observedComponent.__x) {
                     return target[key].bind(observedComponent.__x.$data)
                 }
+                // If scope is null, we are at root level so when target[key] is not defined
+                // we try to look for observedComponent.__x.$data[key] to check if a magic
+                // helper/property exists
+                if (scope === null && !target[key] && observedComponent?.__x?.$data[key]) {
+                    return observedComponent.__x.$data[key]
+                }
                 return target[key]
             },
             set(_target, key, value) {
@@ -107,4 +113,24 @@ function saferEval(expression, dataContext, additionalHelperVariables = {}) {
     return (new Function(['$data', ...Object.keys(additionalHelperVariables)], `var __alpine_result; with($data) { __alpine_result = ${expression} }; return __alpine_result`))(
         dataContext, ...Object.values(additionalHelperVariables),
     )
+}
+
+// Returns a dummy proxy that supports multiple levels of nesting and always prints/returns an empty string.
+export function getNoopProxy() {
+    const handler = {
+        get(target, key) {
+            return new Proxy(() => '', handler)
+        },
+    }
+    return new Proxy(() => '', handler)
+}
+
+// Continuously check the observed component until it's ready.
+// It returns an object that always spits out an empty string while waiting (See getNoopProxy).
+export function waitUntilReady(componentBeingObserved, component, callback) {
+    if (!componentBeingObserved.__x) {
+        window.requestAnimationFrame(() => component.__x.updateElements(component))
+        return getNoopProxy()
+    }
+    return callback()
 }
