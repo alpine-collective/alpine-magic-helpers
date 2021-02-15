@@ -57,6 +57,10 @@ jobs:
       - name: Commit README if needed #it fails if nothing has changed so we allow an error
         run: git commit -am 'Update version in README'
         continue-on-error: true
+      - name: Update CHANGELOG
+        run: sed -i "/\[Unreleased\]/a\\\n## [${CDN_VERSION}] - $(date +"%Y-%m-%d")" CHANGELOG.md
+      - name: Commit CHANGELOG
+        run: git commit -am 'Update version in README'
       - name: Push changed files to master
         run: git push origin HEAD:master
       - name: Recreate tag
