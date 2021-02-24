@@ -1,4 +1,3 @@
-
 # Magic Helpers
 
 A collection of magic properties and helper functions for use with [Alpine.js](https://github.com/alpinejs/alpine)
@@ -119,10 +118,10 @@ You may watch other components, but you must give them each an id using the 'id'
    </div>
  </div>
 ```
-When a component initialize, the observed component may not be ready yet due to the why Alpine starts up. This is always true for `$parent` and it occurs for `$component` where the observer is placed before the observed component in the page structure. 
+When a component is initialised, the observed component may not be ready yet due to the way Alpine starts up. This is always true for `$parent` and it occurs for `$component` when the observer is placed before the observed component in the page structure. 
 Previous versions were using a hack to evaluate the missing x-data on the fly but that strategy wasn't allowing to use nested magic properties and it was not syncronising properly in some edge cases. 
 The magic helper since version 1.0 defers the resolution of those properties (resolving temporary to empty strings/noop functions) until the observed component is ready and then refreshes the component: this happens in a few milliseconds and it's not noticable by the final users but refreshing a component won't rerun `x-init` with the correct values.
-**If developers need to use the magic property inside x-init, they'll need to manually postpone the execution of x-init for one tick either using the Alpine native $nextTick or a setTimeout with no duration (See examples above).**
+**If developers need to use the magic property inside x-init, they'll need to manually postpone the execution of x-init for one tick either using the Alpine native `$nextTick` or a setTimeout with no duration (See examples above).**
 
 ---
 
