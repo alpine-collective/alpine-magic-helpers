@@ -22,6 +22,9 @@ Adds the following magic helpers to use with Alpine JS. ***More to come!***
 
 🚀 If you have ideas for more magic helpers, please open a [discussion](https://github.com/alpine-collective/alpine-magic-helpers/discussions) or join us on the [AlpineJS Discord](https://discord.gg/snmCYk3)
 
+**Known issues**
+* [Using `$component`/`$parent` in `x-init`](#warning-using-componentparent-in-x-init)
+
 ## Installation
 
 Include the following `<script>` tag in the `<head>` of your document (before Alpine):
@@ -94,6 +97,33 @@ You may watch other components, but you must give them each an id using the 'id'
 <div x-id="yellowSquare" x-data="{ color: 'yellow' }"></div>
 ```
 
+#### :warning: **Using `$component`/`$parent` in `x-init`**
+```html
+ <!-- This won't populate baz correctly -->
+ <div x-data="{ foo: 'bar' }">
+   <div x-data="{ baz: null }" x-init="() => baz = $parent.foo">
+     <span x-text='baz'></span>
+   </div>
+ </div>
+ <!-- use this instead -->
+ <div x-data="{ foo: 'bar' }">
+   <div x-data="{ baz: null }" x-init="$nextTick(() => baz = $parent.foo)">
+     <span x-text='baz'></span>
+   </div>
+ </div>
+ <!-- or -->
+ <div x-data="{ foo: 'bar' }">
+   <div x-data="{ baz: null }" x-init="setTimeout(() => baz = $parent.foo)">
+     <span x-text='baz'></span>
+   </div>
+ </div>
+```
+When a component is initialised, the observed component may not be ready yet due to the way Alpine starts up. This is always true for `$parent` and it occurs for `$component` when the observer is placed before the observed component in the page structure. 
+Previous versions were using a hack to evaluate the missing x-data on the fly but that strategy wasn't allowing to use nested magic properties and it was not syncronising properly in some edge cases. 
+The magic helper since version 1.0 defers the resolution of those properties (resolving temporary to empty strings/noop functions) until the observed component is ready and then refreshes the component: this happens in a few milliseconds and it's not noticable by the final users but refreshing a component won't rerun `x-init` with the correct values.
+**If developers need to use the magic property inside x-init, they'll need to manually postpone the execution of x-init for one tick either using the Alpine native `$nextTick` or a setTimeout with no duration (See examples above).**
+
+---
 
 ### `$fetch`
 **Example:**

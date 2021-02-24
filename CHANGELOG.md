@@ -12,6 +12,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 - [`$component`]: $component and $parent are now deferred for a few ms if the observed component is not ready
+- [`$component`]: **BREAKING** `$component...` and `$parent...` in `x-init` are now always resolving to empty strings.
 
 ## [0.6.0] - 2021-02-05
 ### Fixed
