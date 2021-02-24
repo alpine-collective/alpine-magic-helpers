@@ -108,13 +108,13 @@ You may watch other components, but you must give them each an id using the 'id'
  <!-- use this instead -->
  <div x-data="{ foo: 'bar' }">
    <div x-data="{ baz: null }" x-init="$nextTick(() => baz = $parent.foo)">
-     <span x-text='childMsg'></span>
+     <span x-text='baz'></span>
    </div>
  </div>
  <!-- or -->
  <div x-data="{ foo: 'bar' }">
    <div x-data="{ baz: null }" x-init="setTimeout(() => baz = $parent.foo)">
-     <span x-text='childMsg'></span>
+     <span x-text='baz'></span>
    </div>
  </div>
 ```
