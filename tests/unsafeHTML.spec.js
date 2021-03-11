@@ -1,5 +1,5 @@
 import Alpine from 'alpinejs'
-import AlpineUnsafeHTMLDirective from '../dist/unsafeHTML'
+import AlpineUnsafeHTMLCustomDirective from '../dist/unsafeHTML'
 import { waitFor } from '@testing-library/dom'
 
 beforeAll(() => {
@@ -8,7 +8,7 @@ beforeAll(() => {
 })
 
 beforeEach(() => {
-    AlpineUnsafeHTMLDirective.start()
+    AlpineUnsafeHTMLCustomDirective.start()
 })
 
 test('x-unsafe-html > on init', async () => {

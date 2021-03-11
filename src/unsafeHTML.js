@@ -25,7 +25,7 @@ const nodeScriptReplace = function (node) {
     return node
 }
 
-const AlpineUnsafeHTMLDirective = {
+const AlpineUnsafeHTMLCustomDirective = {
     start() {
         checkForAlpine()
 
@@ -51,9 +51,9 @@ const AlpineUnsafeHTMLDirective = {
 const alpine = window.deferLoadingAlpine || ((alpine) => alpine())
 
 window.deferLoadingAlpine = function (callback) {
-    AlpineUnsafeHTMLDirective.start()
+    AlpineUnsafeHTMLCustomDirective.start()
 
     alpine(callback)
 }
 
-export default AlpineUnsafeHTMLDirective
+export default AlpineUnsafeHTMLCustomDirective

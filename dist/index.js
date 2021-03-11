@@ -3136,11 +3136,12 @@
     var directive = 'x-unsafe-html';
 
     var nodeScriptClone = function nodeScriptClone(node) {
-      var script = document.createElement("script");
+      var script = document.createElement('script');
       script.text = node.innerHTML;
 
       for (var i = 0; i < node.attributes.length; i++) {
-        script.setAttribute((attr = node.attributes[i]).name, attr.value);
+        var attr = node.attributes[i];
+        script.setAttribute(attr.name, attr.value);
       }
 
       return script;
@@ -3158,7 +3159,7 @@
       return node;
     };
 
-    var AlpineUnsafeHTMLDirective = {
+    var AlpineUnsafeHTMLCustomDirective = {
       start: function start() {
         checkForAlpine();
         Alpine.onBeforeComponentInitialized(function (component) {
@@ -3170,7 +3171,7 @@
             }
 
             var attrs = Array.from(el.attributes).filter(function (attr) {
-              return attr.name == directive;
+              return attr.name === directive;
             }).map(parseHtmlAttribute);
             attrs.forEach(function (_ref) {
               var expression = _ref.expression;
@@ -3188,7 +3189,7 @@
     };
 
     window.deferLoadingAlpine = function (callback) {
-      AlpineUnsafeHTMLDirective.start();
+      AlpineUnsafeHTMLCustomDirective.start();
       alpine$9(callback);
     };
 
@@ -3202,7 +3203,7 @@
       AlpineScrollMagicMethod: AlpineScrollMagicMethod,
       AlpineTruncateMagicMethod: AlpineTruncateMagicMethod,
       AlpineUndoMagicMethod: AlpineUndoMagicMethod,
-      AlpineUnsafeHTMLDirective: AlpineUnsafeHTMLDirective
+      AlpineUnsafeHTMLCustomDirective: AlpineUnsafeHTMLCustomDirective
     };
 
     return index;
