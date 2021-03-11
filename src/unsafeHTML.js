@@ -1,6 +1,6 @@
 import { checkForAlpine, parseHtmlAttribute } from './utils'
 
-const directive = 'x-unsafe-html'
+const DIRECTIVE = 'x-unsafe-html'
 
 const nodeScriptClone = function (node) {
     const script = document.createElement('script')
@@ -34,7 +34,7 @@ const AlpineUnsafeHTMLCustomDirective = {
 
             component.resolveBoundAttributes = function (el, initialUpdate = false, extraVars) {
                 const attrs = Array.from(el.attributes)
-                    .filter((attr) => attr.name === directive)
+                    .filter((attr) => attr.name === DIRECTIVE)
                     .map(parseHtmlAttribute)
 
                 attrs.forEach(({ type, value, modifiers, expression }) => {
