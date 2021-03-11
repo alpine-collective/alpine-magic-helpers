@@ -7,7 +7,7 @@ A collection of magic properties and helper functions for use with [Alpine.js](h
 
 ## About
 
-Adds the following magic helpers to use with Alpine JS. ***More to come!***
+Adds the following magic helpers to use with Alpine JS.
 | Magic Helpers | Description |
 | --- | --- |
 | [`$component/$parent`](#component) | Natively access and update data from other components or the parent component. |
@@ -20,7 +20,14 @@ Adds the following magic helpers to use with Alpine JS. ***More to come!***
 | [`$truncate`](#truncate) |  Limit a text string to a specific number of characters or words. |
 | [`$undo`](#undo) |  Track and undo state changes inside your component. |
 
-🚀 If you have ideas for more magic helpers, please open a [discussion](https://github.com/alpine-collective/alpine-magic-helpers/discussions) or join us on the [AlpineJS Discord](https://discord.gg/snmCYk3)
+Adds the following custom directives to use with Alpine JS. 
+| Custom Directives | Description |
+| --- | --- |
+| [`x-unsafe-html`](#x-unsafe-html) | like x-html but allowing new javascript scripts to run. |
+
+ ***More to come!***
+
+🚀 If you have ideas for more magic helpers or custom directives, please open a [discussion](https://github.com/alpine-collective/alpine-magic-helpers/discussions) or join us on the [AlpineJS Discord](https://discord.gg/snmCYk3)
 
 **Known issues**
 * [Using `$component`/`$parent` in `x-init`](#warning-using-componentparent-in-x-init)
@@ -44,6 +51,8 @@ Or you can use the specific magic helpers you need:
 <script src="https://cdn.jsdelivr.net/gh/alpine-collective/alpine-magic-helpers@1.0.x/dist/screen.min.js"></script>
 <script src="https://cdn.jsdelivr.net/gh/alpine-collective/alpine-magic-helpers@1.0.x/dist/scroll.min.js"></script>
 <script src="https://cdn.jsdelivr.net/gh/alpine-collective/alpine-magic-helpers@1.0.x/dist/truncate.min.js"></script>
+<script src="https://cdn.jsdelivr.net/gh/alpine-collective/alpine-magic-helpers@1.0.x/dist/undo.min.js"></script>
+<script src="https://cdn.jsdelivr.net/gh/alpine-collective/alpine-magic-helpers@1.1.x/dist/unsafeHtml.min.js"></script>
 ```
 
 ---
@@ -438,6 +447,16 @@ By default, `$undo` will track all properties. Optionally you may limit the prop
 > Use `$track(['prop1', 'prop2'])` to track multiple properties
 
 [Demo](https://codepen.io/KevinBatdorf/pen/VwjmXLy?editors=1000)
+
+---
+### `x-unsafe-html`
+**Example:**
+```html
+<div x-data="{ foo: bar }">
+    <div x-unsafe-html="foo"></div>
+    <button @click="foo = '<p>bar</p><script>alert(1)</script>'">test</button>
+</div>
+```
 
 ---
 

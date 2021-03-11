@@ -164,7 +164,7 @@
             <button @click="foo = '<p>Success</p><script>alert(`Hey!`)</script>'" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
                 Test
             </button>
-            <span x-unsafe-html="foo" class="w-10 h-10 block"></span>
+            <div x-unsafe-html="foo" class="w-10 h-10 block"></div>
         </div>
 
         <p class="mt-6 mb-4">Pressing the button will load an alpine component with a js defined component</p>
@@ -172,7 +172,7 @@
             <button @click="$fetch('./resource/component.html').then(res => foo = res)" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
                 Test
             </button>
-            <span x-unsafe-html="foo" class="w-10 h-10 block"></span>
+            <div x-unsafe-html="foo" class="w-10 h-10 block"></div>
         </div>
     </div>
 </body>

@@ -14,7 +14,7 @@ beforeEach(() => {
 test('x-unsafe-html > on init', async () => {
     document.body.innerHTML = `
         <div x-data="{ foo: '<h1>bar</h1><script>alert(1)</script>' }">
-            <span x-unsafe-html="foo"></span>
+            <div id="component" x-unsafe-html="foo"></div>
         </div>
     `
 
@@ -23,7 +23,7 @@ test('x-unsafe-html > on init', async () => {
     Alpine.start()
 
     await waitFor(() => {
-        expect(document.querySelector('span').innerHTML).toEqual('<h1>bar</h1><script>alert(1)</script>')
+        expect(document.querySelector('#component').innerHTML).toEqual('<h1>bar</h1><script>alert(1)</script>')
         expect(window.alert).toHaveBeenCalledTimes(1)
     })
 })
