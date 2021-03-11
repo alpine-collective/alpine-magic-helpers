@@ -3133,7 +3133,7 @@
       AlpineUndoMagicMethod.start();
     };
 
-    var directive = 'x-unsafe-html';
+    var DIRECTIVE = 'x-unsafe-html';
 
     var nodeScriptClone = function nodeScriptClone(node) {
       var script = document.createElement('script');
@@ -3171,7 +3171,7 @@
             }
 
             var attrs = Array.from(el.attributes).filter(function (attr) {
-              return attr.name === directive;
+              return attr.name === DIRECTIVE;
             }).map(parseHtmlAttribute);
             attrs.forEach(function (_ref) {
               var expression = _ref.expression;
