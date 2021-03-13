@@ -55,6 +55,7 @@
     },
     "homepage": "https://github.com/alpine-collective/magic-helpers#readme",
     "dependencies": {
+        "@kingshott/iodine": "^3.1.0",
         "deep-diff": "^1.0.2"
     },
     "peerDependencies": {

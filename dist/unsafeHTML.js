@@ -26,12 +26,12 @@
 
       return true;
     }
+    var X_ATTR_RE = /^x-([a-z-]*)\b/i;
     function parseHtmlAttribute(_ref) {
       var name = _ref.name,
           value = _ref.value;
-      var xAttrRE = /^x-([a-zA-Z-]*)\b/;
-      var typeMatch = name.match(xAttrRE);
-      var valueMatch = name.match(/:([a-zA-Z0-9\-:]+)/);
+      var typeMatch = name.match(X_ATTR_RE);
+      var valueMatch = name.match(/:([a-z0-9\-:]+)/i);
       var modifiers = name.match(/\.[^.\]]+(?=[^\]]*$)/g) || [];
       return {
         type: typeMatch ? typeMatch[1] : null,
@@ -42,8 +42,13 @@
         expression: value
       };
     }
+    function getXDirectives(el) {
+      return Array.from(el.attributes).filter(function (attr) {
+        return X_ATTR_RE.test(attr.name);
+      }).map(parseHtmlAttribute);
+    }
 
-    var DIRECTIVE = 'x-unsafe-html';
+    var DIRECTIVE = 'unsafe-html';
 
     var nodeScriptClone = function nodeScriptClone(node) {
       var script = document.createElement('script');
@@ -80,13 +85,15 @@
               initialUpdate = false;
             }
 
-            var attrs = Array.from(el.attributes).filter(function (attr) {
-              return attr.name === DIRECTIVE;
-            }).map(parseHtmlAttribute);
+            var attrs = getXDirectives(el);
             attrs.forEach(function (_ref) {
-              var expression = _ref.expression;
-              el.innerHTML = component.evaluateReturnExpression(el, expression, extraVars);
-              nodeScriptReplace(el);
+              var type = _ref.type,
+                  expression = _ref.expression;
+
+              if (type === DIRECTIVE) {
+                el.innerHTML = component.evaluateReturnExpression(el, expression, extraVars);
+                nodeScriptReplace(el);
+              }
             });
             return legacyResolveBoundAttributes.bind(component)(el, initialUpdate, extraVars);
           };

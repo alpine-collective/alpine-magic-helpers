@@ -135,10 +135,11 @@ export function waitUntilReady(componentBeingObserved, component, callback) {
     return callback()
 }
 
+const X_ATTR_RE = /^x-([a-z-]*)\b/i
+
 export function parseHtmlAttribute({ name, value }) {
-    const xAttrRE = /^x-([a-zA-Z-]*)\b/
-    const typeMatch = name.match(xAttrRE)
-    const valueMatch = name.match(/:([a-zA-Z0-9\-:]+)/)
+    const typeMatch = name.match(X_ATTR_RE)
+    const valueMatch = name.match(/:([a-z0-9\-:]+)/i)
     const modifiers = name.match(/\.[^.\]]+(?=[^\]]*$)/g) || []
 
     return {
@@ -147,4 +148,10 @@ export function parseHtmlAttribute({ name, value }) {
         modifiers: modifiers.map(i => i.replace('.', '')),
         expression: value,
     }
+}
+
+export function getXDirectives(el) {
+    return Array.from(el.attributes)
+        .filter((attr) => X_ATTR_RE.test(attr.name))
+        .map(parseHtmlAttribute)
 }

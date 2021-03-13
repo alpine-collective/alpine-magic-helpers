@@ -48,4 +48,5 @@ export default [
     'truncate',
     'undo',
     'unsafeHTML',
+    'validate',
 ].map(createConfig)

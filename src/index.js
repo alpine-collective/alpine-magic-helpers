@@ -8,6 +8,7 @@ import AlpineScrollMagicMethod from './scroll'
 import AlpineTruncateMagicMethod from './truncate'
 import AlpineUndoMagicMethod from './undo'
 import AlpineUnsafeHTMLCustomDirective from './unsafeHTML'
+import AlpineValidateCustomDirective from './validate'
 
 export default {
     AlpineComponentMagicMethod,
@@ -20,4 +21,5 @@ export default {
     AlpineTruncateMagicMethod,
     AlpineUndoMagicMethod,
     AlpineUnsafeHTMLCustomDirective,
+    AlpineValidateCustomDirective,
 }
