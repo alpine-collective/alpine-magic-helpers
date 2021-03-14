@@ -45,7 +45,6 @@ const AlpineValidateCustomDirective = {
                                 value = ''
                             }
                             if (el.type.toLowerCase() === 'radio') {
-                                console.log(el.form, el.name, el.form[el.name])
                                 value = el.form[el.name].value
                             }
                             const validationRes = window.Iodine.is(value, rules)
@@ -59,24 +58,32 @@ const AlpineValidateCustomDirective = {
                             }
                             e.preventDefault()
                         })
-                        el.addEventListener('input', (e) => {
-                            if (firstValidationOnInput) {
-                                el.$dirty = true
-                            }
-                            const prevValue = el.$valid
-                            el.$valid = validate()
-                            if (el.$dirty && el.$valid !== prevValue) {
-                                component.updateElements(component.$el)
-                            }
-                        })
-                        if (!firstValidationOnInput) {
-                            el.addEventListener('focusout', (e) => {
-                                if (el.$dirty !== true) {
+                        let elements = []
+                        if (el.type.toLowerCase() === 'radio') {
+                            elements = el.form[el.name]
+                        } else {
+                            elements = [el]
+                        }
+                        elements.forEach((element) => {
+                            element.addEventListener('input', (e) => {
+                                if (firstValidationOnInput) {
                                     el.$dirty = true
+                                }
+                                const prevValue = el.$valid
+                                el.$valid = validate()
+                                if (el.$dirty && el.$valid !== prevValue) {
                                     component.updateElements(component.$el)
                                 }
                             })
-                        }
+                            if (!firstValidationOnInput) {
+                                element.addEventListener('focusout', (e) => {
+                                    if (el.$dirty !== true) {
+                                        el.$dirty = true
+                                        component.updateElements(component.$el)
+                                    }
+                                })
+                            }
+                        })
                         el.$valid = validate()
                     }
                 })

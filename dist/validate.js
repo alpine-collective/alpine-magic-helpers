@@ -102,7 +102,6 @@
                   }
 
                   if (el.type.toLowerCase() === 'radio') {
-                    console.log(el.form, el.name, el.form[el.name]);
                     value = el.form[el.name].value;
                   }
 
@@ -119,28 +118,37 @@
 
                   e.preventDefault();
                 });
-                el.addEventListener('input', function (e) {
-                  if (firstValidationOnInput) {
-                    el.$dirty = true;
-                  }
+                var elements = [];
 
-                  var prevValue = el.$valid;
-                  el.$valid = validate();
+                if (el.type.toLowerCase() === 'radio') {
+                  elements = el.form[el.name];
+                } else {
+                  elements = [el];
+                }
 
-                  if (el.$dirty && el.$valid !== prevValue) {
-                    component.updateElements(component.$el);
-                  }
-                });
-
-                if (!firstValidationOnInput) {
-                  el.addEventListener('focusout', function (e) {
-                    if (el.$dirty !== true) {
+                elements.forEach(function (element) {
+                  element.addEventListener('input', function (e) {
+                    if (firstValidationOnInput) {
                       el.$dirty = true;
+                    }
+
+                    var prevValue = el.$valid;
+                    el.$valid = validate();
+
+                    if (el.$dirty && el.$valid !== prevValue) {
                       component.updateElements(component.$el);
                     }
                   });
-                }
 
+                  if (!firstValidationOnInput) {
+                    element.addEventListener('focusout', function (e) {
+                      if (el.$dirty !== true) {
+                        el.$dirty = true;
+                        component.updateElements(component.$el);
+                      }
+                    });
+                  }
+                });
                 el.$valid = validate();
               }
             });
