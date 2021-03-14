@@ -3246,21 +3246,28 @@
 
               if (type === DIRECTIVE$1 && typeof el.$valid === 'undefined') {
                 var validate = function validate() {
+                  // Evaluate the rules in case they are dynamic
                   var rules = component.evaluateReturnExpression(el, expression, extraVars);
-                  var value = el.value;
+                  var value = el.value; // For checkbox, threat an unchecked checkbox as an empty value
 
                   if (el.type.toLowerCase() === 'checkbox' && !el.checked) {
                     value = '';
-                  }
+                  } // For radio buttons, get the value from the checked options
+
 
                   if (el.type.toLowerCase() === 'radio') {
                     value = el.form[el.name].value;
-                  }
+                  } // Run validation
 
-                  var validationRes = window.Iodine.is(value, rules);
+
+                  var validationRes = window.Iodine.is(value, rules); // Set validity state
+
                   el.setCustomValidity(validationRes === true ? '' : validationRes);
                   return validationRes;
-                };
+                }; // Prevend the default behaviour on invalid to hide the native tooltips
+                // If the element wasn't flagged as validated, flag it and update the component
+                // to show possible errors
+
 
                 el.addEventListener('invalid', function (e) {
                   if (el.$dirty !== true) {
@@ -3269,28 +3276,24 @@
                   }
 
                   e.preventDefault();
-                });
-                var elements = [];
+                }); // If the element is a radio button, add listeners on each input
 
-                if (el.type.toLowerCase() === 'radio') {
-                  elements = el.form[el.name];
-                } else {
-                  elements = [el];
-                }
-
+                var elements = el.type.toLowerCase() === 'radio' ? el.form[el.name] : [el];
                 elements.forEach(function (element) {
                   element.addEventListener('input', function (e) {
+                    // If immadiate validation, flag the element as validated
                     if (firstValidationOnInput) {
                       el.$dirty = true;
                     }
 
                     var prevValue = el.$valid;
-                    el.$valid = validate();
+                    el.$valid = validate(); // If validated and the validation result has changes, refresh the component
 
                     if (el.$dirty && el.$valid !== prevValue) {
                       component.updateElements(component.$el);
                     }
-                  });
+                  }); // If not immediate validation, flag the element as validated on blur
+                  // and refresh the component
 
                   if (!firstValidationOnInput) {
                     element.addEventListener('focusout', function (e) {
@@ -3300,7 +3303,9 @@
                       }
                     });
                   }
-                });
+                }); // Trigger initial validation to mimic native HTML5 behaviour
+                // and prevent form from being submitted straight away
+
                 el.$valid = validate();
               }
             });

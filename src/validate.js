@@ -39,18 +39,31 @@ const AlpineValidateCustomDirective = {
 
                     if (type === DIRECTIVE && typeof el.$valid === 'undefined') {
                         const validate = () => {
+                            // Evaluate the rules in case they are dynamic
                             const rules = component.evaluateReturnExpression(el, expression, extraVars)
+
                             let value = el.value
+                            // For checkbox, threat an unchecked checkbox as an empty value
                             if (el.type.toLowerCase() === 'checkbox' && !el.checked) {
                                 value = ''
                             }
+                            // For radio buttons, get the value from the checked options
                             if (el.type.toLowerCase() === 'radio') {
                                 value = el.form[el.name].value
                             }
+
+                            // Run validation
                             const validationRes = window.Iodine.is(value, rules)
+
+                            // Set validity state
                             el.setCustomValidity(validationRes === true ? '' : validationRes)
+
                             return validationRes
                         }
+
+                        // Prevend the default behaviour on invalid to hide the native tooltips
+                        // If the element wasn't flagged as validated, flag it and update the component
+                        // to show possible errors
                         el.addEventListener('invalid', (e) => {
                             if (el.$dirty !== true) {
                                 el.$dirty = true
@@ -58,23 +71,26 @@ const AlpineValidateCustomDirective = {
                             }
                             e.preventDefault()
                         })
-                        let elements = []
-                        if (el.type.toLowerCase() === 'radio') {
-                            elements = el.form[el.name]
-                        } else {
-                            elements = [el]
-                        }
+
+                        // If the element is a radio button, add listeners on each input
+                        const elements = (el.type.toLowerCase() === 'radio') ? el.form[el.name] : [el]
                         elements.forEach((element) => {
                             element.addEventListener('input', (e) => {
+                                // If immadiate validation, flag the element as validated
                                 if (firstValidationOnInput) {
                                     el.$dirty = true
                                 }
+
                                 const prevValue = el.$valid
                                 el.$valid = validate()
+
+                                // If validated and the validation result has changes, refresh the component
                                 if (el.$dirty && el.$valid !== prevValue) {
                                     component.updateElements(component.$el)
                                 }
                             })
+                            // If not immediate validation, flag the element as validated on blur
+                            // and refresh the component
                             if (!firstValidationOnInput) {
                                 element.addEventListener('focusout', (e) => {
                                     if (el.$dirty !== true) {
@@ -84,6 +100,9 @@ const AlpineValidateCustomDirective = {
                                 })
                             }
                         })
+
+                        // Trigger initial validation to mimic native HTML5 behaviour
+                        // and prevent form from being submitted straight away
                         el.$valid = validate()
                     }
                 })
