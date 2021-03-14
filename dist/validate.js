@@ -88,12 +88,25 @@
             var attrs = getXDirectives(el);
             attrs.forEach(function (_ref) {
               var type = _ref.type,
+                  modifiers = _ref.modifiers,
                   expression = _ref.expression;
+              var firstValidationOnInput = modifiers.includes('immediate');
 
               if (type === DIRECTIVE && typeof el.$valid === 'undefined') {
                 var validate = function validate() {
                   var rules = component.evaluateReturnExpression(el, expression, extraVars);
-                  var validationRes = window.Iodine.is(el.value, rules);
+                  var value = el.value;
+
+                  if (el.type.toLowerCase() === 'checkbox' && !el.checked) {
+                    value = '';
+                  }
+
+                  if (el.type.toLowerCase() === 'radio') {
+                    console.log(el.form, el.name, el.form[el.name]);
+                    value = el.form[el.name].value;
+                  }
+
+                  var validationRes = window.Iodine.is(value, rules);
                   el.setCustomValidity(validationRes === true ? '' : validationRes);
                   return validationRes;
                 };
@@ -107,14 +120,27 @@
                   e.preventDefault();
                 });
                 el.addEventListener('input', function (e) {
-                  el.$dirty = true;
+                  if (firstValidationOnInput) {
+                    el.$dirty = true;
+                  }
+
                   var prevValue = el.$valid;
                   el.$valid = validate();
 
-                  if (el.$valid !== prevValue) {
+                  if (el.$dirty && el.$valid !== prevValue) {
                     component.updateElements(component.$el);
                   }
                 });
+
+                if (!firstValidationOnInput) {
+                  el.addEventListener('focusout', function (e) {
+                    if (el.$dirty !== true) {
+                      el.$dirty = true;
+                      component.updateElements(component.$el);
+                    }
+                  });
+                }
+
                 el.$valid = validate();
               }
             });
