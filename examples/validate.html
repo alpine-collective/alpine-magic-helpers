@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+
+<head>
+	<script type="module" src="https://cdn.jsdelivr.net/gh/alpinejs/alpine@v2.x.x/dist/alpine.min.js"></script>
+	<script nomodule src="https://cdn.jsdelivr.net/gh/alpinejs/alpine@v2.x.x/dist/alpine-ie11.min.js" defer></script>
+	<script src="../dist/validate.js"></script>
+	<link href="https://unpkg.com/tailwindcss@^1.0/dist/tailwind.min.css" rel="stylesheet">
+    <style type="text/css">
+        input:invalid {
+            background-color: pink;
+        }
+    </style>
+</head>
+
+<body class="flex flex-col items-center justify-center m-24">
+    <p class="mb-4 font-bold"></p>
+    <div x-data class="inline-flex space-x-2">
+        <form action="https://cdn.jsdelivr.net">
+            <label for="req">Required field, min 3 letters</label>
+            <input name="req" x-ref="req" x-validate="['required', 'minimum:3']">
+            <span x-show="$invalid($refs.req, 'required')">The field is required</span>
+            <span x-show="$invalid($refs.req, 'minimum:3')">The field must be at least 3 letters</span>
+
+            <br>
+            <label for="req2">Textarea</label>
+            <textarea name="req2" x-ref="req2" x-validate="['required']"></textarea>
+            <span x-show="$invalid($refs.req2)">The field is required</span>
+
+            <br>
+            <label for="req3">Select</label>
+            <select name="req3" x-ref="req3" x-validate="['required']">
+                <option value=""></option>
+                <option value="foo">Foo</option>
+                <option value="bar">Bar</option>
+            </select>
+            <span x-show="$invalid($refs.req3)">The field is required</span>
+
+            <br>
+            <label for="re4">Checkbox</label>
+            <input type="checkbox" name="req4" x-ref="req4" x-validate="['required']" value="foo">
+            <span x-show="$invalid($refs.req4)">The field is required</span>
+
+            <br>
+            <label>Radio buttons</label>
+            <input type="radio" name="req5" x-ref="req5" x-validate="['required']" value="foo">
+            <input type="radio" name="req5" value="bar">
+            <span x-show="$invalid($refs.req5)">The field is required</span>
+
+            <br>
+            <input type="submit" value="Test">
+        </form>
+    </div>
+</body>
