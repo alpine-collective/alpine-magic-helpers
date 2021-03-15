@@ -157,4 +157,22 @@
         </div>
     </div>
 
+    <div class="mt-4 pt-4 border-t">
+        <h2 class="text-2xl font-black">x-unsafe-html:</h2>
+        <p class="mb-4">Pressing the button will load an alpine component fragment with a js alert</p>
+        <div x-data="{foo: 'loading...'}" class="inline-flex space-x-2">
+            <button @click="foo = '<p>Success</p><script>alert(`Hey!`)</script>'" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+                Test
+            </button>
+            <div x-unsafe-html="foo" class="w-10 h-10 block"></div>
+        </div>
+
+        <p class="mt-6 mb-4">Pressing the button will load an alpine component with a js defined component</p>
+        <div x-data="{foo: 'loading...'}" class="inline-flex space-x-2">
+            <button @click="$fetch('./resource/component.html').then(res => foo = res)" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+                Test
+            </button>
+            <div x-unsafe-html="foo" class="w-10 h-10 block"></div>
+        </div>
+    </div>
 </body>

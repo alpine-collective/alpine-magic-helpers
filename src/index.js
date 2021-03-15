@@ -7,6 +7,7 @@ import AlpineScreenMagicMethod from './screen'
 import AlpineScrollMagicMethod from './scroll'
 import AlpineTruncateMagicMethod from './truncate'
 import AlpineUndoMagicMethod from './undo'
+import AlpineUnsafeHTMLCustomDirective from './unsafeHTML'
 
 export default {
     AlpineComponentMagicMethod,
@@ -18,4 +19,5 @@ export default {
     AlpineScrollMagicMethod,
     AlpineTruncateMagicMethod,
     AlpineUndoMagicMethod,
+    AlpineUnsafeHTMLCustomDirective,
 }

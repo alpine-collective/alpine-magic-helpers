@@ -47,4 +47,5 @@ export default [
     'scroll',
     'truncate',
     'undo',
+    'unsafeHTML',
 ].map(createConfig)
