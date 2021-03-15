@@ -52,7 +52,7 @@ Or you can use the specific magic helpers you need:
 <script src="https://cdn.jsdelivr.net/gh/alpine-collective/alpine-magic-helpers@1.1.x/dist/scroll.min.js"></script>
 <script src="https://cdn.jsdelivr.net/gh/alpine-collective/alpine-magic-helpers@1.1.x/dist/truncate.min.js"></script>
 <script src="https://cdn.jsdelivr.net/gh/alpine-collective/alpine-magic-helpers@1.1.x/dist/undo.min.js"></script>
-<script src="https://cdn.jsdelivr.net/gh/alpine-collective/alpine-magic-helpers@1.1.x/dist/unsafeHtml.min.js"></script>
+<script src="https://cdn.jsdelivr.net/gh/alpine-collective/alpine-magic-helpers@1.1.x/dist/unsafeHTML.min.js"></script>
 ```
 
 ---
