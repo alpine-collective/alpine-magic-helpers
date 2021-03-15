@@ -458,6 +458,12 @@ By default, `$undo` will track all properties. Optionally you may limit the prop
 </div>
 ```
 
+> :warning: **Only use on trusted content.** :warning:
+>
+> Dynamically rendering HTML from third parties can easily lead to [XSS](https://developer.mozilla.org/en-US/docs/Glossary/Cross-site_scripting) vulnerabilities.
+
+[Demo](https://codepen.io/KevinBatdorf/pen/poNYpZb)
+
 ---
 
 ## License
