@@ -15,7 +15,7 @@ const validator = {
         min: (value, min) => value === '' || parseFloat(value) >= parseFloat(min),
         max: (value, max) => value === '' || parseFloat(value) <= parseFloat(max),
         pattern: (value, pattern) => value === '' || (new RegExp(pattern)).test(value),
-        equals: (value, otherValue) => value === otherValue,
+        match: (value, otherValue) => value === otherValue,
     },
     is(value, rules = []) {
         for (const index in rules) {

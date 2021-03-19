@@ -3201,7 +3201,7 @@
     };
 
     var DIRECTIVE$1 = 'validate';
-    var EMAIL_REGEX = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+    var EMAIL_REGEX = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
     var validator = {
       tests: {
         required: function required(value) {
@@ -3222,6 +3222,7 @@
         integer: function integer(value) {
           return !isNaN(value) && !isNaN(parseInt(value, 10)) && Math.floor(value) == value;
         },
+        // eslint-disable-line eqeqeq
         min: function min(value, _min) {
           return value === '' || parseFloat(value) >= parseFloat(_min);
         },
@@ -3231,8 +3232,8 @@
         pattern: function pattern(value, _pattern) {
           return value === '' || new RegExp(_pattern).test(value);
         },
-        equals: function equals(value, otherValue) {
-          return value === otherValu;
+        match: function match(value, otherValue) {
+          return value === otherValue;
         }
       },
       is: function is(value, rules) {
@@ -3241,7 +3242,7 @@
         }
 
         for (var index in rules) {
-          var rule = rules[index].split(":");
+          var rule = rules[index].split(':');
           var result = this.tests[rule[0]].apply(this, [value, rule[1]]);
           if (!result) return rules[index];
         }

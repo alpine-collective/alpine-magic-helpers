@@ -5,11 +5,6 @@
 	<script nomodule src="https://cdn.jsdelivr.net/gh/alpinejs/alpine@v2.x.x/dist/alpine-ie11.min.js" defer></script>
 	<script src="../dist/validate.js"></script>
 	<link href="https://unpkg.com/tailwindcss@^1.0/dist/tailwind.min.css" rel="stylesheet">
-    <style type="text/css">
-        input:invalid {
-            background-color: pink;
-        }
-    </style>
 </head>
 
 <body class="flex flex-col items-center justify-center m-24">
@@ -45,6 +40,19 @@
             <input type="radio" name="req5" x-ref="req5" x-validate="['required']" value="foo">
             <input type="radio" name="req5" value="bar">
             <span x-show="$invalid($refs.req5)">The field is required</span>
+
+            <br>
+            <label>Password confirmation</label>
+            <input type="password" name="req6" x-ref="req6" x-validate="['required']">
+            <span x-show="$invalid($refs.req6)">The field is required</span>
+            <input type="password" name="req7" x-ref="req7" x-validate="['match:'+$refs.req6.value]">
+            <span x-show="$invalid($refs.req7)">The fields do not match</span>
+
+            <br>
+            <label for="req">Email</label>
+            <input type="email" name="req8" x-ref="req8" x-validate="['required', 'email']">
+            <span x-show="$invalid($refs.req8, 'required')">The field is required</span>
+            <span x-show="$invalid($refs.req8, 'email')">The field must be a valid email</span>
 
             <br>
             <input type="submit" value="Test">
