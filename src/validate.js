@@ -1,7 +1,34 @@
 import { checkForAlpine, getXDirectives } from './utils'
-import '@kingshott/iodine' // The library is attached directly to the global scope and it doesn't export the module
 
 const DIRECTIVE = 'validate'
+
+const EMAIL_REGEX = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
+
+const validator = {
+    tests: {
+        required: (value) => value !== '',
+        email: (value) => value === '' || EMAIL_REGEX.test(value),
+        minlength: (value, length) => value === '' || value.length >= parseInt(length),
+        maxlength: (value, length) => value === '' || value.length <= parseInt(length),
+        numeric: (value) => value === '' || (!isNaN(parseFloat(value)) && isFinite(value)),
+        integer: (value) => !isNaN(value) && !isNaN(parseInt(value, 10)) && Math.floor(value) == value, // eslint-disable-line eqeqeq
+        min: (value, min) => value === '' || parseFloat(value) >= parseFloat(min),
+        max: (value, max) => value === '' || parseFloat(value) <= parseFloat(max),
+        pattern: (value, pattern) => value === '' || (new RegExp(pattern)).test(value),
+        equals: (value, otherValue) => value === otherValue,
+    },
+    is(value, rules = []) {
+        for (const index in rules) {
+            const rule = rules[index].split(':')
+
+            const result = this.tests[rule[0]].apply(this, [value, rule[1]])
+
+            if (!result) return rules[index]
+        }
+
+        return true
+    },
+}
 
 const AlpineValidateCustomDirective = {
     start() {
@@ -42,18 +69,14 @@ const AlpineValidateCustomDirective = {
                             // Evaluate the rules in case they are dynamic
                             const rules = component.evaluateReturnExpression(el, expression, extraVars)
 
-                            let value = el.value
+                            let value = el.form[el.name].value
                             // For checkbox, threat an unchecked checkbox as an empty value
                             if (el.type.toLowerCase() === 'checkbox' && !el.checked) {
                                 value = ''
                             }
-                            // For radio buttons, get the value from the checked options
-                            if (el.type.toLowerCase() === 'radio') {
-                                value = el.form[el.name].value
-                            }
 
                             // Run validation
-                            const validationRes = window.Iodine.is(value, rules)
+                            const validationRes = validator.is(value, rules)
 
                             // Set validity state
                             el.setCustomValidity(validationRes === true ? '' : validationRes)

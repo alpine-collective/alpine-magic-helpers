@@ -17,9 +17,9 @@
     <div x-data class="inline-flex space-x-2">
         <form action="https://cdn.jsdelivr.net">
             <label for="req">Required field, min 3 letters</label>
-            <input name="req" x-ref="req" x-validate="['required', 'minimum:3']">
+            <input name="req" x-ref="req" x-validate="['required', 'minlength:3']">
             <span x-show="$invalid($refs.req, 'required')">The field is required</span>
-            <span x-show="$invalid($refs.req, 'minimum:3')">The field must be at least 3 letters</span>
+            <span x-show="$invalid($refs.req, 'minlength:3')">The field must be at least 3 letters</span>
 
             <br>
             <label for="req2">Textarea</label>
