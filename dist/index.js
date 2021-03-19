@@ -164,6 +164,7 @@
       return callback();
     }
     var X_ATTR_RE = /^x-([a-z-]*)\b/i;
+
     function parseHtmlAttribute(_ref) {
       var name = _ref.name,
           value = _ref.value;
@@ -179,6 +180,7 @@
         expression: value
       };
     }
+
     function getXDirectives(el) {
       return Array.from(el.attributes).filter(function (attr) {
         return X_ATTR_RE.test(attr.name);

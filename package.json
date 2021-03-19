@@ -1,6 +1,6 @@
 {
     "name": "alpine-magic-helpers",
-    "version": "1.0.0",
+    "version": "1.1.0",
     "description": "A collection of magic properties and helper functions for use with Alpine.",
     "source": [
         "src/index.js",
@@ -54,10 +54,7 @@
         "url": "https://github.com/alpine-collective/magic-helpers/issues"
     },
     "homepage": "https://github.com/alpine-collective/magic-helpers#readme",
-    "dependencies": {
-        "@kingshott/iodine": "^3.1.0",
-        "deep-diff": "^1.0.2"
-    },
+    "dependencies": {},
     "peerDependencies": {
         "alpinejs": "^2.8"
     },
@@ -73,6 +70,7 @@
         "axios": "^0.21",
         "browser-sync": "^2.26.14",
         "concurrently": "^5.3.0",
+        "deep-diff": "^1.0.2",
         "eslint": "^7.19.0",
         "eslint-config-standard": "^16.0.2",
         "eslint-plugin-import": "^2.22.1",

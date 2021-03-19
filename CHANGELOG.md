@@ -6,6 +6,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.1.x] - 2021-03-15
+### Added
+- [`x-unsafe-html`]: Added 'x-unsafe-html' custom directive
+
 ## [1.0.0] - 2021-02-13
 ### Added
 - [`$component`]: Added support for accessing magic properties/helper via $component/$parent ($parent.$parent.foo is now a thing!!!)

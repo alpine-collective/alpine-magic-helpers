@@ -137,7 +137,7 @@ export function waitUntilReady(componentBeingObserved, component, callback) {
 
 const X_ATTR_RE = /^x-([a-z-]*)\b/i
 
-export function parseHtmlAttribute({ name, value }) {
+function parseHtmlAttribute({ name, value }) {
     const typeMatch = name.match(X_ATTR_RE)
     const valueMatch = name.match(/:([a-z0-9\-:]+)/i)
     const modifiers = name.match(/\.[^.\]]+(?=[^\]]*$)/g) || []
