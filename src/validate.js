@@ -16,10 +16,18 @@ const validator = {
         max: (value, max) => value === '' || parseFloat(value) <= parseFloat(max),
         pattern: (value, pattern) => value === '' || (new RegExp(pattern)).test(value),
         match: (value, otherValue) => value === otherValue,
+        lowercase: (value) => value === '' || /[a-z]/.test(value),
+        uppercase: (value) => value === '' || /[a-z]/.test(value),
+        digit: (value) => value === '' || /[0-9]/.test(value),
+        symbol: (value) => value === '' || /[^a-zA-Z0-9\s]/.test(value),
     },
     is(value, rules = []) {
         for (const index in rules) {
             const rule = rules[index].split(':')
+
+            if (!this.tests[rule[0]]) {
+                throw Error('Invalid rule in validator: ' + rule[0])
+            }
 
             const result = this.tests[rule[0]].apply(this, [value, rule[1]])
 

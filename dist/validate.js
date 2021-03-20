@@ -84,6 +84,18 @@
         },
         match: function match(value, otherValue) {
           return value === otherValue;
+        },
+        lowercase: function lowercase(value) {
+          return value === '' || /[a-z]/.test(value);
+        },
+        uppercase: function uppercase(value) {
+          return value === '' || /[a-z]/.test(value);
+        },
+        digit: function digit(value) {
+          return value === '' || /[0-9]/.test(value);
+        },
+        symbol: function symbol(value) {
+          return value === '' || /[^a-zA-Z0-9\s]/.test(value);
         }
       },
       is: function is(value, rules) {
@@ -93,6 +105,11 @@
 
         for (var index in rules) {
           var rule = rules[index].split(':');
+
+          if (!this.tests[rule[0]]) {
+            throw Error('Invalid rule in validator: ' + rule[0]);
+          }
+
           var result = this.tests[rule[0]].apply(this, [value, rule[1]]);
           if (!result) return rules[index];
         }
