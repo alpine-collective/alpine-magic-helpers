@@ -1702,25 +1702,38 @@
     var AlpineFetchMagicMethod = {
       start: function start() {
         checkForAlpine();
-        Alpine.addMagicProperty('fetch', function () {
-          return function () {
-            for (var _len = arguments.length, parameters = new Array(_len), _key = 0; _key < _len; _key++) {
-              parameters[_key] = arguments[_key];
-            }
+        Alpine.addMagicProperty('fetch', this.fetch.bind(null, null));
+        Alpine.addMagicProperty('get', this.fetch.bind(null, 'get'));
+        Alpine.addMagicProperty('post', this.fetch.bind(null, 'post'));
+      },
+      fetch: function fetch(method) {
+        return async function (parameters, data) {
+          function findResponse(response) {
+            return Object.prototype.hasOwnProperty.call(response, 'data') ? response.data : response;
+          } // Using $post or $get
 
-            if (typeof parameters[0] === 'string' && parameters[0].length) {
-              return axios$1.get(parameters[0]).then(function (response) {
-                return Object.prototype.hasOwnProperty.call(response, 'data') ? response.data : response;
-              });
-            }
 
-            if (typeof parameters[0] === 'object') {
-              return axios$1(parameters[0]);
-            }
+          if (method) {
+            var _axios;
 
-            return parameters[0];
-          };
-        });
+            return await axios$1((_axios = {
+              url: parameters,
+              method: method
+            }, _axios[method === 'post' ? 'data' : 'params'] = data, _axios)).then(function (response) {
+              return findResponse(response);
+            });
+          }
+
+          if (typeof parameters === 'string') {
+            // Using $fetch('url')
+            return await axios$1.get(parameters).then(function (response) {
+              return findResponse(response);
+            });
+          } // Using $fetch({ // axios config })
+
+
+          return await axios$1(parameters);
+        };
       }
     };
 
