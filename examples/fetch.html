@@ -20,7 +20,7 @@
     <p class="mt-16 mb-4 font-bold">A title will load below ($get)</p>
     <div
         x-data="{ url: `https://jsonplaceholder.typicode.com/todos/${Math.floor(Math.random() * 50) + 1}`, title: ''}"
-        x-init="$get(url).then(response => title = response.title)"
+        x-init="$get(url, { parameters: 'work' }).then(response => title = response.title)"
         x-text="title"
         >
     </div>
