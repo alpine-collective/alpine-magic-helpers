@@ -10,7 +10,7 @@ const AlpineFetchMagicMethod = {
         Alpine.addMagicProperty('post', this.fetch.bind(null, 'post'))
     },
     fetch(method) {
-        return async (parameters, data) => {
+        return async (parameters, data = {}) => {
             function findResponse(response) {
                 return Object.prototype.hasOwnProperty.call(response, 'data') ? response.data : response
             }
