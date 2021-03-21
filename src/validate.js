@@ -72,12 +72,12 @@ const AlpineValidateCustomDirective = {
                 attrs.forEach(({ type, value, modifiers, expression }) => {
                     const firstValidationOnInput = modifiers.includes('immediate')
 
-                    if (type === DIRECTIVE && typeof el.$valid === 'undefined') {
+                    if (type === DIRECTIVE && initialUpdate) {
                         const validate = () => {
                             // Evaluate the rules in case they are dynamic
                             const rules = component.evaluateReturnExpression(el, expression, extraVars)
 
-                            let value = el.form[el.name].value
+                            let value = el.form.elements[el.name].value
                             // For checkbox, threat an unchecked checkbox as an empty value
                             if (el.type.toLowerCase() === 'checkbox' && !el.checked) {
                                 value = ''

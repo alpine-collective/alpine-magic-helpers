@@ -158,11 +158,11 @@
                   expression = _ref.expression;
               var firstValidationOnInput = modifiers.includes('immediate');
 
-              if (type === DIRECTIVE && typeof el.$valid === 'undefined') {
+              if (type === DIRECTIVE && initialUpdate) {
                 var validate = function validate() {
                   // Evaluate the rules in case they are dynamic
                   var rules = component.evaluateReturnExpression(el, expression, extraVars);
-                  var value = el.form[el.name].value; // For checkbox, threat an unchecked checkbox as an empty value
+                  var value = el.form.elements[el.name].value; // For checkbox, threat an unchecked checkbox as an empty value
 
                   if (el.type.toLowerCase() === 'checkbox' && !el.checked) {
                     value = '';
