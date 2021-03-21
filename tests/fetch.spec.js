@@ -10,101 +10,101 @@ beforeEach(function () {
     AlpineFetchMagicMethod.start()
 })
 
-// test('$fetch > accept strings', async () => {
-//     const xhrMock = {
-//         open: jest.fn(),
-//         send: jest.fn(),
-//         readyState: 4,
-//         responseText: JSON.stringify({ title: 'bar' }),
-//         status: 200,
-//     }
+test('$fetch > accept strings', async () => {
+    const xhrMock = {
+        open: jest.fn(),
+        send: jest.fn(),
+        readyState: 4,
+        responseText: JSON.stringify({ title: 'bar' }),
+        status: 200,
+    }
 
-//     window.XMLHttpRequest = jest.fn(() => xhrMock)
+    window.XMLHttpRequest = jest.fn(() => xhrMock)
 
-//     document.body.innerHTML = `
-//         <div x-data="{title: 'foo'}" x-init="$fetch('https://dummy.url').then(response => title = response.title)">
-//             <p x-text="title"></p>
-//         </div>
-//     `
+    document.body.innerHTML = `
+        <div x-data="{title: 'foo'}" x-init="$fetch('https://dummy.url').then(response => title = response.title)">
+            <p x-text="title"></p>
+        </div>
+    `
 
-//     Alpine.start()
+    Alpine.start()
 
-//     await waitFor(() => {
-//         expect(document.querySelector('p').textContent).toEqual('foo')
-//     })
+    await waitFor(() => {
+        expect(document.querySelector('p').textContent).toEqual('foo')
+    })
 
-//     xhrMock.onreadystatechange()
+    xhrMock.onreadystatechange()
 
-//     await waitFor(() => {
-//         expect(document.querySelector('p').textContent).toEqual('bar')
-//     })
+    await waitFor(() => {
+        expect(document.querySelector('p').textContent).toEqual('bar')
+    })
 
-//     expect(xhrMock.open).toHaveBeenCalledWith('GET', 'https://dummy.url', expect.anything())
-// })
+    expect(xhrMock.open).toHaveBeenCalledWith('GET', 'https://dummy.url', expect.anything())
+})
 
-// test('$fetch > accept objects', async () => {
-//     const xhrMock = {
-//         open: jest.fn(),
-//         send: jest.fn(),
-//         readyState: 4,
-//         responseText: JSON.stringify({ title: 'bar' }),
-//         status: 200,
-//     }
+test('$fetch > accept objects', async () => {
+    const xhrMock = {
+        open: jest.fn(),
+        send: jest.fn(),
+        readyState: 4,
+        responseText: JSON.stringify({ title: 'bar' }),
+        status: 200,
+    }
 
-//     window.XMLHttpRequest = jest.fn(() => xhrMock)
+    window.XMLHttpRequest = jest.fn(() => xhrMock)
 
-//     document.body.innerHTML = `
-//         <div x-data="{ title: 'foo'}" x-init="$fetch({url: 'https://dummy.url', method: 'post'}).then(response => title = response.data.title)">
-//             <p x-text="title"></p>
-//         </div>
-//     `
+    document.body.innerHTML = `
+        <div x-data="{ title: 'foo'}" x-init="$fetch({url: 'https://dummy.url', method: 'post'}).then(response => title = response.data.title)">
+            <p x-text="title"></p>
+        </div>
+    `
 
-//     Alpine.start()
+    Alpine.start()
 
-//     await waitFor(() => {
-//         expect(document.querySelector('p').textContent).toEqual('foo')
-//     })
+    await waitFor(() => {
+        expect(document.querySelector('p').textContent).toEqual('foo')
+    })
 
-//     xhrMock.onreadystatechange()
+    xhrMock.onreadystatechange()
 
-//     await waitFor(() => {
-//         expect(document.querySelector('p').textContent).toEqual('bar')
-//     })
+    await waitFor(() => {
+        expect(document.querySelector('p').textContent).toEqual('bar')
+    })
 
-//     expect(xhrMock.open).toHaveBeenCalledWith('POST', 'https://dummy.url', expect.anything())
-// })
+    expect(xhrMock.open).toHaveBeenCalledWith('POST', 'https://dummy.url', expect.anything())
+})
 
-// test('$get > is properly called', async () => {
-//     const xhrMock = {
-//         open: jest.fn(),
-//         send: jest.fn(),
-//         readyState: 4,
-//         responseText: JSON.stringify({ title: 'bar' }),
-//         status: 200,
-//     }
+test('$get > is properly called', async () => {
+    const xhrMock = {
+        open: jest.fn(),
+        send: jest.fn(),
+        readyState: 4,
+        responseText: JSON.stringify({ title: 'bar' }),
+        status: 200,
+    }
 
-//     window.XMLHttpRequest = jest.fn(() => xhrMock)
+    window.XMLHttpRequest = jest.fn(() => xhrMock)
 
-//     document.body.innerHTML = `
-//         <div x-data="{ title: 'foo'}" x-init="$get('https://dummy.url').then(response => title = response.title)">
-//             <p x-text="title"></p>
-//         </div>
-//     `
+    document.body.innerHTML = `
+        <div x-data="{ title: 'foo'}" x-init="$get('https://dummy.url').then(response => title = response.title)">
+            <p x-text="title"></p>
+        </div>
+    `
 
-//     Alpine.start()
+    Alpine.start()
 
-//     await waitFor(() => {
-//         expect(document.querySelector('p').textContent).toEqual('foo')
-//     })
+    await waitFor(() => {
+        expect(document.querySelector('p').textContent).toEqual('foo')
+    })
 
-//     xhrMock.onreadystatechange()
+    xhrMock.onreadystatechange()
 
-//     await waitFor(() => {
-//         expect(document.querySelector('p').textContent).toEqual('bar')
-//     })
+    await waitFor(() => {
+        expect(document.querySelector('p').textContent).toEqual('bar')
+    })
 
-//     expect(xhrMock.open).toHaveBeenCalledWith('GET', 'https://dummy.url', expect.anything())
-// })
+    expect(xhrMock.open).toHaveBeenCalledWith('GET', 'https://dummy.url', expect.anything())
+})
 
 test('$post > is properly called', async () => {
     const xhrMock = {
