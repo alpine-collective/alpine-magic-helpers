@@ -10,10 +10,24 @@
 
 <body class="flex flex-col items-center justify-center m-24">
 
-    <p class="mb-4 font-bold">A title will load below</p>
+    <p class="mt-16 mb-4 font-bold">A title will load below ($fetch)</p>
     <div
-        x-data="{ url: 'https://jsonplaceholder.typicode.com/todos/1', title: ''}"
+        x-data="{ url: `https://jsonplaceholder.typicode.com/todos/${Math.floor(Math.random() * 50) + 1}`, title: ''}"
         x-init="$fetch(url).then(response => title = response.title)"
+        x-text="title"
+        >
+    </div>
+    <p class="mt-16 mb-4 font-bold">A title will load below ($get)</p>
+    <div
+        x-data="{ url: `https://jsonplaceholder.typicode.com/todos/${Math.floor(Math.random() * 50) + 1}`, title: ''}"
+        x-init="$get(url, { parameters: 'work' }).then(response => title = response.title)"
+        x-text="title"
+        >
+    </div>
+    <p class="mt-16 mb-4 font-bold">The text "Magic Helper" should appear below ($post)</p>
+    <div
+        x-data="{ url: 'https://jsonplaceholder.typicode.com/todos', title: ''}"
+        x-init="$post(url, { title: 'Magic Helper' }).then(response => title = response.title)"
         x-text="title"
         >
     </div>

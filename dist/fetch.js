@@ -1429,37 +1429,37 @@
   }
 
   // Create the default instance to be exported
-  var axios = createInstance(defaults_1);
+  var axios$1 = createInstance(defaults_1);
 
   // Expose Axios class to allow class inheritance
-  axios.Axios = Axios_1;
+  axios$1.Axios = Axios_1;
 
   // Factory for creating new instances
-  axios.create = function create(instanceConfig) {
-    return createInstance(mergeConfig(axios.defaults, instanceConfig));
+  axios$1.create = function create(instanceConfig) {
+    return createInstance(mergeConfig(axios$1.defaults, instanceConfig));
   };
 
   // Expose Cancel & CancelToken
-  axios.Cancel = Cancel_1;
-  axios.CancelToken = CancelToken_1;
-  axios.isCancel = isCancel;
+  axios$1.Cancel = Cancel_1;
+  axios$1.CancelToken = CancelToken_1;
+  axios$1.isCancel = isCancel;
 
   // Expose all/spread
-  axios.all = function all(promises) {
+  axios$1.all = function all(promises) {
     return Promise.all(promises);
   };
-  axios.spread = spread;
+  axios$1.spread = spread;
 
   // Expose isAxiosError
-  axios.isAxiosError = isAxiosError;
+  axios$1.isAxiosError = isAxiosError;
 
-  var axios_1 = axios;
+  var axios_1 = axios$1;
 
   // Allow use of default import syntax in TypeScript
-  var _default = axios;
+  var _default = axios$1;
   axios_1.default = _default;
 
-  var axios$1 = axios_1;
+  var axios = axios_1;
 
   var checkForAlpine = function checkForAlpine() {
     if (!window.Alpine) {
@@ -1487,25 +1487,38 @@
   var AlpineFetchMagicMethod = {
     start: function start() {
       checkForAlpine();
-      Alpine.addMagicProperty('fetch', function () {
-        return function () {
-          for (var _len = arguments.length, parameters = new Array(_len), _key = 0; _key < _len; _key++) {
-            parameters[_key] = arguments[_key];
-          }
+      Alpine.addMagicProperty('fetch', this.fetch.bind(null, null));
+      Alpine.addMagicProperty('get', this.fetch.bind(null, 'get'));
+      Alpine.addMagicProperty('post', this.fetch.bind(null, 'post'));
+    },
+    fetch: function fetch(method) {
+      return async function (parameters, data) {
+        function findResponse(response) {
+          return Object.prototype.hasOwnProperty.call(response, 'data') ? response.data : response;
+        } // Using $post or $get
 
-          if (typeof parameters[0] === 'string' && parameters[0].length) {
-            return axios$1.get(parameters[0]).then(function (response) {
-              return Object.prototype.hasOwnProperty.call(response, 'data') ? response.data : response;
-            });
-          }
 
-          if (typeof parameters[0] === 'object') {
-            return axios$1(parameters[0]);
-          }
+        if (method) {
+          var _axios;
 
-          return parameters[0];
-        };
-      });
+          return await axios((_axios = {
+            url: parameters,
+            method: method
+          }, _axios[method === 'post' ? 'data' : 'params'] = data, _axios)).then(function (response) {
+            return findResponse(response);
+          });
+        }
+
+        if (typeof parameters === 'string') {
+          // Using $fetch('url')
+          return await axios.get(parameters).then(function (response) {
+            return findResponse(response);
+          });
+        } // Using $fetch({ // axios config })
+
+
+        return await axios(parameters);
+      };
     }
   };
 
