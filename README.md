@@ -31,10 +31,11 @@ Adds the following custom directives to use with Alpine JS.
 
 **Known issues**
 * [Using `$component`/`$parent` in `x-init`](#warning-using-componentparent-in-x-init)
+* [Using Magic Helpers with Livewire](#warning-using-magic-helpers-with-livewire)
 
 ## Installation
 
-Include the following `<script>` tag in the `<head>` of your document (before Alpine):
+Include the following `<script>` tag in the `<head>` of your document before Alpine:
 
 ```html
 <script src="https://cdn.jsdelivr.net/gh/alpine-collective/alpine-magic-helpers@1.1.x/dist/index.min.js" defer></script>
@@ -79,6 +80,13 @@ import 'alpine-magic-helpers/dist/component'
 import 'alpine-magic-helpers/dist/fetch'
 import 'alpinejs'
 ```
+
+---
+
+### :warning: **Using Magic Helpers with Livewire**
+When using magic helpers along with Laravel Livewire, you need to make sure that the library is registered after lLivewire to prevent Livewire from overriding the magi helper startup callbacks. This can be done either using the defer attribut on the magic helper script or including the magic helper script at the bottom of your body after `@livewireScripts` **without** the `defer` attribute.
+
+---
 
 ### `$component`
 **Example:**
@@ -242,8 +250,6 @@ The `$range` helper mostly mimics implementations found in other languages `$ran
 **Example:**
 
 The `$screen` helper detects if the current browser width is equal or greater than a given breakpoint and returns `true` or `false` based on the result.
-
-> ⚠️ **NOTE**: when using `$screen` in conjunction with Livewire and using the CDN installation option you need to include the magic helper after Livewire or defer the helper library see issue comment: https://github.com/alpine-collective/alpine-magic-helpers/issues/111#issuecomment-810990742
 
 ```html
 <div x-data>
