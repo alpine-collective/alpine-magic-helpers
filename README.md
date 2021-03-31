@@ -37,22 +37,22 @@ Adds the following custom directives to use with Alpine JS.
 Include the following `<script>` tag in the `<head>` of your document (before Alpine):
 
 ```html
-<script src="https://cdn.jsdelivr.net/gh/alpine-collective/alpine-magic-helpers@1.1.x/dist/index.min.js"></script>
+<script src="https://cdn.jsdelivr.net/gh/alpine-collective/alpine-magic-helpers@1.1.x/dist/index.min.js" defer></script>
 ```
 
 Or you can use the specific magic helpers you need:
 
 ```html
-<script src="https://cdn.jsdelivr.net/gh/alpine-collective/alpine-magic-helpers@1.1.x/dist/component.min.js"></script>
-<script src="https://cdn.jsdelivr.net/gh/alpine-collective/alpine-magic-helpers@1.1.x/dist/fetch.min.js"></script>
-<script src="https://cdn.jsdelivr.net/gh/alpine-collective/alpine-magic-helpers@1.1.x/dist/interval.min.js"></script>
-<script src="https://cdn.jsdelivr.net/gh/alpine-collective/alpine-magic-helpers@1.1.x/dist/range.min.js"></script>
-<script src="https://cdn.jsdelivr.net/gh/alpine-collective/alpine-magic-helpers@1.1.x/dist/refresh.min.js"></script>
-<script src="https://cdn.jsdelivr.net/gh/alpine-collective/alpine-magic-helpers@1.1.x/dist/screen.min.js"></script>
-<script src="https://cdn.jsdelivr.net/gh/alpine-collective/alpine-magic-helpers@1.1.x/dist/scroll.min.js"></script>
-<script src="https://cdn.jsdelivr.net/gh/alpine-collective/alpine-magic-helpers@1.1.x/dist/truncate.min.js"></script>
-<script src="https://cdn.jsdelivr.net/gh/alpine-collective/alpine-magic-helpers@1.1.x/dist/undo.min.js"></script>
-<script src="https://cdn.jsdelivr.net/gh/alpine-collective/alpine-magic-helpers@1.1.x/dist/unsafeHTML.min.js"></script>
+<script src="https://cdn.jsdelivr.net/gh/alpine-collective/alpine-magic-helpers@1.1.x/dist/component.min.js" defer></script>
+<script src="https://cdn.jsdelivr.net/gh/alpine-collective/alpine-magic-helpers@1.1.x/dist/fetch.min.js" defer></script>
+<script src="https://cdn.jsdelivr.net/gh/alpine-collective/alpine-magic-helpers@1.1.x/dist/interval.min.js" defer></script>
+<script src="https://cdn.jsdelivr.net/gh/alpine-collective/alpine-magic-helpers@1.1.x/dist/range.min.js" defer></script>
+<script src="https://cdn.jsdelivr.net/gh/alpine-collective/alpine-magic-helpers@1.1.x/dist/refresh.min.js" defer></script>
+<script src="https://cdn.jsdelivr.net/gh/alpine-collective/alpine-magic-helpers@1.1.x/dist/screen.min.js" defer></script>
+<script src="https://cdn.jsdelivr.net/gh/alpine-collective/alpine-magic-helpers@1.1.x/dist/scroll.min.js" defer></script>
+<script src="https://cdn.jsdelivr.net/gh/alpine-collective/alpine-magic-helpers@1.1.x/dist/truncate.min.js" defer></script>
+<script src="https://cdn.jsdelivr.net/gh/alpine-collective/alpine-magic-helpers@1.1.x/dist/undo.min.js" defer></script>
+<script src="https://cdn.jsdelivr.net/gh/alpine-collective/alpine-magic-helpers@1.1.x/dist/unsafeHTML.min.js" defer></script>
 ```
 
 ---
@@ -242,6 +242,8 @@ The `$range` helper mostly mimics implementations found in other languages `$ran
 **Example:**
 
 The `$screen` helper detects if the current browser width is equal or greater than a given breakpoint and returns `true` or `false` based on the result.
+
+> ⚠️ **NOTE**: when using `$screen` in conjunction with Livewire and using the CDN installation option you need to include the magic helper after Livewire or defer the helper library see issue comment: https://github.com/alpine-collective/alpine-magic-helpers/issues/111#issuecomment-810990742
 
 ```html
 <div x-data>
