@@ -10,19 +10,33 @@ const AlpineFetchMagicMethod = {
     start() {
         checkForAlpine()
 
-        Alpine.addMagicProperty('fetch', () => {
-            return (...parameters) => {
-                if (typeof parameters[0] === 'string' && parameters[0].length) {
-                    return axios.get(parameters[0]).then(response => Object.prototype.hasOwnProperty.call(response, 'data') ? response.data : response)
-                }
-
-                if (typeof parameters[0] === 'object') {
-                    return axios(parameters[0])
-                }
-
-                return parameters[0]
+        Alpine.addMagicProperty('fetch', this.fetch.bind(null, null))
+        Alpine.addMagicProperty('get', this.fetch.bind(null, 'get'))
+        Alpine.addMagicProperty('post', this.fetch.bind(null, 'post'))
+    },
+    fetch(method) {
+        return async (parameters, data = {}) => {
+            function findResponse(response) {
+                return Object.prototype.hasOwnProperty.call(response, 'data') ? response.data : response
             }
-        })
+
+            // Using $post or $get
+            if (method) {
+                return await axios({
+                    url: parameters,
+                    method: method,
+                    [method === 'post' ? 'data' : 'params']: data,
+                }).then(response => findResponse(response))
+            }
+
+            if (typeof parameters === 'string') {
+                // Using $fetch('url')
+                return await axios.get(parameters).then(response => findResponse(response))
+            }
+
+            // Using $fetch({ // axios config })
+            return await axios(parameters)
+        }
     },
 }
 

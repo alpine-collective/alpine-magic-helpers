@@ -11,7 +11,7 @@ Adds the following magic helpers to use with Alpine JS.
 | Magic Helpers | Description |
 | --- | --- |
 | [`$component/$parent`](#component) | Natively access and update data from other components or the parent component. |
-| [`$fetch`](#fetch) | Using Axios, fetch JSON from an external source.  |
+| [`$fetch/$get/$post`](#fetch) | Using Axios, fetch JSON from an external source.  |
 | [`$interval`](#interval) | Run a function every n milliseconds. Optionally start and stop the timer. |
 | [`$range`](#range) | Iterate over a range of values. |
 | [`$refresh`](#refresh) | Manually refresh a component. |
@@ -20,7 +20,7 @@ Adds the following magic helpers to use with Alpine JS.
 | [`$truncate`](#truncate) |  Limit a text string to a specific number of characters or words. |
 | [`$undo`](#undo) |  Track and undo state changes inside your component. |
 
-Adds the following custom directives to use with Alpine JS. 
+Adds the following custom directives to use with Alpine JS.
 | Custom Directives | Description |
 | --- | --- |
 | [`x-unsafe-html`](#x-unsafe-html) | like x-html but allowing new javascript scripts to run. |
@@ -127,8 +127,8 @@ You may watch other components, but you must give them each an id using the 'id'
    </div>
  </div>
 ```
-When a component is initialised, the observed component may not be ready yet due to the way Alpine starts up. This is always true for `$parent` and it occurs for `$component` when the observer is placed before the observed component in the page structure. 
-Previous versions were using a hack to evaluate the missing x-data on the fly but that strategy wasn't allowing to use nested magic properties and it was not syncronising properly in some edge cases. 
+When a component is initialised, the observed component may not be ready yet due to the way Alpine starts up. This is always true for `$parent` and it occurs for `$component` when the observer is placed before the observed component in the page structure.
+Previous versions were using a hack to evaluate the missing x-data on the fly but that strategy wasn't allowing to use nested magic properties and it was not syncronising properly in some edge cases.
 The magic helper since version 1.0 defers the resolution of those properties (resolving temporary to empty strings/noop functions) until the observed component is ready and then refreshes the component: this happens in a few milliseconds and it's not noticable by the final users but refreshing a component won't rerun `x-init` with the correct values.
 **If developers need to use the magic property inside x-init, they'll need to manually postpone the execution of x-init for one tick either using the Alpine native `$nextTick` or a setTimeout with no duration (See examples above).**
 
@@ -144,9 +144,11 @@ The magic helper since version 1.0 defers the resolution of those properties (re
 ```
 [Demo](https://codepen.io/KevinBatdorf/pen/poyyXKj)
 
-**Optionally pass in an options object**
+> As a shortcut, you can optionally use `$get(url, params)` or `$post(url, data)` to conveniently send a GET or POST request with params or data as the second argument.
 
-By default, `$fetch` will return the JSON data object. However, because we are using Axios behind the scenes, you may pass in an object to customize the request [See all options](https://github.com/axios/axios).
+**Optionally pass in an Axios options object**
+
+If you need more control, you may pass in an object to customize the request [See all options](https://github.com/axios/axios).
 
 **Example:**
 
@@ -338,7 +340,7 @@ Alternatively, you can pass a css selector to scroll to an element at any positi
 <div id="foo">
 </div>
 <div x-data>
-    <button x-on:click="$scroll('#foo, {behavior: auto}')">Jump to #foo</scroll>
+    <button x-on:click="$scroll('#foo', {behavior: auto})">Jump to #foo</scroll>
 </div>
 ...
 <button x-data x-on:click="$scroll(0, {behavior: auto}">Jump to top</scroll>
@@ -355,7 +357,7 @@ With offset:
 <div id="foo">
 </div>
 <div x-data>
-    <button x-on:click="$scroll('#foo, {offset: 50}')">Scroll to 50px before #foo</scroll>
+    <button x-on:click="$scroll('#foo', {offset: 50})">Scroll to 50px before #foo</scroll>
 </div>
 ...
 <button x-data x-on:click="$scroll(0, {offset: 50}">Jump to 50px before top (a bit daft but supported)</scroll>
@@ -372,7 +374,7 @@ With both:
 <div id="foo">
 </div>
 <div x-data>
-    <button x-on:click="$scroll('#foo, {behavior: auto, offset: 50}')">Jump to 50px before #foo</scroll>
+    <button x-on:click="$scroll('#foo', {behavior: auto, offset: 50})">Jump to 50px before #foo</scroll>
 </div>
 ...
 <button x-data x-on:click="$scroll(0, {behavior: auto, offset: 50}">Jump to 50px before top</scroll>
