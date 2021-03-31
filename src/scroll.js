@@ -1,9 +1,17 @@
 import smoothscroll from 'smoothscroll-polyfill'
+import {
+    checkForAlpine,
+    importOrderCheck,
+} from './utils'
+
+importOrderCheck()
 
 smoothscroll.polyfill()
 
 const AlpineScrollMagicMethod = {
     start() {
+        checkForAlpine()
+
         Alpine.addMagicProperty('scroll', () => {
             return function (target, options = {}) {
                 const originalTarget = target

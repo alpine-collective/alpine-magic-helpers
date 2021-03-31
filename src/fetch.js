@@ -1,5 +1,10 @@
 import axios from 'axios'
-import { checkForAlpine } from './utils'
+import {
+    checkForAlpine,
+    importOrderCheck,
+} from './utils'
+
+importOrderCheck()
 
 const AlpineFetchMagicMethod = {
     start() {

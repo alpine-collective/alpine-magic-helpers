@@ -186,7 +186,16 @@
         return X_ATTR_RE.test(attr.name);
       }).map(parseHtmlAttribute);
     }
+    function importOrderCheck() {
+      // We only want to show the error once
+      if (window.Alpine && !window.AlpineMagicHelpers.__fatal) {
+        window.AlpineMagicHelpers.__fatal = setTimeout(function () {
+          console.error("%c*** ALPINE MAGIC HELPER: Fatal Error! ***\n\n\n" + "Alpine magic helpers need to be loaded before Alpine " + "to avoid errors when Alpine initialises its component. \n\n" + "Make sure the helper script is included before Alpine in " + "your page when using the defer attribute", "font-size: 14px");
+        }, 200); // We set a small timeout to make sure we flush all the Alpine noise first
+      }
+    }
 
+    importOrderCheck();
     var AlpineComponentMagicMethod = {
       start: function start() {
         checkForAlpine();
@@ -238,8 +247,8 @@
     };
 
     window.deferLoadingAlpine = function (callback) {
-      alpine(callback);
       AlpineComponentMagicMethod.start();
+      alpine(callback);
     };
 
     var bind = function bind(fn, thisArg) {
@@ -1699,6 +1708,7 @@
 
     var axios$1 = axios_1;
 
+    importOrderCheck();
     var AlpineFetchMagicMethod = {
       start: function start() {
         checkForAlpine();
@@ -1733,6 +1743,7 @@
       alpine$1(callback);
     };
 
+    importOrderCheck();
     var AlpineIntervalMagicMethod = {
       start: function start() {
         checkForAlpine();
@@ -1800,6 +1811,7 @@
       alpine$2(callback);
     };
 
+    importOrderCheck();
     var AlpineRangeMagicMethod = {
       start: function start() {
         checkForAlpine();
@@ -1845,6 +1857,7 @@
       alpine$3(callback);
     };
 
+    importOrderCheck();
     var AlpineRefreshMagicMethod = {
       start: function start() {
         checkForAlpine();
@@ -1908,6 +1921,8 @@
 
     var config = new Config();
 
+    importOrderCheck(); // Collection of components that contains `$screen` helper usecase
+
     var screenComponents = []; // Debounce `updateElements` method to prevent memory leak
 
     var debouncedScreensUpdate = function debouncedScreensUpdate() {
@@ -1927,8 +1942,9 @@
 
     var AlpineScreenMagicMethod = {
       start: function start() {
-        // Bind `debouncedScreensUpdate` to resize event on window
+        checkForAlpine(); // Bind `debouncedScreensUpdate` to resize event on window
         // Note that `resize` event will be triggered on `orientationchange` event as well
+
         window.addEventListener('resize', debouncedScreensUpdate());
         Alpine.addMagicProperty('screen', function ($el) {
           // Push $el if it's not in the `screenComponents`
@@ -2404,9 +2420,11 @@
     }());
     });
 
+    importOrderCheck();
     smoothscroll.polyfill();
     var AlpineScrollMagicMethod = {
       start: function start() {
+        checkForAlpine();
         Alpine.addMagicProperty('scroll', function () {
           return function (target, options) {
             if (options === void 0) {
@@ -2469,6 +2487,7 @@
       alpine$6(callback);
     };
 
+    importOrderCheck();
     var AlpineTruncateMagicMethod = {
       start: function start() {
         var _this = this;
@@ -3041,6 +3060,7 @@
     }));
     });
 
+    importOrderCheck();
     var history = new WeakMap();
     var AlpineUndoMagicMethod = {
       start: function start() {
@@ -3140,6 +3160,7 @@
       AlpineUndoMagicMethod.start();
     };
 
+    importOrderCheck();
     var DIRECTIVE = 'unsafe-html';
 
     var nodeScriptClone = function nodeScriptClone(node) {

@@ -2,8 +2,11 @@ import {
     checkForAlpine,
     componentData,
     updateOnMutation,
+    importOrderCheck,
 } from './utils'
 import { DeepDiff } from 'deep-diff'
+
+importOrderCheck()
 
 const history = new WeakMap()
 
