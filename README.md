@@ -2,8 +2,9 @@
 
 A collection of magic properties and helper functions for use with [Alpine.js](https://github.com/alpinejs/alpine)
 
-![GitHub tag (latest by date)](https://img.shields.io/github/v/tag/alpine-collective/alpine-magic-helpers?label=version&style=flat-square)
+[![GitHub tag (latest by date)](https://img.shields.io/github/v/tag/alpine-collective/alpine-magic-helpers?label=version&style=flat-square)](https://www.npmjs.com/package/alpine-magic-helpers)
 [![](https://data.jsdelivr.com/v1/package/gh/alpine-collective/alpine-magic-helpers/badge)](https://www.jsdelivr.com/package/gh/alpine-collective/alpine-magic-helpers)
+[![npm bundle size](https://img.shields.io/bundlephobia/minzip/alpine-magic-helpers?color=#0F0)](https://bundlephobia.com/result?p=alpine-magic-helpers)
 
 ## About
 
