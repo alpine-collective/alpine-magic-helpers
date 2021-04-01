@@ -84,7 +84,7 @@ import 'alpinejs'
 ---
 
 ### :warning: **Using Magic Helpers with Livewire**
-When using magic helpers along with Laravel Livewire, you need to make sure that the library is registered after lLivewire to prevent Livewire from overriding the magi helper startup callbacks. This can be done either using the defer attribut on the magic helper script or including the magic helper script at the bottom of your body after `@livewireScripts` **without** the `defer` attribute.
+When using magic helpers along with Laravel Livewire, you need to make sure that the library is registered after Livewire to prevent Livewire from overriding the magic helper startup callbacks. This can be done either using the defer attribute on the magic helper script or including the magic helper script at the bottom of your body after `@livewireScripts` **without** the `defer` attribute.
 
 ---
 
