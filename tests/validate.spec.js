@@ -51,9 +51,87 @@ test('x-validate > required input', async () => {
     })
 })
 
-test.todo('x-validate > required textarea')
+test('x-validate > required textarea', async () => {
+    document.body.innerHTML = `
+        <div x-data="{ foo: 'bar' }">
+            <p x-text="foo"></p>
+            <form>
+                <textarea x-ref="baz" name="test" x-validate="['required']"></textarea>
+                <span x-show="$invalid($refs.baz)">Invalid</span>
+            </form>
+        </div>
+    `
 
-test.todo('x-validate > required checkbox')
+    Alpine.start()
+
+    // Make sure Alpine started
+    await waitFor(() => {
+        expect(document.querySelector('p').innerHTML).toEqual('bar')
+    })
+
+    // Error message is not visible
+    expect(document.querySelector('span').getAttribute('style')).toEqual('display: none;')
+
+    // Check form is invalid and cannot be submitted
+    expect(document.querySelector('form').checkValidity()).toEqual(false)
+
+    // Type something
+    fireEvent.input(document.querySelector('textarea'), { target: { value: 'bob' } })
+
+    // Check error message is still not visible
+    await waitFor(() => {
+        expect(document.querySelector('span').getAttribute('style')).toEqual('display: none;')
+    })
+
+    // Delete content
+    fireEvent.input(document.querySelector('textarea'), { target: { value: '' } })
+
+    // Check error message is visible
+    await waitFor(() => {
+        expect(document.querySelector('span').getAttribute('style')).toEqual(null)
+    })
+})
+
+test('x-validate > required checkbox', async () => {
+    document.body.innerHTML = `
+        <div x-data="{ foo: 'bar' }">
+            <p x-text="foo"></p>
+            <form>
+                <input type="checkbox" x-ref="baz" name="test" x-validate="['required']">
+                <span x-show="$invalid($refs.baz)">Invalid</span>
+            </form>
+        </div>
+    `
+
+    Alpine.start()
+
+    // Make sure Alpine started
+    await waitFor(() => {
+        expect(document.querySelector('p').innerHTML).toEqual('bar')
+    })
+
+    // Error message is not visible
+    expect(document.querySelector('span').getAttribute('style')).toEqual('display: none;')
+
+    // Check form is invalid and cannot be submitted
+    expect(document.querySelector('form').checkValidity()).toEqual(false)
+
+    // Check
+    document.querySelector('input').click()
+
+    // Check error message is still not visible
+    await waitFor(() => {
+        expect(document.querySelector('span').getAttribute('style')).toEqual('display: none;')
+    })
+
+    // uncheck
+    document.querySelector('input').click()
+
+    // Check error message is visible
+    await waitFor(() => {
+        expect(document.querySelector('span').getAttribute('style')).toEqual(null)
+    })
+})
 
 test.todo('x-validate > required radio button')
 

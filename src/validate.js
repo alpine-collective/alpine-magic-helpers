@@ -70,9 +70,8 @@ const AlpineValidateCustomDirective = {
                 const attrs = getXDirectives(el)
 
                 attrs.forEach(({ type, value, modifiers, expression }) => {
-                    const firstValidationOnInput = modifiers.includes('immediate')
-
                     if (type === DIRECTIVE && initialUpdate) {
+                        const firstValidationOnInput = modifiers.includes('immediate')
                         const validate = () => {
                             // Evaluate the rules in case they are dynamic
                             const rules = component.evaluateReturnExpression(el, expression, extraVars)
@@ -92,20 +91,20 @@ const AlpineValidateCustomDirective = {
                             return validationRes
                         }
 
-                        // Prevend the default behaviour on invalid to hide the native tooltips
-                        // If the element wasn't flagged as validated, flag it and update the component
-                        // to show possible errors
-                        el.addEventListener('invalid', (e) => {
-                            if (el.$dirty !== true) {
-                                el.$dirty = true
-                                component.updateElements(component.$el)
-                            }
-                            e.preventDefault()
-                        })
-
                         // If the element is a radio button, add listeners on each input
-                        const elements = (el.type.toLowerCase() === 'radio') ? el.form[el.name] : [el]
+                        const elements = (el.type.toLowerCase() === 'radio') ? el.form.elements[el.name] : [el]
                         elements.forEach((element) => {
+                            // Prevend the default behaviour on invalid to hide the native tooltips
+                            // If the element wasn't flagged as validated, flag it and update the component
+                            // to show possible errors
+                            el.addEventListener('invalid', (e) => {
+                                if (el.$dirty !== true) {
+                                    el.$dirty = true
+                                    component.updateElements(component.$el)
+                                }
+                                e.preventDefault()
+                            })
+
                             element.addEventListener('input', (e) => {
                                 // If immadiate validation, flag the element as validated
                                 if (firstValidationOnInput) {
