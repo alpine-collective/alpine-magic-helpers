@@ -11,7 +11,7 @@ const validator = {
         minlength: (value, length) => value === '' || value.length >= parseInt(length),
         maxlength: (value, length) => value === '' || value.length <= parseInt(length),
         numeric: (value) => value === '' || (!isNaN(parseFloat(value)) && isFinite(value)),
-        integer: (value) => !isNaN(value) && !isNaN(parseInt(value, 10)) && Math.floor(value) == value, // eslint-disable-line eqeqeq
+        integer: (value) => value === '' || (!isNaN(value) && !isNaN(parseInt(value, 10)) && Math.floor(value) == value), // eslint-disable-line eqeqeq
         min: (value, min) => value === '' || parseFloat(value) >= parseFloat(min),
         max: (value, max) => value === '' || parseFloat(value) <= parseFloat(max),
         pattern: (value, pattern) => value === '' || (new RegExp(pattern)).test(value),
@@ -77,9 +77,21 @@ const AlpineValidateCustomDirective = {
                             const rules = component.evaluateReturnExpression(el, expression, extraVars)
 
                             let value = el.form.elements[el.name].value
-                            // For checkbox, threat an unchecked checkbox as an empty value
+
                             if (el.type.toLowerCase() === 'checkbox' && !el.checked) {
                                 value = ''
+                            }
+
+                            if (el.type.toLowerCase() !== 'radio' && (el.form.elements[el.name] instanceof NodeList)) {
+                                Array.from(el.form.elements[el.name]).reduce(
+                                    (acc, curr) => {
+                                        if (curr.checked) {
+                                            acc.push(curr.value)
+                                        }
+                                        return acc
+                                    },
+                                    [],
+                                )
                             }
 
                             // Run validation
@@ -92,7 +104,8 @@ const AlpineValidateCustomDirective = {
                         }
 
                         // If the element is a radio button, add listeners on each input
-                        const elements = (el.type.toLowerCase() === 'radio') ? el.form.elements[el.name] : [el]
+                        let elements = el.form.elements[el.name]
+                        if (!(elements instanceof NodeList)) elements = [elements]
                         elements.forEach((element) => {
                             // Prevend the default behaviour on invalid to hide the native tooltips
                             // If the element wasn't flagged as validated, flag it and update the component

@@ -70,7 +70,7 @@
           return value === '' || !isNaN(parseFloat(value)) && isFinite(value);
         },
         integer: function integer(value) {
-          return !isNaN(value) && !isNaN(parseInt(value, 10)) && Math.floor(value) == value;
+          return value === '' || !isNaN(value) && !isNaN(parseInt(value, 10)) && Math.floor(value) == value;
         },
         // eslint-disable-line eqeqeq
         min: function min(value, _min) {
@@ -163,10 +163,20 @@
                 var validate = function validate() {
                   // Evaluate the rules in case they are dynamic
                   var rules = component.evaluateReturnExpression(el, expression, extraVars);
-                  var value = el.form.elements[el.name].value; // For checkbox, threat an unchecked checkbox as an empty value
+                  var value = el.form.elements[el.name].value;
 
                   if (el.type.toLowerCase() === 'checkbox' && !el.checked) {
                     value = '';
+                  }
+
+                  if (el.type.toLowerCase() !== 'radio' && el.form.elements[el.name] instanceof NodeList) {
+                    Array.from(el.form.elements[el.name]).reduce(function (acc, curr) {
+                      if (curr.checked) {
+                        acc.push(curr.value);
+                      }
+
+                      return acc;
+                    }, []);
                   } // Run validation
 
 
@@ -177,7 +187,8 @@
                 }; // If the element is a radio button, add listeners on each input
 
 
-                var elements = el.type.toLowerCase() === 'radio' ? el.form.elements[el.name] : [el];
+                var elements = el.form.elements[el.name];
+                if (!(elements instanceof NodeList)) elements = [elements];
                 elements.forEach(function (element) {
                   // Prevend the default behaviour on invalid to hide the native tooltips
                   // If the element wasn't flagged as validated, flag it and update the component
