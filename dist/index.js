@@ -3236,6 +3236,12 @@
         },
         match: function match(value, otherValue) {
           return value === '' || value === otherValue;
+        },
+        minoptions: function minoptions(value, min) {
+          return value === '' || Array.isArray(value) && value.length >= parseFloat(min);
+        },
+        maxoptions: function maxoptions(value, max) {
+          return value === '' || Array.isArray(value) && value.length <= parseFloat(max);
         }
       },
       is: function is(value, rules) {
@@ -3311,13 +3317,14 @@
                   }
 
                   if (el.type.toLowerCase() !== 'radio' && el.form.elements[el.name] instanceof NodeList) {
-                    Array.from(el.form.elements[el.name]).reduce(function (acc, curr) {
+                    value = Array.from(el.form.elements[el.name]).reduce(function (acc, curr) {
                       if (curr.checked) {
                         acc.push(curr.value);
                       }
 
                       return acc;
                     }, []);
+                    if (value.length === 0) value = '';
                   } // Run validation
 
 

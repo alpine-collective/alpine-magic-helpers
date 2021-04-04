@@ -16,6 +16,8 @@ const validator = {
         max: (value, max) => value === '' || parseFloat(value) <= parseFloat(max),
         pattern: (value, pattern) => value === '' || (new RegExp(pattern)).test(value),
         match: (value, otherValue) => value === '' || value === otherValue,
+        minoptions: (value, min) => value === '' || (Array.isArray(value) && value.length >= parseFloat(min)),
+        maxoptions: (value, max) => value === '' || (Array.isArray(value) && value.length <= parseFloat(max)),
     },
     is(value, rules = []) {
         for (const index in rules) {
@@ -80,7 +82,7 @@ const AlpineValidateCustomDirective = {
                             }
 
                             if (el.type.toLowerCase() !== 'radio' && (el.form.elements[el.name] instanceof NodeList)) {
-                                Array.from(el.form.elements[el.name]).reduce(
+                                value = Array.from(el.form.elements[el.name]).reduce(
                                     (acc, curr) => {
                                         if (curr.checked) {
                                             acc.push(curr.value)
@@ -89,6 +91,7 @@ const AlpineValidateCustomDirective = {
                                     },
                                     [],
                                 )
+                                if (value.length === 0) value = ''
                             }
 
                             // Run validation

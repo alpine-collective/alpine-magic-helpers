@@ -55,6 +55,15 @@
             <span x-show="$invalid($refs.req8, 'email')">The field must be a valid email</span>
 
             <br>
+            <label for="req">CHeckboxes</label>
+            <input type="checkbox" name="req9[]" x-ref="req9" x-validate="['required', 'minoptions:2', 'maxoptions:2']" value="one">
+            <input type="checkbox" name="req9[]" value="two">
+            <input type="checkbox" name="req9[]" value="three">
+            <span x-show="$invalid($refs.req9, 'required')">The field is required</span>
+            <span x-show="$invalid($refs.req9, 'minoptions:2')">Please select at least 2 options</span>
+            <span x-show="$invalid($refs.req9, 'maxoptions:2')">Please select maximum 2 options</span>
+
+            <br>
             <input type="submit" value="Test">
         </form>
     </div>
