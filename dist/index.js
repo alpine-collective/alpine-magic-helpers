@@ -3235,19 +3235,7 @@
           return value === '' || new RegExp(_pattern).test(value);
         },
         match: function match(value, otherValue) {
-          return value === otherValue;
-        },
-        lowercase: function lowercase(value) {
-          return value === '' || /[a-z]/.test(value);
-        },
-        uppercase: function uppercase(value) {
-          return value === '' || /[a-z]/.test(value);
-        },
-        digit: function digit(value) {
-          return value === '' || /[0-9]/.test(value);
-        },
-        symbol: function symbol(value) {
-          return value === '' || /[^a-zA-Z0-9\s]/.test(value);
+          return value === '' || value === otherValue;
         }
       },
       is: function is(value, rules) {
@@ -3257,12 +3245,13 @@
 
         for (var index in rules) {
           var rule = rules[index].split(':');
+          var test = this.tests[rule[0]] || window.AlpineValidationRules[rule[0]];
 
-          if (!this.tests[rule[0]]) {
+          if (!test) {
             throw Error('Invalid rule in validator: ' + rule[0]);
           }
 
-          var result = this.tests[rule[0]].apply(this, [value, rule[1]]);
+          var result = test.apply(this, [value, rule[1]]);
           if (!result) return rules[index];
         }
 

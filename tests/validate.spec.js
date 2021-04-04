@@ -130,9 +130,149 @@ test('x-validate > required checkbox', async () => {
     })
 })
 
-test.todo('x-validate > required radio button')
+// Untestable as jsdom does not implement/support RadioNodeLis
+// https://github.com/jsdom/jsdom/issues/2600
+test.skip('x-validate > required radio button', async () => {
+    document.body.innerHTML = `
+        <div x-data="{ foo: 'bar' }">
+            <p x-text="foo"></p>
+            <form>
+                <input type="radio" name="test" value="one" x-validate="['required']">
+                <input type="radio" name="test" value="two">
+            </form>
+        </div>
+    `
 
-test.todo('x-validate > required select dropdown')
+    Alpine.start()
+
+    // Make sure Alpine started
+    await waitFor(() => {
+        expect(document.querySelector('p').innerHTML).toEqual('bar')
+    })
+
+    // Check form is invalid and cannot be submitted
+    expect(document.querySelector('input').checkValidity()).toEqual(false)
+    expect(document.querySelector('form').checkValidity()).toEqual(false)
+
+    // Check
+    document.querySelector('input').click()
+
+    // Form is now valid
+    await waitFor(() => {
+        expect(document.querySelector('input').checkValidity()).toEqual(true)
+        expect(document.querySelector('form').checkValidity()).toEqual(true)
+    })
+
+    // Uncheck
+    document.querySelector('input').click()
+
+    // Form is invalid
+    await waitFor(() => {
+        expect(document.querySelector('input').checkValidity()).toEqual(false)
+        expect(document.querySelector('form').checkValidity()).toEqual(false)
+    })
+})
+
+test('x-validate > required select dropdown', async () => {
+    document.body.innerHTML = `
+        <div x-data="{ foo: 'bar' }">
+            <p x-text="foo"></p>
+            <form>
+                <select name="test" x-validate="['required']">
+                    <option></option>
+                    <option value="value1">value1</option>
+                    <option>value2</option>
+                </select>
+            </form>
+        </div>
+    `
+
+    Alpine.start()
+
+    // Make sure Alpine started
+    await waitFor(() => {
+        expect(document.querySelector('p').innerHTML).toEqual('bar')
+    })
+
+    // Check form is invalid and cannot be submitted
+    expect(document.querySelector('select').checkValidity()).toEqual(false)
+    expect(document.querySelector('form').checkValidity()).toEqual(false)
+
+    // Select option with value attribute
+    fireEvent.input(document.querySelector('select'), {
+        target: { value: document.querySelectorAll('option')[1].value },
+    })
+
+    // Form is now valid
+    await waitFor(() => {
+        expect(document.querySelector('select').checkValidity()).toEqual(true)
+        expect(document.querySelector('form').checkValidity()).toEqual(true)
+    })
+
+    // Select non-empty option without value attribute
+    fireEvent.input(document.querySelector('select'), {
+        target: { value: document.querySelectorAll('option')[2].value },
+    })
+
+    // Form is still valid
+    await waitFor(() => {
+        expect(document.querySelector('select').checkValidity()).toEqual(true)
+        expect(document.querySelector('form').checkValidity()).toEqual(true)
+    })
+
+    // Select empty option
+    fireEvent.input(document.querySelector('select'), {
+        target: { value: document.querySelectorAll('option')[0].value },
+    })
+
+    // Form is invalid
+    await waitFor(() => {
+        expect(document.querySelector('select').checkValidity()).toEqual(false)
+        expect(document.querySelector('form').checkValidity()).toEqual(false)
+    })
+})
+
+test('x-validate > email rule', async () => {
+    document.body.innerHTML = `
+        <div x-data="{ foo: 'bar' }">
+            <p x-text="foo"></p>
+            <form>
+                <input name="test" x-validate="['email']">
+            </form>
+        </div>
+    `
+
+    Alpine.start()
+
+    // Make sure Alpine started
+    await waitFor(() => {
+        expect(document.querySelector('p').innerHTML).toEqual('bar')
+    })
+
+    // Check form is valid when field is empty
+    expect(document.querySelector('input').checkValidity()).toEqual(true)
+    expect(document.querySelector('form').checkValidity()).toEqual(true)
+
+    // Type something
+    fireEvent.input(document.querySelector('input'), { target: { value: 'foo' } })
+
+    // Form is not valid
+    await waitFor(() => {
+        expect(document.querySelector('input').value).toEqual('foo')
+        expect(document.querySelector('input').checkValidity()).toEqual(false)
+        expect(document.querySelector('form').checkValidity()).toEqual(false)
+    })
+
+    // Type more
+    fireEvent.input(document.querySelector('input'), { target: { value: 'foo@bar.com' } })
+
+    // Form is now valid
+    await waitFor(() => {
+        expect(document.querySelector('input').value).toEqual('foo@bar.com')
+        expect(document.querySelector('input').checkValidity()).toEqual(true)
+        expect(document.querySelector('form').checkValidity()).toEqual(true)
+    })
+})
 
 test('x-validate > minlength rule', async () => {
     document.body.innerHTML = `
@@ -498,18 +638,151 @@ test('x-validate > pattern rule', async () => {
     })
 })
 
-test.todo('x-validate > match rule')
+test('x-validate > match rule', async () => {
+    document.body.innerHTML = `
+        <div x-data="{ foo: 'bar' }">
+            <p x-text="foo"></p>
+            <form>
+                <input name="test" x-validate="['match:bob']">
+            </form>
+        </div>
+    `
 
-test.todo('x-validate > lowercase rule')
+    Alpine.start()
 
-test.todo('x-validate > uppercase rule')
+    // Make sure Alpine started
+    await waitFor(() => {
+        expect(document.querySelector('p').innerHTML).toEqual('bar')
+    })
 
-test.todo('x-validate > digit rule')
+    // Check form is valid when field is empty
+    expect(document.querySelector('input').checkValidity()).toEqual(true)
+    expect(document.querySelector('form').checkValidity()).toEqual(true)
 
-test.todo('x-validate > symbol rule')
+    // Type something
+    fireEvent.input(document.querySelector('input'), { target: { value: 'baz' } })
 
-test.todo('x-validate > email rule')
+    // Form is not valid
+    await waitFor(() => {
+        expect(document.querySelector('input').value).toEqual('baz')
+        expect(document.querySelector('input').checkValidity()).toEqual(false)
+        expect(document.querySelector('form').checkValidity()).toEqual(false)
+    })
 
-test.todo('x-validate > invalid helper')
+    // Type more
+    fireEvent.input(document.querySelector('input'), { target: { value: 'bob' } })
 
-test.todo('x-validate > immediate modifier')
+    // Form is now valid
+    await waitFor(() => {
+        expect(document.querySelector('input').value).toEqual('bob')
+        expect(document.querySelector('input').checkValidity()).toEqual(true)
+        expect(document.querySelector('form').checkValidity()).toEqual(true)
+    })
+})
+
+test('x-validate > invalid helper', async () => {
+    document.body.innerHTML = `
+        <div x-data="{ foo: 'bar' }">
+            <p x-text="foo"></p>
+            <form>
+                <input x-ref="test" name="test" x-validate="['required', 'minlength:2']">
+                <span x-show="$invalid($refs.test)"></span>
+                <span x-show="$invalid($refs.test, 'required')"></span>
+                <span x-show="$invalid($refs.test, 'minlength:2')"></span>
+                <input type="submit">
+            </form>
+        </div>
+    `
+
+    Alpine.start()
+
+    // Make sure Alpine started
+    await waitFor(() => {
+        expect(document.querySelector('p').innerHTML).toEqual('bar')
+    })
+
+    // Check errors won't show
+    expect(document.querySelectorAll('span')[0].getAttribute('style')).toEqual('display: none;')
+    expect(document.querySelectorAll('span')[1].getAttribute('style')).toEqual('display: none;')
+    expect(document.querySelectorAll('span')[2].getAttribute('style')).toEqual('display: none;')
+
+    document.querySelector('input').focus()
+    // Type something
+    fireEvent.input(document.querySelector('input'), { target: { value: 'foo' } })
+    await waitFor(() => {
+        expect(document.querySelector('input').value).toEqual('foo')
+    })
+    // delete content
+    fireEvent.input(document.querySelector('input'), { target: { value: '' } })
+
+    // Errors still not showing
+    await waitFor(() => {
+        expect(document.querySelector('input').value).toEqual('')
+        expect(document.querySelectorAll('span')[0].getAttribute('style')).toEqual('display: none;')
+        expect(document.querySelectorAll('span')[1].getAttribute('style')).toEqual('display: none;')
+        expect(document.querySelectorAll('span')[2].getAttribute('style')).toEqual('display: none;')
+    })
+
+    // Trigger blur
+    document.querySelector('input').blur()
+
+    // Errors showing
+    await waitFor(() => {
+        expect(document.querySelectorAll('span')[0].getAttribute('style')).toEqual(null)
+        expect(document.querySelectorAll('span')[1].getAttribute('style')).toEqual(null)
+        expect(document.querySelectorAll('span')[2].getAttribute('style')).toEqual('display: none;')
+    })
+
+    fireEvent.input(document.querySelector('input'), { target: { value: 'a' } })
+    // Errors showing
+    await waitFor(() => {
+        expect(document.querySelectorAll('span')[0].getAttribute('style')).toEqual(null)
+        expect(document.querySelectorAll('span')[1].getAttribute('style')).toEqual('display: none;')
+        expect(document.querySelectorAll('span')[2].getAttribute('style')).toEqual(null)
+    })
+
+    fireEvent.input(document.querySelector('input'), { target: { value: 'aa' } })
+    // Errors not showing
+    await waitFor(() => {
+        expect(document.querySelectorAll('span')[0].getAttribute('style')).toEqual('display: none;')
+        expect(document.querySelectorAll('span')[1].getAttribute('style')).toEqual('display: none;')
+        expect(document.querySelectorAll('span')[2].getAttribute('style')).toEqual('display: none;')
+    })
+})
+
+test('x-validate > immediate modifier', async () => {
+    document.body.innerHTML = `
+        <div x-data="{ foo: 'bar' }">
+            <p x-text="foo"></p>
+            <form>
+                <input x-ref="test" name="test" x-validate.immediate="['required', 'minlength:2']">
+                <span x-show="$invalid($refs.test)"></span>
+                <input type="submit">
+            </form>
+        </div>
+    `
+
+    Alpine.start()
+
+    // Make sure Alpine started
+    await waitFor(() => {
+        expect(document.querySelector('p').innerHTML).toEqual('bar')
+    })
+
+    // Check error won't show
+    expect(document.querySelector('span').getAttribute('style')).toEqual('display: none;')
+
+    document.querySelector('input').focus()
+    // Type something
+    fireEvent.input(document.querySelector('input'), { target: { value: 'foo' } })
+    await waitFor(() => {
+        expect(document.querySelector('input').value).toEqual('foo')
+    })
+    // delete content
+    fireEvent.input(document.querySelector('input'), { target: { value: '' } })
+
+    // Errors showing without blur
+    await waitFor(() => {
+        expect(document.querySelector('span').getAttribute('style')).toEqual(null)
+    })
+})
