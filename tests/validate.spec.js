@@ -232,6 +232,10 @@ test('x-validate > required select dropdown', async () => {
     })
 })
 
+test.todo('x-validate > required checkbox array')
+
+test.todo('x-validate > required select multiple')
+
 test('x-validate > email rule', async () => {
     document.body.innerHTML = `
         <div x-data="{ foo: 'bar' }">
@@ -680,6 +684,9 @@ test('x-validate > match rule', async () => {
     })
 })
 
+test.todo('x-validate > minoptions rules')
+test.todo('x-validate > maxoptions rules')
+
 test('x-validate > invalid helper', async () => {
     document.body.innerHTML = `
         <div x-data="{ foo: 'bar' }">
@@ -786,3 +793,6 @@ test('x-validate > immediate modifier', async () => {
         expect(document.querySelector('span').getAttribute('style')).toEqual(null)
     })
 })
+
+test.todo('x-validate > validation on form submit')
+test.todo('x-validate > always immediate validation for checkboxes, radio buttons and select dropdowns')
