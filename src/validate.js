@@ -82,16 +82,27 @@ const AlpineValidateCustomDirective = {
                             }
 
                             if (el.type.toLowerCase() !== 'radio' && (el.form.elements[el.name] instanceof NodeList)) {
-                                value = Array.from(el.form.elements[el.name]).reduce(
-                                    (acc, curr) => {
-                                        if (curr.checked) {
-                                            acc.push(curr.value)
-                                        }
-                                        return acc
-                                    },
-                                    [],
-                                )
-                                if (value.length === 0) value = ''
+                                value = Array.from(el.form.elements[el.name]).reduce((acc, curr) => {
+                                    if (curr.checked) {
+                                        acc.push(curr.value)
+                                    }
+                                    return acc
+                                }, [])
+                                if (value.length === 0 || (value.length === 1 && value[0] === '')) {
+                                    value = ''
+                                }
+                            }
+
+                            if (el.type.toLowerCase() === 'select-multiple') {
+                                value = Array(...el.options).reduce((acc, option) => {
+                                    if (option.selected === true) {
+                                        acc.push(option.value)
+                                    }
+                                    return acc
+                                }, [])
+                                if (value.length === 0 || (value.length === 1 && value[0] === '')) {
+                                    value = ''
+                                }
                             }
 
                             // Run validation
@@ -135,7 +146,11 @@ const AlpineValidateCustomDirective = {
                             // If not immediate validation, flag the element as validated on blur
                             // and refresh the component
                             if (!firstValidationOnInput) {
-                                element.addEventListener('focusout', (e) => {
+                                let eventName = 'focusout'
+                                if (['radio', 'checkbox', 'select-one', 'select-multiple'].includes(element.type.toLowerCase())) {
+                                    eventName = 'change'
+                                }
+                                element.addEventListener(eventName, (e) => {
                                     if (el.$dirty !== true) {
                                         el.$dirty = true
                                         component.updateElements(component.$el)

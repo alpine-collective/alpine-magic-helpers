@@ -172,7 +172,24 @@
 
                       return acc;
                     }, []);
-                    if (value.length === 0) value = '';
+
+                    if (value.length === 0 || value.length === 1 && value[0] === '') {
+                      value = '';
+                    }
+                  }
+
+                  if (el.type.toLowerCase() === 'select-multiple') {
+                    value = Array.apply(void 0, el.options).reduce(function (acc, option) {
+                      if (option.selected === true) {
+                        acc.push(option.value);
+                      }
+
+                      return acc;
+                    }, []);
+
+                    if (value.length === 0 || value.length === 1 && value[0] === '') {
+                      value = '';
+                    }
                   } // Run validation
 
 
@@ -213,7 +230,13 @@
                   // and refresh the component
 
                   if (!firstValidationOnInput) {
-                    element.addEventListener('focusout', function (e) {
+                    var eventName = 'focusout';
+
+                    if (['radio', 'checkbox', 'select-one', 'select-multiple'].includes(element.type.toLowerCase())) {
+                      eventName = 'change';
+                    }
+
+                    element.addEventListener(eventName, function (e) {
                       if (el.$dirty !== true) {
                         el.$dirty = true;
                         component.updateElements(component.$el);
