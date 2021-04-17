@@ -5,7 +5,10 @@ import {
     syncWithObservedComponent,
     updateOnMutation,
     waitUntilReady,
+    importOrderCheck,
 } from './utils'
+
+importOrderCheck()
 
 const AlpineComponentMagicMethod = {
     start() {
@@ -58,9 +61,9 @@ const AlpineComponentMagicMethod = {
 const alpine = window.deferLoadingAlpine || ((alpine) => alpine())
 
 window.deferLoadingAlpine = function (callback) {
-    alpine(callback)
-
     AlpineComponentMagicMethod.start()
+
+    alpine(callback)
 }
 
 export default AlpineComponentMagicMethod

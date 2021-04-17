@@ -1,4 +1,10 @@
-import { checkForAlpine, getXDirectives } from './utils'
+import {
+    checkForAlpine,
+    getXDirectives,
+    importOrderCheck,
+} from './utils'
+
+importOrderCheck()
 
 const DIRECTIVE = 'unsafe-html'
 

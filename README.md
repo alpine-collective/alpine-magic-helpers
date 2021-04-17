@@ -2,8 +2,9 @@
 
 A collection of magic properties and helper functions for use with [Alpine.js](https://github.com/alpinejs/alpine)
 
-![GitHub tag (latest by date)](https://img.shields.io/github/v/tag/alpine-collective/alpine-magic-helpers?label=version&style=flat-square)
+[![GitHub tag (latest by date)](https://img.shields.io/github/v/tag/alpine-collective/alpine-magic-helpers?label=version&style=flat-square)](https://www.npmjs.com/package/alpine-magic-helpers)
 [![](https://data.jsdelivr.com/v1/package/gh/alpine-collective/alpine-magic-helpers/badge)](https://www.jsdelivr.com/package/gh/alpine-collective/alpine-magic-helpers)
+[![npm bundle size](https://img.shields.io/bundlephobia/minzip/alpine-magic-helpers?color=#0F0)](https://bundlephobia.com/result?p=alpine-magic-helpers)
 
 ## About
 
@@ -31,28 +32,29 @@ Adds the following custom directives to use with Alpine JS.
 
 **Known issues**
 * [Using `$component`/`$parent` in `x-init`](#warning-using-componentparent-in-x-init)
+* [Using Magic Helpers with Livewire](#warning-using-magic-helpers-with-livewire)
 
 ## Installation
 
-Include the following `<script>` tag in the `<head>` of your document (before Alpine):
+Include the following `<script>` tag in the `<head>` of your document before Alpine:
 
 ```html
-<script src="https://cdn.jsdelivr.net/gh/alpine-collective/alpine-magic-helpers@1.1.x/dist/index.min.js"></script>
+<script src="https://cdn.jsdelivr.net/gh/alpine-collective/alpine-magic-helpers@1.1.x/dist/index.min.js" defer></script>
 ```
 
 Or you can use the specific magic helpers you need:
 
 ```html
-<script src="https://cdn.jsdelivr.net/gh/alpine-collective/alpine-magic-helpers@1.1.x/dist/component.min.js"></script>
-<script src="https://cdn.jsdelivr.net/gh/alpine-collective/alpine-magic-helpers@1.1.x/dist/fetch.min.js"></script>
-<script src="https://cdn.jsdelivr.net/gh/alpine-collective/alpine-magic-helpers@1.1.x/dist/interval.min.js"></script>
-<script src="https://cdn.jsdelivr.net/gh/alpine-collective/alpine-magic-helpers@1.1.x/dist/range.min.js"></script>
-<script src="https://cdn.jsdelivr.net/gh/alpine-collective/alpine-magic-helpers@1.1.x/dist/refresh.min.js"></script>
-<script src="https://cdn.jsdelivr.net/gh/alpine-collective/alpine-magic-helpers@1.1.x/dist/screen.min.js"></script>
-<script src="https://cdn.jsdelivr.net/gh/alpine-collective/alpine-magic-helpers@1.1.x/dist/scroll.min.js"></script>
-<script src="https://cdn.jsdelivr.net/gh/alpine-collective/alpine-magic-helpers@1.1.x/dist/truncate.min.js"></script>
-<script src="https://cdn.jsdelivr.net/gh/alpine-collective/alpine-magic-helpers@1.1.x/dist/undo.min.js"></script>
-<script src="https://cdn.jsdelivr.net/gh/alpine-collective/alpine-magic-helpers@1.1.x/dist/unsafeHTML.min.js"></script>
+<script src="https://cdn.jsdelivr.net/gh/alpine-collective/alpine-magic-helpers@1.1.x/dist/component.min.js" defer></script>
+<script src="https://cdn.jsdelivr.net/gh/alpine-collective/alpine-magic-helpers@1.1.x/dist/fetch.min.js" defer></script>
+<script src="https://cdn.jsdelivr.net/gh/alpine-collective/alpine-magic-helpers@1.1.x/dist/interval.min.js" defer></script>
+<script src="https://cdn.jsdelivr.net/gh/alpine-collective/alpine-magic-helpers@1.1.x/dist/range.min.js" defer></script>
+<script src="https://cdn.jsdelivr.net/gh/alpine-collective/alpine-magic-helpers@1.1.x/dist/refresh.min.js" defer></script>
+<script src="https://cdn.jsdelivr.net/gh/alpine-collective/alpine-magic-helpers@1.1.x/dist/screen.min.js" defer></script>
+<script src="https://cdn.jsdelivr.net/gh/alpine-collective/alpine-magic-helpers@1.1.x/dist/scroll.min.js" defer></script>
+<script src="https://cdn.jsdelivr.net/gh/alpine-collective/alpine-magic-helpers@1.1.x/dist/truncate.min.js" defer></script>
+<script src="https://cdn.jsdelivr.net/gh/alpine-collective/alpine-magic-helpers@1.1.x/dist/undo.min.js" defer></script>
+<script src="https://cdn.jsdelivr.net/gh/alpine-collective/alpine-magic-helpers@1.1.x/dist/unsafeHTML.min.js" defer></script>
 ```
 
 ---
@@ -79,6 +81,13 @@ import 'alpine-magic-helpers/dist/component'
 import 'alpine-magic-helpers/dist/fetch'
 import 'alpinejs'
 ```
+
+---
+
+### :warning: **Using Magic Helpers with Livewire**
+When using magic helpers along with Laravel Livewire, you need to make sure that the library is registered after Livewire to prevent Livewire from overriding the magic helper startup callbacks. This can be done either using the defer attribute on the magic helper script or including the magic helper script at the bottom of your body after `@livewireScripts` **without** the `defer` attribute.
+
+---
 
 ### `$component`
 **Example:**
