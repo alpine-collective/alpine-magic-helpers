@@ -5,6 +5,9 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
+### Fixed
+- [`$interval`]: timeOut was not cleared correctly when paused. When paused and resumed straightaway, it was leading to duplicate callbacks being invoked.
+
 ### Added
 - [`$get`/`$post`]: Added two helpers to simplify working with `$fetch`
 ## [1.1.x] - 2021-03-15
