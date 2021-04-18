@@ -1,5 +1,10 @@
-
 import config from './config'
+import {
+    checkForAlpine,
+    importOrderCheck,
+} from './utils'
+
+importOrderCheck()
 
 // Collection of components that contains `$screen` helper usecase
 const screenComponents = []
@@ -23,6 +28,8 @@ const debouncedScreensUpdate = () => {
 
 const AlpineScreenMagicMethod = {
     start() {
+        checkForAlpine()
+
         // Bind `debouncedScreensUpdate` to resize event on window
         // Note that `resize` event will be triggered on `orientationchange` event as well
         window.addEventListener('resize', debouncedScreensUpdate())

@@ -2,8 +2,9 @@
 
 A collection of magic properties and helper functions for use with [Alpine.js](https://github.com/alpinejs/alpine)
 
-![GitHub tag (latest by date)](https://img.shields.io/github/v/tag/alpine-collective/alpine-magic-helpers?label=version&style=flat-square)
+[![GitHub tag (latest by date)](https://img.shields.io/github/v/tag/alpine-collective/alpine-magic-helpers?label=version&style=flat-square)](https://www.npmjs.com/package/alpine-magic-helpers)
 [![](https://data.jsdelivr.com/v1/package/gh/alpine-collective/alpine-magic-helpers/badge)](https://www.jsdelivr.com/package/gh/alpine-collective/alpine-magic-helpers)
+[![npm bundle size](https://img.shields.io/bundlephobia/minzip/alpine-magic-helpers?color=#0F0)](https://bundlephobia.com/result?p=alpine-magic-helpers)
 
 ## About
 
@@ -11,7 +12,7 @@ Adds the following magic helpers to use with Alpine JS.
 | Magic Helpers | Description |
 | --- | --- |
 | [`$component/$parent`](#component) | Natively access and update data from other components or the parent component. |
-| [`$fetch`](#fetch) | Using Axios, fetch JSON from an external source.  |
+| [`$fetch/$get/$post`](#fetch) | Using Axios, fetch JSON from an external source.  |
 | [`$interval`](#interval) | Run a function every n milliseconds. Optionally start and stop the timer. |
 | [`$range`](#range) | Iterate over a range of values. |
 | [`$refresh`](#refresh) | Manually refresh a component. |
@@ -20,7 +21,7 @@ Adds the following magic helpers to use with Alpine JS.
 | [`$truncate`](#truncate) |  Limit a text string to a specific number of characters or words. |
 | [`$undo`](#undo) |  Track and undo state changes inside your component. |
 
-Adds the following custom directives to use with Alpine JS. 
+Adds the following custom directives to use with Alpine JS.
 | Custom Directives | Description |
 | --- | --- |
 | [`x-unsafe-html`](#x-unsafe-html) | like x-html but allowing new javascript scripts to run. |
@@ -32,29 +33,30 @@ Adds the following custom directives to use with Alpine JS.
 
 **Known issues**
 * [Using `$component`/`$parent` in `x-init`](#warning-using-componentparent-in-x-init)
+* [Using Magic Helpers with Livewire](#warning-using-magic-helpers-with-livewire)
 
 ## Installation
 
-Include the following `<script>` tag in the `<head>` of your document (before Alpine):
+Include the following `<script>` tag in the `<head>` of your document before Alpine:
 
 ```html
-<script src="https://cdn.jsdelivr.net/gh/alpine-collective/alpine-magic-helpers@1.1.x/dist/index.min.js"></script>
+<script src="https://cdn.jsdelivr.net/gh/alpine-collective/alpine-magic-helpers@1.2.x/dist/index.min.js" defer></script>
 ```
 
 Or you can use the specific magic helpers you need:
 
 ```html
-<script src="https://cdn.jsdelivr.net/gh/alpine-collective/alpine-magic-helpers@1.1.x/dist/component.min.js"></script>
-<script src="https://cdn.jsdelivr.net/gh/alpine-collective/alpine-magic-helpers@1.1.x/dist/fetch.min.js"></script>
-<script src="https://cdn.jsdelivr.net/gh/alpine-collective/alpine-magic-helpers@1.1.x/dist/interval.min.js"></script>
-<script src="https://cdn.jsdelivr.net/gh/alpine-collective/alpine-magic-helpers@1.1.x/dist/range.min.js"></script>
-<script src="https://cdn.jsdelivr.net/gh/alpine-collective/alpine-magic-helpers@1.1.x/dist/refresh.min.js"></script>
-<script src="https://cdn.jsdelivr.net/gh/alpine-collective/alpine-magic-helpers@1.1.x/dist/screen.min.js"></script>
-<script src="https://cdn.jsdelivr.net/gh/alpine-collective/alpine-magic-helpers@1.1.x/dist/scroll.min.js"></script>
-<script src="https://cdn.jsdelivr.net/gh/alpine-collective/alpine-magic-helpers@1.1.x/dist/truncate.min.js"></script>
-<script src="https://cdn.jsdelivr.net/gh/alpine-collective/alpine-magic-helpers@1.1.x/dist/undo.min.js"></script>
-<script src="https://cdn.jsdelivr.net/gh/alpine-collective/alpine-magic-helpers@1.1.x/dist/unsafeHTML.min.js"></script>
-<script src="https://cdn.jsdelivr.net/gh/alpine-collective/alpine-magic-helpers@1.2.x/dist/validate.min.js"></script>
+<script src="https://cdn.jsdelivr.net/gh/alpine-collective/alpine-magic-helpers@1.2.x/dist/component.min.js" defer></script>
+<script src="https://cdn.jsdelivr.net/gh/alpine-collective/alpine-magic-helpers@1.2.x/dist/fetch.min.js" defer></script>
+<script src="https://cdn.jsdelivr.net/gh/alpine-collective/alpine-magic-helpers@1.2.x/dist/interval.min.js" defer></script>
+<script src="https://cdn.jsdelivr.net/gh/alpine-collective/alpine-magic-helpers@1.2.x/dist/range.min.js" defer></script>
+<script src="https://cdn.jsdelivr.net/gh/alpine-collective/alpine-magic-helpers@1.2.x/dist/refresh.min.js" defer></script>
+<script src="https://cdn.jsdelivr.net/gh/alpine-collective/alpine-magic-helpers@1.2.x/dist/screen.min.js" defer></script>
+<script src="https://cdn.jsdelivr.net/gh/alpine-collective/alpine-magic-helpers@1.2.x/dist/scroll.min.js" defer></script>
+<script src="https://cdn.jsdelivr.net/gh/alpine-collective/alpine-magic-helpers@1.2.x/dist/truncate.min.js" defer></script>
+<script src="https://cdn.jsdelivr.net/gh/alpine-collective/alpine-magic-helpers@1.2.x/dist/undo.min.js" defer></script>
+<script src="https://cdn.jsdelivr.net/gh/alpine-collective/alpine-magic-helpers@1.2.x/dist/unsafeHTML.min.js" defer></script>
+<script src="https://cdn.jsdelivr.net/gh/alpine-collective/alpine-magic-helpers@1.3.x/dist/validate.min.js"></script>
 ```
 
 ---
@@ -81,6 +83,13 @@ import 'alpine-magic-helpers/dist/component'
 import 'alpine-magic-helpers/dist/fetch'
 import 'alpinejs'
 ```
+
+---
+
+### :warning: **Using Magic Helpers with Livewire**
+When using magic helpers along with Laravel Livewire, you need to make sure that the library is registered after Livewire to prevent Livewire from overriding the magic helper startup callbacks. This can be done either using the defer attribute on the magic helper script or including the magic helper script at the bottom of your body after `@livewireScripts` **without** the `defer` attribute.
+
+---
 
 ### `$component`
 **Example:**
@@ -129,8 +138,8 @@ You may watch other components, but you must give them each an id using the 'id'
    </div>
  </div>
 ```
-When a component is initialised, the observed component may not be ready yet due to the way Alpine starts up. This is always true for `$parent` and it occurs for `$component` when the observer is placed before the observed component in the page structure. 
-Previous versions were using a hack to evaluate the missing x-data on the fly but that strategy wasn't allowing to use nested magic properties and it was not syncronising properly in some edge cases. 
+When a component is initialised, the observed component may not be ready yet due to the way Alpine starts up. This is always true for `$parent` and it occurs for `$component` when the observer is placed before the observed component in the page structure.
+Previous versions were using a hack to evaluate the missing x-data on the fly but that strategy wasn't allowing to use nested magic properties and it was not syncronising properly in some edge cases.
 The magic helper since version 1.0 defers the resolution of those properties (resolving temporary to empty strings/noop functions) until the observed component is ready and then refreshes the component: this happens in a few milliseconds and it's not noticable by the final users but refreshing a component won't rerun `x-init` with the correct values.
 **If developers need to use the magic property inside x-init, they'll need to manually postpone the execution of x-init for one tick either using the Alpine native `$nextTick` or a setTimeout with no duration (See examples above).**
 
@@ -146,9 +155,11 @@ The magic helper since version 1.0 defers the resolution of those properties (re
 ```
 [Demo](https://codepen.io/KevinBatdorf/pen/poyyXKj)
 
-**Optionally pass in an options object**
+> As a shortcut, you can optionally use `$get(url, params)` or `$post(url, data)` to conveniently send a GET or POST request with params or data as the second argument.
 
-By default, `$fetch` will return the JSON data object. However, because we are using Axios behind the scenes, you may pass in an object to customize the request [See all options](https://github.com/axios/axios).
+**Optionally pass in an Axios options object**
+
+If you need more control, you may pass in an object to customize the request [See all options](https://github.com/axios/axios).
 
 **Example:**
 

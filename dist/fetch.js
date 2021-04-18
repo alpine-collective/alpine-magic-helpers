@@ -1483,29 +1483,55 @@
 
     return true;
   }
+  function importOrderCheck() {
+    // We only want to show the error once
+    if (window.Alpine && !window.AlpineMagicHelpers.__fatal) {
+      window.AlpineMagicHelpers.__fatal = setTimeout(function () {
+        console.error('%c*** ALPINE MAGIC HELPER: Fatal Error! ***\n\n\n' + 'Alpine magic helpers need to be loaded before Alpine ' + 'to avoid errors when Alpine initialises its component. \n\n' + 'Make sure the helper script is included before Alpine in ' + 'your page when using the defer attribute', 'font-size: 14px');
+      }, 200); // We set a small timeout to make sure we flush all the Alpine noise first
+    }
+  }
 
+  importOrderCheck();
   var AlpineFetchMagicMethod = {
     start: function start() {
       checkForAlpine();
-      Alpine.addMagicProperty('fetch', function () {
-        return function () {
-          for (var _len = arguments.length, parameters = new Array(_len), _key = 0; _key < _len; _key++) {
-            parameters[_key] = arguments[_key];
-          }
+      Alpine.addMagicProperty('fetch', this.fetch.bind(null, null));
+      Alpine.addMagicProperty('get', this.fetch.bind(null, 'get'));
+      Alpine.addMagicProperty('post', this.fetch.bind(null, 'post'));
+    },
+    fetch: function fetch(method) {
+      return async function (parameters, data) {
+        if (data === void 0) {
+          data = {};
+        }
 
-          if (typeof parameters[0] === 'string' && parameters[0].length) {
-            return axios.get(parameters[0]).then(function (response) {
-              return Object.prototype.hasOwnProperty.call(response, 'data') ? response.data : response;
-            });
-          }
+        function findResponse(response) {
+          return Object.prototype.hasOwnProperty.call(response, 'data') ? response.data : response;
+        } // Using $post or $get
 
-          if (typeof parameters[0] === 'object') {
-            return axios(parameters[0]);
-          }
 
-          return parameters[0];
-        };
-      });
+        if (method) {
+          var _axios;
+
+          return await axios((_axios = {
+            url: parameters,
+            method: method
+          }, _axios[method === 'post' ? 'data' : 'params'] = data, _axios)).then(function (response) {
+            return findResponse(response);
+          });
+        }
+
+        if (typeof parameters === 'string') {
+          // Using $fetch('url')
+          return await axios.get(parameters).then(function (response) {
+            return findResponse(response);
+          });
+        } // Using $fetch({ // axios config })
+
+
+        return await axios(parameters);
+      };
     }
   };
 

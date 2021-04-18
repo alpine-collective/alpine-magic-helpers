@@ -8,6 +8,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 - [`x-validate`/`$invalid`]: Added 'x-validate' custom directive and $invalid helper
 
+## [1.2.x] - 2021-04-18
+### Added
+- [`$get`/`$post`]: Added two helpers to simplify working with `$fetch`
 ## [1.1.x] - 2021-03-15
 ### Added
 - [`x-unsafe-html`]: Added 'x-unsafe-html' custom directive

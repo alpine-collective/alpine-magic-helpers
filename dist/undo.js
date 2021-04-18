@@ -72,6 +72,14 @@
 
       return new Function(['$data'].concat(Object.keys(additionalHelperVariables)), "var __alpine_result; with($data) { __alpine_result = " + expression + " }; return __alpine_result").apply(void 0, [dataContext].concat(Object.values(additionalHelperVariables)));
     } // Returns a dummy proxy that supports multiple levels of nesting and always prints/returns an empty string.
+    function importOrderCheck() {
+      // We only want to show the error once
+      if (window.Alpine && !window.AlpineMagicHelpers.__fatal) {
+        window.AlpineMagicHelpers.__fatal = setTimeout(function () {
+          console.error('%c*** ALPINE MAGIC HELPER: Fatal Error! ***\n\n\n' + 'Alpine magic helpers need to be loaded before Alpine ' + 'to avoid errors when Alpine initialises its component. \n\n' + 'Make sure the helper script is included before Alpine in ' + 'your page when using the defer attribute', 'font-size: 14px');
+        }, 200); // We set a small timeout to make sure we flush all the Alpine noise first
+      }
+    }
 
     var commonjsGlobal = typeof globalThis !== 'undefined' ? globalThis : typeof window !== 'undefined' ? window : typeof global !== 'undefined' ? global : typeof self !== 'undefined' ? self : {};
 
@@ -594,6 +602,7 @@
     }));
     });
 
+    importOrderCheck();
     var history = new WeakMap();
     var AlpineUndoMagicMethod = {
       start: function start() {
