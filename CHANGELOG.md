@@ -5,6 +5,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
+
+## [1.2.x] - 2021-04-18
 ### Added
 - [`$get`/`$post`]: Added two helpers to simplify working with `$fetch`
 ## [1.1.x] - 2021-03-15
