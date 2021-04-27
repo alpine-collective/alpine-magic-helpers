@@ -75,6 +75,10 @@ const AlpineValidateCustomDirective = {
                             // Evaluate the rules in case they are dynamic
                             const rules = component.evaluateReturnExpression(el, expression, extraVars)
 
+                            if (! Array.isArray(rules)) {
+                                throw Error('x-validate must contain an array of validation rules');
+                            }
+
                             let value = el.form.elements[el.name].value
 
                             if (el.type.toLowerCase() === 'checkbox' && !el.checked) {
