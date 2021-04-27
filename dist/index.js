@@ -3272,7 +3272,7 @@
         pattern: function pattern(value, _pattern) {
           return value === '' || new RegExp(_pattern).test(value);
         },
-        match: function match(value, otherValue) {
+        equals: function equals(value, otherValue) {
           return value === '' || value === otherValue;
         },
         minoptions: function minoptions(value, min) {
@@ -3393,7 +3393,7 @@
                 var elements = el.form.elements[el.name];
                 if (!(elements instanceof NodeList)) elements = [elements];
                 elements.forEach(function (element) {
-                  // Prevend the default behaviour on invalid to hide the native tooltips
+                  // Prevent the default behaviour on invalid to hide the native tooltips
                   // If the element wasn't flagged as validated, flag it and update the component
                   // to show possible errors
                   el.addEventListener('invalid', function (e) {

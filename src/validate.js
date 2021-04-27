@@ -118,7 +118,7 @@ const AlpineValidateCustomDirective = {
                         let elements = el.form.elements[el.name]
                         if (!(elements instanceof NodeList)) elements = [elements]
                         elements.forEach((element) => {
-                            // Prevend the default behaviour on invalid to hide the native tooltips
+                            // Prevent the default behaviour on invalid to hide the native tooltips
                             // If the element wasn't flagged as validated, flag it and update the component
                             // to show possible errors
                             el.addEventListener('invalid', (e) => {
