@@ -8,72 +8,62 @@
 </head>
 
 <body class="flex flex-col items-center justify-center m-24">
-    <p class="mb-4 font-bold"></p>
-    <div x-data class="inline-flex space-x-2">
-        <form action="https://cdn.jsdelivr.net">
-            <label for="req">Required field, min 3 letters</label>
-            <input name="req" x-ref="req" x-validate="['required', 'minlength:3']">
-            <span x-show="$invalid($refs.req, 'required')">The field is required</span>
-            <span x-show="$invalid($refs.req, 'minlength:3')">The field must be at least 3 letters</span>
+    <p class="mb-4 font-bold">The elements below validate on blur and when users tries to submit the form</p>
+    <form x-data action="https://cdn.jsdelivr.net">
+        <label class="block text-sm font-medium text-gray-700" for="req">Required field, min 3 letters</label>
+        <input name="req" x-ref="req" x-validate="['required', 'minlength:3']" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
+        <span x-show="$invalid($refs.req, 'required')" class="absolute block text-xs text-red-600 font-bold">The field is required</span>
+        <span x-show="$invalid($refs.req, 'minlength:3')" class="absolute block text-xs text-red-600 font-bold">The field must be at least 3 letters</span>
 
-            <br>
-            <label for="req2">Textarea</label>
-            <textarea name="req2" x-ref="req2" x-validate="['required']"></textarea>
-            <span x-show="$invalid($refs.req2)">The field is required</span>
+        <label class="block text-sm font-medium text-gray-700 mt-8" for="req2">Textarea</label>
+        <textarea name="req2" x-ref="req2" x-validate="['required']" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"></textarea>
+        <span x-show="$invalid($refs.req2)" class="absolute block text-xs text-red-600 font-bold">The field is required</span>
 
-            <br>
-            <label for="req3">Select</label>
-            <select name="req3" x-ref="req3" x-validate="['required']">
-                <option value=""></option>
-                <option value="foo">Foo</option>
-                <option value="bar">Bar</option>
-            </select>
-            <span x-show="$invalid($refs.req3)">The field is required</span>
+        <label class="block text-sm font-medium text-gray-700 mt-8" for="req3">Select</label>
+        <select name="req3" x-ref="req3" x-validate="['required']" class="block w-full bg-white border border-gray-400 hover:border-gray-500 px-4 py-2 pr-8 rounded shadow leading-tight focus:outline-none focus:shadow-outline">
+            <option value=""></option>
+            <option value="foo">Foo</option>
+            <option value="bar">Bar</option>
+        </select>
+        <span x-show="$invalid($refs.req3)" class="absolute block text-xs text-red-600 font-bold">The field is required</span>
 
-            <br>
-            <label for="re4">Checkbox</label>
-            <input type="checkbox" name="req4" x-ref="req4" x-validate="['required']" value="foo">
-            <span x-show="$invalid($refs.req4)">The field is required</span>
+        <label class="block text-sm font-medium text-gray-700 mt-8" for="re4">Checkbox</label>
+        <input type="checkbox" name="req4" x-ref="req4" x-validate="['required']" value="foo" class="mr-2 leading-tight align-middle">
+        <span class="text-sm">Option</span>
+        <span x-show="$invalid($refs.req4)" class="absolute block text-xs text-red-600 font-bold">The field is required</span>
 
-            <br>
-            <label>Radio buttons</label>
-            <input type="radio" name="req5" x-ref="req5" x-validate="['required']" value="foo">
-            <input type="radio" name="req5" value="bar">
-            <span x-show="$invalid($refs.req5)">The field is required</span>
+        <label class="block text-sm font-medium text-gray-700 mt-8">Radio buttons</label>
+        <input type="radio" name="req5" x-ref="req5" x-validate="['required']" value="foo" class="mr-2 leading-tight align-middle"><span class="text-sm">Option 1</span>
+        <input type="radio" name="req5" value="bar" class="mr-2 leading-tight align-middle ml-5"><span class="text-sm">Option 2</span>
+        <span x-show="$invalid($refs.req5)" class="absolute block text-xs text-red-600 font-bold">The field is required</span>
 
-            <br>
-            <label>Password confirmation</label>
-            <input type="password" name="req6" x-ref="req6" x-validate="['required']">
-            <span x-show="$invalid($refs.req6)">The field is required</span>
-            <input type="password" name="req7" x-ref="req7" x-validate="['required', 'equals:'+$refs.req6.value]">
-            <span x-show="$invalid($refs.req7)">Fields do not match</span>
+        <label class="block text-sm font-medium text-gray-700 mt-8">Password confirmation</label>
+        <input type="password" name="req6" x-ref="req6" x-validate="['required']" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
+        <span x-show="$invalid($refs.req6)" class="absolute block text-xs text-red-600 font-bold">The field is required</span>
+        <input type="password" name="req7" x-ref="req7" x-validate="['required', 'equals:'+$refs.req6.value]" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline mt-5">
+        <span x-show="$invalid($refs.req7)" class="absolute block text-xs text-red-600 font-bold">Fields do not match</span>
 
-            <br>
-            <label for="req">Email</label>
-            <input type="email" name="req8" x-ref="req8" x-validate="['required', 'email']">
-            <span x-show="$invalid($refs.req8, 'required')">The field is required</span>
-            <span x-show="$invalid($refs.req8, 'email')">The field must be a valid email</span>
+        <label class="block text-sm font-medium text-gray-700 mt-8"for="req">Email</label>
+        <input type="email" name="req8" x-ref="req8" x-validate="['required', 'email']" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
+        <span x-show="$invalid($refs.req8, 'required')" class="absolute block text-xs text-red-600 font-bold">The field is required</span>
+        <span x-show="$invalid($refs.req8, 'email')" class="absolute block text-xs text-red-600 font-bold">The field must be a valid email</span>
 
-            <br>
-            <label for="req">Checkboxes</label>
-            <input type="checkbox" name="req9[]" x-ref="req9" x-validate="['required', 'minoptions:2', 'maxoptions:2']" value="one">
-            <input type="checkbox" name="req9[]" value="two">
-            <input type="checkbox" name="req9[]" value="three">
-            <span x-show="$invalid($refs.req9, 'required')">The field is required</span>
-            <span x-show="$invalid($refs.req9, 'minoptions:2')">Please select at least 2 options</span>
-            <span x-show="$invalid($refs.req9, 'maxoptions:2')">Please select maximum 2 options</span>
+        <label class="block text-sm font-medium text-gray-700 mt-8"for="req">Checkboxes</label>
+        <input type="checkbox" name="req9[]" x-ref="req9" x-validate="['required', 'minoptions:2', 'maxoptions:2']" value="one" class="mr-2 leading-tight align-middle"><span class="text-sm">Option 1</span>
+        <input type="checkbox" name="req9[]" value="two" class="ml-5 mr-2 leading-tight align-middle"><span class="text-sm">Option 2</span>
+        <input type="checkbox" name="req9[]" value="three" class="ml-5 mr-2 leading-tight align-middle"><span class="text-sm">Option 3</span>
+        <span x-show="$invalid($refs.req9, 'required')" class="absolute block text-xs text-red-600 font-bold">The field is required</span>
+        <span x-show="$invalid($refs.req9, 'minoptions:2')" class="absolute block text-xs text-red-600 font-bold">Please select at least 2 options</span>
+        <span x-show="$invalid($refs.req9, 'maxoptions:2')" class="absolute block text-xs text-red-600 font-bold">Please select maximum 2 options</span>
 
-            <br>
-            <label for="req10">Select multi</label>
-            <select name="req10" x-ref="req10" x-validate="['required']" multiple>
-                <option value=""></option>
-                <option value="foo">Foo</option>
-                <option value="bar">Bar</option>
-            </select>
-            <span x-show="$invalid($refs.req10)">The field is required</span>
+        <label class="block text-sm font-medium text-gray-700 mt-8"for="req10">Select multi</label>
+        <select name="req10" x-ref="req10" x-validate="['required']" multiple class="block w-full bg-white border border-gray-400 hover:border-gray-500 px-4 py-2 rounded shadow leading-tight focus:outline-none focus:shadow-outline">
+            <option value=""></option>
+            <option value="foo">Foo</option>
+            <option value="bar">Bar</option>
+        </select>
+        <span x-show="$invalid($refs.req10)" class="absolute block text-xs text-red-600 font-bold">The field is required</span>
 
-            <br>
-            <input type="submit" value="Test">
-        </form>
-    </div>
+        <input type="submit" value="Test" class="mt-8 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+    </form>
 </body>

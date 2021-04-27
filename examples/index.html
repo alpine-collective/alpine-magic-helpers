@@ -175,4 +175,33 @@
             <div x-unsafe-html="foo" class="w-10 h-10 block"></div>
         </div>
     </div>
+
+    <div class="mt-4 pt-4 border-t">
+        <h2 class="text-2xl font-black">x-validate:</h2>
+        <p>Validate on blur</p>
+        <form x-data class="mb-4">
+            <label class="block text-sm font-medium text-gray-700" for="req">Required field</label>
+            <input name="req" x-ref="req" x-validate="['required']" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
+            <span x-show="$invalid($refs.req)" class="absolute block text-xs text-red-600 font-bold">The field is required</span>
+
+            <input type="submit" value="Submit" class="mt-5 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded inline-block">
+        </form>
+        <p>Validate on input</p>
+        <form x-data class="mb-4">
+            <label class="block text-sm font-medium text-gray-700" for="req">Required field</label>
+            <input name="req" x-ref="req" x-validate.immediate="['required']" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
+            <span x-show="$invalid($refs.req)" class="absolute block text-xs text-red-600 font-bold">The field is required</span>
+
+            <input type="submit" value="Submit" class="mt-5 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded inline-block">
+        </form>
+        <p>Multiple rules and error messages</p>
+        <form x-data class="mb-4">
+            <label class="block text-sm font-medium text-gray-700" for="req">Required field - minimum length: 3</label>
+            <input name="req" x-ref="req" x-validate="['required', 'minlength:3']" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
+            <span x-show="$invalid($refs.req, 'required')" class="absolute block text-xs text-red-600 font-bold">The field is required</span>
+            <span x-show="$invalid($refs.req, 'minlength:3')" class="absolute block text-xs text-red-600 font-bold">The field must be at least 3 charactes</span>
+
+            <input type="submit" value="Submit" class="mt-5 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded inline-block">
+        </form>
+    </div>
 </body>
