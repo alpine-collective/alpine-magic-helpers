@@ -58,7 +58,7 @@ jobs:
         run: git commit -am 'Update version in README'
         continue-on-error: true
       - name: Update CHANGELOG
-        run: sed -i "/\[Unreleased\]/a\\\n## [${CDN_VERSION}] - $(date +"%Y-%m-%d")" CHANGELOG.md
+        run: sed -i "/\[Unreleased\]/a\\\n## [${RELEASE_VERSION}] - $(date +"%Y-%m-%d")" CHANGELOG.md
       - name: Commit CHANGELOG
         run: git commit -am 'Update version in README'
       - name: Push changed files to master

@@ -9,7 +9,7 @@ const AlpineIntervalMagicMethod = {
     start() {
         checkForAlpine()
 
-        Alpine.addMagicProperty('interval', () => {
+        Alpine.addMagicProperty('interval', ($el) => {
             return function (...parameters) {
                 if (typeof parameters[0] !== 'function') return parameters[0]
 
@@ -32,33 +32,24 @@ const AlpineIntervalMagicMethod = {
                     }
                 }
 
-                const loop = () => {
-                    const test = Object.prototype.hasOwnProperty.call(this, 'autoIntervalTest') ? this.autoIntervalTest : true
+                let autoIntervalLoop = null
 
-                    setTimeout(() => {
-                        if (!this.autoIntervalLoop) return
-                        test && parameters[0].call(this)
-                        forceInterval ? this.autoIntervalLoop() : requestAnimationFrame(this.autoIntervalLoop)
+                const loop = () => {
+                    autoIntervalLoop = setTimeout(() => {
+                        parameters[0].call(this)
+                        forceInterval ? loop() : requestAnimationFrame(loop)
                     }, timer)
                 }
 
-                this.autoIntervalLoop = loop
-
-                setTimeout(() => {
-                    if (!this.autoIntervalLoop) return
-
-                    forceInterval ? this.autoIntervalLoop() : requestAnimationFrame(this.autoIntervalLoop)
+                autoIntervalLoop = setTimeout(() => {
+                    forceInterval ? loop() : requestAnimationFrame(loop)
                 }, delay)
 
                 this.$watch('autoIntervalTest', test => {
                     if (test) {
-                        this.autoIntervalLoop = loop
-
-                        forceInterval ? this.autoIntervalLoop() : requestAnimationFrame(this.autoIntervalLoop)
+                        forceInterval ? loop() : requestAnimationFrame(loop)
                     } else {
-                        clearTimeout(this.autoIntervalLoop)
-
-                        this.autoIntervalLoop = null
+                        clearTimeout(autoIntervalLoop)
                     }
                 })
             }
