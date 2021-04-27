@@ -15,7 +15,7 @@ const validator = {
         min: (value, min) => value === '' || parseFloat(value) >= parseFloat(min),
         max: (value, max) => value === '' || parseFloat(value) <= parseFloat(max),
         pattern: (value, pattern) => value === '' || (new RegExp(pattern)).test(value),
-        match: (value, otherValue) => value === '' || value === otherValue,
+        equals: (value, otherValue) => value === '' || value === otherValue,
         minoptions: (value, min) => value === '' || (Array.isArray(value) && value.length >= parseFloat(min)),
         maxoptions: (value, max) => value === '' || (Array.isArray(value) && value.length <= parseFloat(max)),
     },

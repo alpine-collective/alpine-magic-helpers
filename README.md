@@ -513,6 +513,8 @@ It's possible to pass the rule name as second parameter to the $invalid helper t
 </form>
 ```
 
+#### Rules
+
 [Demo]Coming soon
 
 ---

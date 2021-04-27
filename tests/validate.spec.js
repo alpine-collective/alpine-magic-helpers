@@ -642,12 +642,12 @@ test('x-validate > pattern rule', async () => {
     })
 })
 
-test('x-validate > match rule', async () => {
+test('x-validate > equals rule', async () => {
     document.body.innerHTML = `
         <div x-data="{ foo: 'bar' }">
             <p x-text="foo"></p>
             <form>
-                <input name="test" x-validate="['match:bob']">
+                <input name="test" x-validate="['equals:bob']">
             </form>
         </div>
     `

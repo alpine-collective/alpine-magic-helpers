@@ -45,7 +45,7 @@
             <label>Password confirmation</label>
             <input type="password" name="req6" x-ref="req6" x-validate="['required']">
             <span x-show="$invalid($refs.req6)">The field is required</span>
-            <input type="password" name="req7" x-ref="req7" x-validate="['required', 'match:'+$refs.req6.value]">
+            <input type="password" name="req7" x-ref="req7" x-validate="['required', 'equals:'+$refs.req6.value]">
             <span x-show="$invalid($refs.req7)">Fields do not match</span>
 
             <br>
