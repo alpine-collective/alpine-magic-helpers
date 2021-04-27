@@ -213,7 +213,7 @@ By default, `$interval ` will run your function every `nth` millisecond when bro
     <button
         @click="autoIntervalTest = !autoIntervalTest"
         x-text="autoIntervalTest ? 'pause' : 'play'"></button>
-</div>
+</div>  
 ```
 [Demo](https://codepen.io/KevinBatdorf/pen/poyyXQy?editors=1010)
 
@@ -462,6 +462,22 @@ By default, `$undo` will track all properties. Optionally you may limit the prop
 [Demo](https://codepen.io/KevinBatdorf/pen/VwjmXLy?editors=1000)
 
 ---
+### `x-unsafe-html`
+**Example:**
+```html
+<div x-data="{ foo: bar }">
+    <div x-unsafe-html="foo"></div>
+    <button @click="foo = '<p>bar</p><script>alert(1)</script>'">test</button>
+</div>
+```
+
+> :warning: **Only use on trusted content.** :warning:
+>
+> Dynamically rendering HTML from third parties can easily lead to [XSS](https://developer.mozilla.org/en-US/docs/Glossary/Cross-site_scripting) vulnerabilities.
+
+[Demo](https://codepen.io/KevinBatdorf/pen/poNYpZb)
+
+---
 ### `x-validate`
 **Example:**
 ```html
@@ -514,24 +530,22 @@ It's possible to pass the rule name as second parameter to the $invalid helper t
 ```
 
 #### Rules
+| Name | Rule |
+| --- | --- |
+| Rrequired | Validates that a required field has been filled with a non blank value. |
+| email | Validates that a field, when not blank, has been filled with a non blank email. |
+| minlength:X | Where X is a positive integer. Validates that a field, when not blank, has been filled with at least X characters. |
+| maxlength:X | Where X is a positive integer. Validates that a field, when not blank, has been filled with no more than X characters. |
+| numeric | Validates that a field, when not blank, has been filled with a numeric value. |
+| integer | Validates that a field, when not blank, has been filled with an integer. |
+| min:X | Where X is a number. Validates that a field, when not blank, has been filled with a number equals or greater than X. |
+| max:X | Where X is a number. Validates that a field, when not blank, has been filled with a number equals or smaller than X. |
+| pattern:X | Where X is a regular expression. Validates that a field, when not blank, follows the pattern  defined by the regular expression X. |
+| equals:X | Where X is a string. Validates that a field, when not blank, matches the string X. |
+| minoptions:X | Where X is a positive integer. Validates that at least X options have been checked in a checkbox group. |
+| maxoptions:X | Where X is a positive integer. Validates that no more than X options have been checked in a checkbox group. |
 
-[Demo]Coming soon
-
----
-### `x-unsafe-html`
-**Example:**
-```html
-<div x-data="{ foo: bar }">
-    <div x-unsafe-html="foo"></div>
-    <button @click="foo = '<p>bar</p><script>alert(1)</script>'">test</button>
-</div>
-```
-
-> :warning: **Only use on trusted content.** :warning:
->
-> Dynamically rendering HTML from third parties can easily lead to [XSS](https://developer.mozilla.org/en-US/docs/Glossary/Cross-site_scripting) vulnerabilities.
-
-[Demo](https://codepen.io/KevinBatdorf/pen/poNYpZb)
+[Demo] Coming soon
 
 ---
 
