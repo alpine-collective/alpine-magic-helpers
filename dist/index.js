@@ -3458,6 +3458,8 @@
       alpine(callback);
     };
 
+    window.AlpineValidationRules = [];
+
     var index = {
       AlpineComponentMagicMethod: AlpineComponentMagicMethod,
       AlpineFetchMagicMethod: AlpineFetchMagicMethod,

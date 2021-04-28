@@ -44,12 +44,12 @@
         <input type="password" name="req7" x-ref="req7" x-validate="['required', 'equals:'+$refs.req6.value]" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline mt-5">
         <span x-show="$invalid($refs.req7)" class="absolute block text-xs text-red-600 font-bold">Fields do not match</span>
 
-        <label class="block text-sm font-medium text-gray-700 mt-8"for="req">Email</label>
+        <label class="block text-sm font-medium text-gray-700 mt-8" for="req">Email</label>
         <input type="email" name="req8" x-ref="req8" x-validate="['required', 'email']" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
         <span x-show="$invalid($refs.req8, 'required')" class="absolute block text-xs text-red-600 font-bold">The field is required</span>
         <span x-show="$invalid($refs.req8, 'email')" class="absolute block text-xs text-red-600 font-bold">The field must be a valid email</span>
 
-        <label class="block text-sm font-medium text-gray-700 mt-8"for="req">Checkboxes</label>
+        <label class="block text-sm font-medium text-gray-700 mt-8" for="req">Checkboxes</label>
         <input type="checkbox" name="req9[]" x-ref="req9" x-validate="['required', 'minoptions:2', 'maxoptions:2']" value="one" class="mr-2 leading-tight align-middle"><span class="text-sm">Option 1</span>
         <input type="checkbox" name="req9[]" value="two" class="ml-5 mr-2 leading-tight align-middle"><span class="text-sm">Option 2</span>
         <input type="checkbox" name="req9[]" value="three" class="ml-5 mr-2 leading-tight align-middle"><span class="text-sm">Option 3</span>
@@ -57,13 +57,21 @@
         <span x-show="$invalid($refs.req9, 'minoptions:2')" class="absolute block text-xs text-red-600 font-bold">Please select at least 2 options</span>
         <span x-show="$invalid($refs.req9, 'maxoptions:2')" class="absolute block text-xs text-red-600 font-bold">Please select maximum 2 options</span>
 
-        <label class="block text-sm font-medium text-gray-700 mt-8"for="req10">Select multi</label>
+        <label class="block text-sm font-medium text-gray-700 mt-8" for="req10">Select multi</label>
         <select name="req10" x-ref="req10" x-validate="['required']" multiple class="block w-full bg-white border border-gray-400 hover:border-gray-500 px-4 py-2 rounded shadow leading-tight focus:outline-none focus:shadow-outline">
             <option value=""></option>
             <option value="foo">Foo</option>
             <option value="bar">Bar</option>
         </select>
         <span x-show="$invalid($refs.req10)" class="absolute block text-xs text-red-600 font-bold">The field is required</span>
+
+        <script type="text/javascript">
+            window.AlpineValidationRules['foo'] = (value) => value === '' || parseFloat(value) > 100
+        </script>
+        <label class="block text-sm font-medium text-gray-700 mt-8" for="req11">Custom rule (number > 100)</label>
+        <input name="req11" x-ref="req11" x-validate="['required', 'foo']" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
+        <span x-show="$invalid($refs.req11, 'required')" class="absolute block text-xs text-red-600 font-bold">The field is required</span>
+        <span x-show="$invalid($refs.req11, 'foo')" class="absolute block text-xs text-red-600 font-bold">The field value should be a number greater than 100</span>
 
         <input type="submit" value="Test" class="mt-8 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
     </form>

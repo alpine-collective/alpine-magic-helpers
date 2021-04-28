@@ -611,7 +611,7 @@ test('x-validate > pattern rule', async () => {
     expect(document.querySelector('input').checkValidity()).toEqual(true)
     expect(document.querySelector('form').checkValidity()).toEqual(true)
 
-    // Type a number greater than 10
+    // Type 2 digits
     fireEvent.input(document.querySelector('input'), { target: { value: '11' } })
 
     // Form is not valid
@@ -621,7 +621,7 @@ test('x-validate > pattern rule', async () => {
         expect(document.querySelector('form').checkValidity()).toEqual(false)
     })
 
-    // Type 10
+    // Type 2 letters
     fireEvent.input(document.querySelector('input'), { target: { value: 'aa' } })
 
     // Form is now valid
@@ -631,7 +631,7 @@ test('x-validate > pattern rule', async () => {
         expect(document.querySelector('form').checkValidity()).toEqual(true)
     })
 
-    // Type a number less than 10
+    // Type 3 letters
     fireEvent.input(document.querySelector('input'), { target: { value: 'aaa' } })
 
     // Form is not valid

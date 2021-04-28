@@ -272,6 +272,8 @@
       alpine(callback);
     };
 
+    window.AlpineValidationRules = [];
+
     return AlpineValidateCustomDirective;
 
 })));

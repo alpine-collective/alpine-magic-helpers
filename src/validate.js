@@ -193,4 +193,6 @@ window.deferLoadingAlpine = function (callback) {
     alpine(callback)
 }
 
+window.AlpineValidationRules = [];
+
 export default AlpineValidateCustomDirective
