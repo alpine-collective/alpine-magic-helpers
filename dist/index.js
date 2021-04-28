@@ -3323,9 +3323,11 @@
 
             if (target.$dirty !== true) {
               return false;
-            }
+            } // Note Alpine has a bug end it strips all backslashes breaking regular expresions
 
-            return errorType === '' ? target.$valid !== true : target.$valid === errorType;
+
+            return errorType === '' ? target.$valid !== true : // Note Alpine has a bug end it strips all backslashes breaking regular expresions
+            typeof target.$valid === 'string' ? target.$valid.replace(/\\/g, '') === errorType : target.$valid === errorType;
           };
         });
         Alpine.onBeforeComponentInitialized(function (component) {
@@ -3347,7 +3349,13 @@
 
                 var validate = function validate() {
                   // Evaluate the rules in case they are dynamic
-                  var rules = component.evaluateReturnExpression(el, expression, extraVars);
+                  // Note Alpine has a bug end it strips all backslashes breaking regular expresions
+                  var rules = component.evaluateReturnExpression(el, expression.replace(/\\/g, '\\\\'), extraVars);
+
+                  if (!Array.isArray(rules)) {
+                    throw Error('x-validate must contain an array of validation rules');
+                  }
+
                   var value = el.form.elements[el.name].value;
 
                   if (el.type.toLowerCase() === 'checkbox' && !el.checked) {

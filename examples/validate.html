@@ -38,8 +38,9 @@
         <span x-show="$invalid($refs.req5)" class="absolute block text-xs text-red-600 font-bold">The field is required</span>
 
         <label class="block text-sm font-medium text-gray-700 mt-8">Password confirmation</label>
-        <input type="password" name="req6" x-ref="req6" x-validate="['required']" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
-        <span x-show="$invalid($refs.req6)" class="absolute block text-xs text-red-600 font-bold">The field is required</span>
+        <input type="password" name="req6" x-ref="req6" x-validate="['required', 'pattern:(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[\W])']" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
+        <span x-show="$invalid($refs.req6, 'required')" class="absolute block text-xs text-red-600 font-bold">The field is required</span>
+        <span x-show="$invalid($refs.req6, 'pattern:(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[\W])')" class="absolute block text-xs text-red-600 font-bold">The field must contain 1 uppercase letter, 1 lowercase letter, 1 digit and 1 symbol</span>
         <input type="password" name="req7" x-ref="req7" x-validate="['required', 'equals:'+$refs.req6.value]" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline mt-5">
         <span x-show="$invalid($refs.req7)" class="absolute block text-xs text-red-600 font-bold">Fields do not match</span>
 

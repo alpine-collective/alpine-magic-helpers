@@ -58,7 +58,16 @@ const AlpineValidateCustomDirective = {
                     return false
                 }
 
-                return (errorType === '') ? target.$valid !== true : target.$valid === errorType
+                // Note Alpine has a bug end it strips all backslashes breaking regular expresions
+
+                return (errorType === '')
+                    ? target.$valid !== true
+                    : (
+                        // Note Alpine has a bug end it strips all backslashes breaking regular expresions
+                        (typeof target.$valid === 'string')
+                        ? target.$valid.replace(/\\/g, '') === errorType
+                        : target.$valid === errorType
+                    )
             }
         })
 
@@ -73,7 +82,8 @@ const AlpineValidateCustomDirective = {
                         const firstValidationOnInput = modifiers.includes('immediate')
                         const validate = () => {
                             // Evaluate the rules in case they are dynamic
-                            const rules = component.evaluateReturnExpression(el, expression, extraVars)
+                            // Note Alpine has a bug end it strips all backslashes breaking regular expresions
+                            const rules = component.evaluateReturnExpression(el, expression.replace(/\\/g, '\\\\'), extraVars)
 
                             if (! Array.isArray(rules)) {
                                 throw Error('x-validate must contain an array of validation rules');
