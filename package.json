@@ -1,6 +1,6 @@
 {
     "name": "alpine-magic-helpers",
-    "version": "1.2.1",
+    "version": "1.2.2",
     "description": "A collection of magic properties and helper functions for use with Alpine.",
     "source": [
         "src/index.js",
