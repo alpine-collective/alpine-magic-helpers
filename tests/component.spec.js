@@ -254,3 +254,21 @@ test('$component > component can access magic properties', async () => {
         expect(document.querySelector('p').textContent).toEqual('bar')
     })
 })
+
+test('$parent > x-for can loop correctly on a property from the parent scope', async () => {
+    document.body.innerHTML = `
+        <div x-data="{ comments: ['test', 'test2'] }">
+            <div x-data>
+                <template x-for="item in $parent.comments">
+                  <p x-text="item"></p>
+                </template>
+            </div>
+        </div>
+    `
+
+    Alpine.start()
+
+    await waitFor(() => {
+        expect(document.querySelectorAll('p').length).toEqual(2)
+    })
+})
