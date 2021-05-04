@@ -30,11 +30,14 @@
             if (target[key] !== null && typeof target[key] === 'object') {
               var path = scope ? scope + "." + key : key;
               return new Proxy(target[key], handler(path));
-            } // We bind the scope only if the observed component is ready.
+            } // If scope is null, we are at root level so when target[key] is
+            // a function, we need to make sure the context is the Alpine
+            // reactive layer.
+            // We bind the scope only if the observed component is ready.
             // Most of the time, the unwrapped data is enough
 
 
-            if (typeof target[key] === 'function' && observedComponent.__x) {
+            if (scope === null && typeof target[key] === 'function' && observedComponent.__x) {
               return target[key].bind(observedComponent.__x.$data);
             } // If scope is null, we are at root level so when target[key] is not defined
             // we try to look for observedComponent.__x.$data[key] to check if a magic
