@@ -1767,7 +1767,7 @@
     var AlpineIntervalMagicMethod = {
       start: function start() {
         checkForAlpine();
-        Alpine.addMagicProperty('interval', function () {
+        Alpine.addMagicProperty('interval', function ($el) {
           return function () {
             var _this = this;
 
@@ -1794,27 +1794,23 @@
               }
             }
 
+            var autoIntervalLoop = null;
+
             var loop = function loop() {
-              var test = Object.prototype.hasOwnProperty.call(_this, 'autoIntervalTest') ? _this.autoIntervalTest : true;
-              setTimeout(function () {
-                if (!_this.autoIntervalLoop) return;
-                test && parameters[0].call(_this);
-                forceInterval ? _this.autoIntervalLoop() : requestAnimationFrame(_this.autoIntervalLoop);
+              autoIntervalLoop = setTimeout(function () {
+                parameters[0].call(_this);
+                forceInterval ? loop() : requestAnimationFrame(loop);
               }, timer);
             };
 
-            this.autoIntervalLoop = loop;
-            setTimeout(function () {
-              if (!_this.autoIntervalLoop) return;
-              forceInterval ? _this.autoIntervalLoop() : requestAnimationFrame(_this.autoIntervalLoop);
+            autoIntervalLoop = setTimeout(function () {
+              forceInterval ? loop() : requestAnimationFrame(loop);
             }, delay);
             this.$watch('autoIntervalTest', function (test) {
               if (test) {
-                _this.autoIntervalLoop = loop;
-                forceInterval ? _this.autoIntervalLoop() : requestAnimationFrame(_this.autoIntervalLoop);
+                forceInterval ? loop() : requestAnimationFrame(loop);
               } else {
-                clearTimeout(_this.autoIntervalLoop);
-                _this.autoIntervalLoop = null;
+                clearTimeout(autoIntervalLoop);
               }
             });
           };

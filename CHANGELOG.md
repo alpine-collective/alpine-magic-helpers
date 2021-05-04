@@ -6,10 +6,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-## [1.2.x] - 2021-04-18
+## [v1.2.1] - 2021-04-20
+### Fixed
+- [`$interval`]: timeOut was not cleared correctly when paused. When paused and resumed straightaway, it was leading to duplicate callbacks being invoked.
+
+## [1.2.0] - 2021-04-18
 ### Added
 - [`$get`/`$post`]: Added two helpers to simplify working with `$fetch`
-## [1.1.x] - 2021-03-15
+
+## [1.1.0] - 2021-03-15
 ### Added
 - [`x-unsafe-html`]: Added 'x-unsafe-html' custom directive
 
