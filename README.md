@@ -317,7 +317,7 @@ And using those breakpoints in your page.
     <div x-ref="foo">
         ...
     </div>
-    <button x-on:click="$scroll($refs.foo)">Scroll to foo</scroll>
+    <button x-on:click="$scroll($refs.foo)">Scroll to foo</button>
 </div>
 ```
 [Demo](https://codepen.io/KevinBatdorf/pen/PozVLPy?editors=1000)
@@ -327,13 +327,13 @@ Alternatively, you can pass a css selector to scroll to an element at any positi
 <div id="foo">
 </div>
 <div x-data>
-    <button x-on:click="$scroll('#foo')">Scroll to #foo</scroll>
+    <button x-on:click="$scroll('#foo')">Scroll to #foo</button>
 </div>
 ```
 
 `$scroll` also supports integers to scroll to a specific point of the page.
 ```html
-<button x-data x-on:click="$scroll(0)">Scroll to top</scroll>
+<button x-data x-on:click="$scroll(0)">Scroll to top</button>
 ```
 [Demo](https://codepen.io/KevinBatdorf/pen/PozVLPy?editors=1000) (same as above)
 
@@ -343,16 +343,16 @@ Alternatively, you can pass a css selector to scroll to an element at any positi
     <div x-ref="foo">
         ...
     </div>
-    <button x-on:click="$scroll($refs.foo, {behavior: auto})">Jump to foo</scroll>
+    <button x-on:click="$scroll($refs.foo, {behavior: auto})">Jump to foo</button>
 </div>
 ...
 <div id="foo">
 </div>
 <div x-data>
-    <button x-on:click="$scroll('#foo', {behavior: auto})">Jump to #foo</scroll>
+    <button x-on:click="$scroll('#foo', {behavior: auto})">Jump to #foo</button>
 </div>
 ...
-<button x-data x-on:click="$scroll(0, {behavior: auto}">Jump to top</scroll>
+<button x-data x-on:click="$scroll(0, {behavior: auto}">Jump to top</button>
 ```
 With offset:
 ```html
@@ -360,16 +360,16 @@ With offset:
     <div x-ref="foo">
         ...
     </div>
-    <button x-on:click="$scroll($refs.foo, {offset: 50})">Scroll to 50px before foo</scroll>
+    <button x-on:click="$scroll($refs.foo, {offset: 50})">Scroll to 50px before foo</button>
 </div>
 ...
 <div id="foo">
 </div>
 <div x-data>
-    <button x-on:click="$scroll('#foo', {offset: 50})">Scroll to 50px before #foo</scroll>
+    <button x-on:click="$scroll('#foo', {offset: 50})">Scroll to 50px before #foo</button>
 </div>
 ...
-<button x-data x-on:click="$scroll(0, {offset: 50}">Jump to 50px before top (a bit daft but supported)</scroll>
+<button x-data x-on:click="$scroll(0, {offset: 50}">Jump to 50px before top (a bit daft but supported)</button>
 ```
 With both:
 ```html
@@ -377,16 +377,16 @@ With both:
     <div x-ref="foo">
         ...
     </div>
-    <button x-on:click="$scroll($refs.foo, {behavior: auto, offset: 50})">Jump to 50px before foo</scroll>
+    <button x-on:click="$scroll($refs.foo, {behavior: auto, offset: 50})">Jump to 50px before foo</button>
 </div>
 ...
 <div id="foo">
 </div>
 <div x-data>
-    <button x-on:click="$scroll('#foo', {behavior: auto, offset: 50})">Jump to 50px before #foo</scroll>
+    <button x-on:click="$scroll('#foo', {behavior: auto, offset: 50})">Jump to 50px before #foo</button>
 </div>
 ...
-<button x-data x-on:click="$scroll(0, {behavior: auto, offset: 50}">Jump to 50px before top</scroll>
+<button x-data x-on:click="$scroll(0, {behavior: auto, offset: 50}">Jump to 50px before top</button>
 ```
 [Demo](https://codepen.io/KevinBatdorf/pen/PozVLPy?editors=1000) (same as above)
 
