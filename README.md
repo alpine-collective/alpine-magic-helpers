@@ -1,10 +1,15 @@
-# Magic Helpers
-
-A collection of magic properties and helper functions for use with [Alpine.js](https://github.com/alpinejs/alpine)
 
 [![GitHub tag (latest by date)](https://img.shields.io/github/v/tag/alpine-collective/alpine-magic-helpers?label=version&style=flat-square)](https://www.npmjs.com/package/alpine-magic-helpers)
 [![](https://data.jsdelivr.com/v1/package/gh/alpine-collective/alpine-magic-helpers/badge)](https://www.jsdelivr.com/package/gh/alpine-collective/alpine-magic-helpers)
 [![npm bundle size](https://img.shields.io/bundlephobia/minzip/alpine-magic-helpers?color=#0F0)](https://bundlephobia.com/result?p=alpine-magic-helpers)
+
+# Magic Helpers
+
+A collection of magic properties and helper functions for use with [Alpine.js](https://github.com/alpinejs/alpine) version 2
+
+:warning:  Notice: This collection of helpers will be tied to version 2 of Alpine and will only receive bug fixes and minor updates as needed.
+
+→ New features and plugins for V3 that will be found in the [toolkit repo](https://github.com/alpine-collective/toolkit).
 
 ## About
 
