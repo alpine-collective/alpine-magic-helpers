@@ -6,6 +6,10 @@ A collection of magic properties and helper functions for use with [Alpine.js](h
 [![](https://data.jsdelivr.com/v1/package/gh/alpine-collective/alpine-magic-helpers/badge)](https://www.jsdelivr.com/package/gh/alpine-collective/alpine-magic-helpers)
 [![npm bundle size](https://img.shields.io/bundlephobia/minzip/alpine-magic-helpers?color=#0F0)](https://bundlephobia.com/result?p=alpine-magic-helpers)
 
+## Compatibilty
+
+`Magic helpers` works with AlpineJS v2 but does **not** yet support v3. Follow the discussion [here](https://github.com/alpine-collective/alpine-magic-helpers/issues/140).
+
 ## About
 
 Adds the following magic helpers to use with Alpine JS.
