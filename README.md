@@ -356,7 +356,7 @@ Alternatively, you can pass a css selector to scroll to an element at any positi
     <button x-on:click="$scroll('#foo', {behavior: 'auto'})">Jump to #foo</button>
 </div>
 ...
-<button x-data x-on:click="$scroll(0, {behavior: 'auto'}">Jump to top</button>
+<button x-data x-on:click="$scroll(0, {behavior: 'auto'})">Jump to top</button>
 ```
 With offset:
 ```html
@@ -373,7 +373,7 @@ With offset:
     <button x-on:click="$scroll('#foo', {offset: 50})">Scroll to 50px before #foo</button>
 </div>
 ...
-<button x-data x-on:click="$scroll(0, {offset: 50}">Jump to 50px before top (a bit daft but supported)</button>
+<button x-data x-on:click="$scroll(0, {offset: 50})">Jump to 50px before top (a bit daft but supported)</button>
 ```
 With both:
 ```html
@@ -390,7 +390,7 @@ With both:
     <button x-on:click="$scroll('#foo', {behavior: 'auto', offset: 50})">Jump to 50px before #foo</button>
 </div>
 ...
-<button x-data x-on:click="$scroll(0, {behavior: 'auto', offset: 50}">Jump to 50px before top</button>
+<button x-data x-on:click="$scroll(0, {behavior: 'auto', offset: 50})">Jump to 50px before top</button>
 ```
 [Demo](https://codepen.io/KevinBatdorf/pen/PozVLPy?editors=1000) (same as above)
 
